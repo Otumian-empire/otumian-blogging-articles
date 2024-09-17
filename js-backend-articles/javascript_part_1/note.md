@@ -2,7 +2,7 @@
 
 Javascript is like a pot of honey. You can dip your finger into it and swipe a mouthful. It is sweet. It is awesome. It is dangerous. It can be hazardous, like hot honey, in a pot.
 
-Is JavaScript complicated? Well, you should find an answer to this question at the end of this excerpt (including the other parts too). We can ask another question, which is, how much JavaScript does one need to know to write some program? It would help if you had an understanding of data and data flow. What data do I need and how do I structure it? What do I do with the data? Something like that. When you think about a concept, you do or should be able to do. And that, will essentially be the aim of this material (we have not forgotten the first question though, "Is javascript complicated?").
+Is JavaScript complicated? Well, you should find an answer to this question at the end of this excerpt (including the other parts too). We can ask another question. How much JavaScript knowledge is necessary to develop a program? It would help if you had an understanding of data and data flow. What data do I need and how do I structure it? What do I do with the data? Something like that. When you think about a concept, you do or should be able to do. And that, will essentially be the aim of this material (we have not forgotten the first question though, "Is javascript complicated?").
 
 > I usually prefer short and detailed articles but this time it will be long so buckle up.
 
@@ -47,7 +47,7 @@ A string is a value (data) enclosed in a quote (double quote, single quote or ba
 - 'I want to use a double quote in a string. Single quote said, "There lived a string called foo bar"'
 - \`"I can mix and match single quotes and double quotes in backticks", John Doe's dad said.\`
 
-The above examples were to show you how to use strings and point out the caveat that handling strings in JavaScript comes with. For starters, you can decide to use double or single quotes. You choose. Use backticks when doing string interpolations or when you are encountering the last example. Just know that, when you use a quote to create a string, the opening quote must match and be closed by the same quote. So you can not open with a single quote and close with a double quote.
+The above examples were to show you how to use strings and point out the caveat that handling strings in JavaScript comes with. For starters, you can decide to use double or single quotes. You choose. Use backticks when doing string interpolations or when you encounter the last example. Just know that, when you use a quote to create a string, the opening quote must match and be closed by the same quote. So you can not open with a single quote and close with a double quote.
 
 We can use a quote (double quote, single quote or backtick) in the quote delimited string but then we have to escape it. We use a backslash, `\`.
 
@@ -57,7 +57,7 @@ We can use a quote (double quote, single quote or backtick) in the quote delimit
 console.log('we can use double quote in a double-quoted string, " by escaping');
 ```
 
-Now, use `console.log` to log the above strings and come up with your own.
+Now, use `console.log` to log the above strings and write your own.
 
 ## Number
 
@@ -75,7 +75,7 @@ An object in Javascript is a way to present a key-value paired data. We can use 
 
 We will `console.log` user profile. The user profile _name, date of birth, profession, number of pets, weight of protein in grams, has a job etc_. Every key value is separated by a comma. A key is followed by a colon, then the value, to form a key-value pair. Usually, keys are strings (Yes, we enclose the keys of an object into quotes). You can add more keys (properties) to it.
 
-_name_ is a string (its value I mean). There is a date object in javascript but for now, we can use a string for _date of birth_. _profession_ is also a string. _number of pets_ and _weight of protein in grams_ are numbers. _has a job_ is a key to indicate whether or not the profile holder has a job. So it is a boolean.
+_name_ is a string (its value I mean). There is a date object in javascript but for now, we can use a string for _date of birth_. _profession_ is also a string. _number of pets_ and _weight of protein in grams_ are numbers. _has a job_ indicates if the profile holder has a job. So it is a boolean.
 
 ```js
 {
@@ -109,7 +109,7 @@ Note that it is important to make the keys a string for now. Be curious and use 
 
 Math is a daily thing for programming and science at large. We won't need that much math. All we need to know is addition (_+_), subtraction (_-_), multiplication (_\*_), division (_/_), modulo (_%_) and exponent (_\*\*_).
 
-From here, modulo (_%_) and exponent (_\*\*_) are new to you, so we will do some math.
+From here, modulo (_%_) and exponent (_\*\*_) are new to you so that we will do some math.
 
 ```js
 // adding numbers with the plus
@@ -138,18 +138,18 @@ console.log(5 ** 2); // answer = 5 * 5 = 25
 
 ## Variables
 
-In a second, we will talk about what a variable is after we look at why we need them. I think you'd know what a variable is based on why you might need it.
+In a second, we will talk about what a variable is after we consider why we need them. I think you'd know what a variable is based on why you might need it.
 
-Let's consider the strings, numbers, booleans, objects and calculations we have done so far. How do we get those values and do other computations on them? We use a variable.
+Let's consider the strings, numbers, booleans, objects and calculations we have done until now. How do we get those values and do other computations on them? We use a variable.
 
 So we can have the result of `3 + 3` which is `6` stored or assigned as a value to a variable. Then we can use that value later. This way we are keeping track of the value (state) of the variable. Know that, whenever you see a variable, there is a value.
 
-A variable is like a tag, label or name attached to a value. Wherever you call (reference) or use that variable, the value is referred. When we say, `let x be 2`. Add `3` to `x`, that is, `x + 3`. The result will be, `x + 3 = 2 + 3 = 5`.
+A variable is a tag, label or name attached to a value. Wherever you call (reference) or use that variable, the value is referred. When we say, `let x be 2`. Add `3` to `x`, that is, `x + 3`. The result will be, `x + 3 = 2 + 3 = 5`.
 
 A variable holds data which is used in the data flow.
 
 **Const and Let**
-In Javascript, there are two keywords used when creating variables. These are `const` and `let` (in lowercase).
+In Javascript, `const` and `let` (in lowercase) are used when creating variables.
 
 - use `const` when you want to assign a value that shouldn't or wouldn't change
 - use `let` when you want to assign a value that might change
@@ -165,7 +165,7 @@ const weightOfProteinInGrams = 12.5;
 const hasAJob = true;
 ```
 
-The above variables are constants. If we want them to be changeable (reassigned), we'd use `let` in place of `const`. This way we can assign different values to these variables. Try your hands on reassigning values to the `const` variables.
+The above variables are constants. If we want them to be changeable (reassigned), we'd use `let` instead of `const`. This way we can assign different values to these variables. Try your hands on reassigning values to the `const` variables.
 
 This is what we mean by reassigning a value to a variable.
 
@@ -192,7 +192,7 @@ will result in this error message: `Uncaught TypeError: Assignment to constant v
 - `<variable name>` can not have a space in it. `my name` can not be a variable name because of the space.
 - `<variable name>` can have numbers in it. Based on the previous rules, we can have `name1, a1, _pet3_, MAX_LIFE, max_life, maxLife, MaxLife, etc`.
 - It is best that a variable name describes or informs you about the data it holds or what the variable is/will be used for.
-- These variables: `MAX_LIFE, max_life, maxLife, MaxLife`, are all saying the same thing, _max life_.
+- These variables: `MAX_LIFE, max_life, maxLife, MaxLife`, say the same thing, _max life_.
 - This format, `maxLife`, known as camelCasing was used. This, `MaxLife` is PascalCasing. This `max_life`, is snake_casing. This, `MAX_LIFE`, is used for creating constants.
 
 We can create a variable for the profile object we created earlier.
@@ -212,4 +212,15 @@ console.log(profile);
 
 ## Conclusion
 
-There is more to discuss about data and data flow. So far, we have looked at `string`, `number`, `boolean` and an `object` literal. We discussed a `variable`, that it is a way to keep track of values. `const x = 2`, creates a variable `x` and **assigns** it the value, `2`. The _equal to_ sign, `=`, is known as the assignment operator. This is why we say, _a variable `x` is assigned a value of `2`_.
+There is more to discuss about data and data flow. Until now, we have looked at `string`, `number`, `boolean` and an `object` literal. As we discussed, a `variable` is a way to keep track of values. The statement `const x = 2` **assigns** the value `2` to the variable `x`.
+
+The _equal to_ sign, `=`, is the assignment operator. This is why we say, _a variable `x` is assigned a value of `2`_.
+
+We have more on javascript to discuss such as:
+
+- String interpolation and a gist of its methods
+- Arrays
+- Control structures (if statements, loops)
+- Functions
+- Callbacks, promises, async & await
+- Next big thing
