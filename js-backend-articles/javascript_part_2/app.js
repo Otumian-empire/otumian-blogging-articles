@@ -1,55 +1,55 @@
-// password_verification.js
-const veryWeakPassword = "qwerty12";
-console.log(`Password validation for "${veryWeakPassword}"`)
+// // password_verification.js
+// const veryWeakPassword = "qwerty12";
+// console.log(`Password validation for "${veryWeakPassword}"`)
 
-// - be six characters
-const passwordLength = veryWeakPassword.length
-console.log(`- Password must have 6 characters => "${veryWeakPassword}" has '${passwordLength}' characters`)
-// so it is a valid password based on our rules?
+// // - be six characters
+// const passwordLength = veryWeakPassword.length
+// console.log(`- Password must have 6 characters => "${veryWeakPassword}" has '${passwordLength}' characters`)
+// // so it is a valid password based on our rules?
 
-// - start with with uppercase p, 'P'
-const startsWithPee = veryWeakPassword.startsWith("P")
-console.log(`- Password must start with 'P' => it is ${startsWithPee} that "${veryWeakPassword}" starts with 'P'`);
+// // - start with with uppercase p, 'P'
+// const startsWithPee = veryWeakPassword.startsWith("P")
+// console.log(`- Password must start with 'P' => it is ${startsWithPee} that "${veryWeakPassword}" starts with 'P'`);
 
-// we can also check the first character, index 0.
-const firstCharacter = veryWeakPassword[0]
-console.log(`- Password must start with 'P' => "${veryWeakPassword}" starts with '${firstCharacter}'`);
+// // we can also check the first character, index 0.
+// const firstCharacter = veryWeakPassword[0]
+// console.log(`- Password must start with 'P' => "${veryWeakPassword}" starts with '${firstCharacter}'`);
 
-// - end with underscore
-const endsWithUnderscore = veryWeakPassword.endsWith("_")
-console.log(`- Password must end with '_' => it is ${endsWithUnderscore} that "${veryWeakPassword}" ends with '_'`)
+// // - end with underscore
+// const endsWithUnderscore = veryWeakPassword.endsWith("_")
+// console.log(`- Password must end with '_' => it is ${endsWithUnderscore} that "${veryWeakPassword}" ends with '_'`)
 
-// from the index concept, the last character will be at index, length of string minus one
-const lastCharacter = veryWeakPassword[veryWeakPassword.length - 1]
-console.log(`- Password must start with 'P' => "${veryWeakPassword}" ends with '${lastCharacter}'`);
+// // from the index concept, the last character will be at index, length of string minus one
+// const lastCharacter = veryWeakPassword[veryWeakPassword.length - 1]
+// console.log(`- Password must start with 'P' => "${veryWeakPassword}" ends with '${lastCharacter}'`);
 
-// - have uppercase q, 'Q'
-const hasUppercaseQue = veryWeakPassword.includes('Q')
-console.log(`- Password must have uppercase q, 'Q' => it is ${hasUppercaseQue} that "${veryWeakPassword}" has 'Q'`)
+// // - have uppercase q, 'Q'
+// const hasUppercaseQue = veryWeakPassword.includes('Q')
+// console.log(`- Password must have uppercase q, 'Q' => it is ${hasUppercaseQue} that "${veryWeakPassword}" has 'Q'`)
 
-// we can use the index approach too
-const indexOfUppercaseQue = veryWeakPassword.indexOf('Q')
-console.log(`- Password must have uppercase q, 'Q' => 'Q' is at index '${indexOfUppercaseQue}' of "${veryWeakPassword}"`)
-// we know that index -1 means, there 'Q' was not found
+// // we can use the index approach too
+// const indexOfUppercaseQue = veryWeakPassword.indexOf('Q')
+// console.log(`- Password must have uppercase q, 'Q' => 'Q' is at index '${indexOfUppercaseQue}' of "${veryWeakPassword}"`)
+// // we know that index -1 means, there 'Q' was not found
 
-// - have lowercase r, 'r'
-const hasLowercaseArr = veryWeakPassword.includes('r')
-console.log(`- Password must have lowercase r, 'r' => it is ${hasLowercaseArr} that "${veryWeakPassword}" has 'r'`)
+// // - have lowercase r, 'r'
+// const hasLowercaseArr = veryWeakPassword.includes('r')
+// console.log(`- Password must have lowercase r, 'r' => it is ${hasLowercaseArr} that "${veryWeakPassword}" has 'r'`)
 
-// we can use the index approach too
-const indexOfLowercaseArr = veryWeakPassword.indexOf('r')
-console.log(`- Password must have lowercase r, 'r' => 'r' is at index '${indexOfLowercaseArr}' of "${veryWeakPassword}"`)
-// we know that index -1 means, there 'r' was not found
+// // we can use the index approach too
+// const indexOfLowercaseArr = veryWeakPassword.indexOf('r')
+// console.log(`- Password must have lowercase r, 'r' => 'r' is at index '${indexOfLowercaseArr}' of "${veryWeakPassword}"`)
+// // we know that index -1 means, there 'r' was not found
 
-// - have its fifth character as uppercase v, 'V'
-// fifth character with have index = fifth position - 1 = 4
-// const fifthCharacter = veryWeakPassword[4]
-const fifthCharacter = veryWeakPassword.charAt(4)
-console.log(`- Password must have its fifth character as uppercase v, 'V' => "${veryWeakPassword}" has it 5th character as '${fifthCharacter}'`)
+// // - have its fifth character as uppercase v, 'V'
+// // fifth character with have index = fifth position - 1 = 4
+// // const fifthCharacter = veryWeakPassword[4]
+// const fifthCharacter = veryWeakPassword.charAt(4)
+// console.log(`- Password must have its fifth character as uppercase v, 'V' => "${veryWeakPassword}" has it 5th character as '${fifthCharacter}'`)
 
-// using the index approach, 'V' must have an index of 4 (same index logic as above)
-const indexOfVee = veryWeakPassword.indexOf("V")
-console.log(`- Password must have its fifth character as uppercase v, 'V' => 'V' is at index '${indexOfVee}' of "${veryWeakPassword}"`)
+// // using the index approach, 'V' must have an index of 4 (same index logic as above)
+// const indexOfVee = veryWeakPassword.indexOf("V")
+// console.log(`- Password must have its fifth character as uppercase v, 'V' => 'V' is at index '${indexOfVee}' of "${veryWeakPassword}"`)
 
 
 // // ## String interpolation and a gist of its methods
