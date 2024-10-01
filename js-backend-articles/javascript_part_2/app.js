@@ -100,6 +100,11 @@ console.log(stringWithStaringAndTrailingSpaces.trim().split(" "))
 // this doesn't hold anymore because of the starting and trailing spaces
 
 
+// substring(starting [, ending])
+const someLongString = "This is some long string";
+// const
+// NB: indexOf and chartAt: add them
+
 // indexing a string (or array)
 const someName = "Doe";
 // consider the string Doe, the first letter is 'D', second is 'o' and the third is 'e'
@@ -107,3 +112,12 @@ const someName = "Doe";
 // second will be 1, after index 0, which will point to 'o', then index 2 will point to the last element, 
 // which is 'e' character at the third position
 // try writing a password validator
+
+const firstChar = someName[0];
+const secondChar = someName[1];
+const thirdChar = someName[2];
+
+console.log(`The characters in "${someName}" are: '${firstChar}', '${secondChar}' and '${thirdChar}'`);
+// The characters in "Doe" are: 'D', 'o' and 'e'
+
+

@@ -65,6 +65,27 @@ const sentence =
 console.log(sentence);
 ```
 
+## Indexing a string
+
+You would surely hear a lot about indexing. So let's talk a little about it now. Indexing is the same as subscripting, if it helps. In brief, it means you can find or retrieve a character from a string using its numeric position (index, counting from zero). We will discuss this (indexing) when dealing with arrays (the same idea is the applies to arrays).
+
+Consider the string "Doe", the first letter is 'D', second is 'o' and the third is 'e'. In javascript indexing starts at zero, so the first character (positioned element) is at index 0, pointing to 'D'. The second will be 1, after index 0, which will point to 'o', then index 2 will point to the last (third) element, which is 'e' character at the third position. In JavaScript, `index = element position - 1`.
+
+**Example**
+
+```js
+const someName = "Doe";
+
+const firstChar = someName[0];
+const secondChar = someName[1];
+const thirdChar = someName[2];
+
+console.log(
+  `The characters in "${someName}" are: '${firstChar}', '${secondChar}' and '${thirdChar}'`
+);
+// The characters in "Doe" are: 'D', 'o' and 'e'
+```
+
 ## String properties and methods
 
 A string is an object. This means they have methods and properties. A method is an action or function that can be performed on the string object. This string object has properties. For now we can say a property is a like a variable attach to this object of interest that keeps some state (data) about this same object.
@@ -82,6 +103,7 @@ We will be looking at the frequently used properties and methods. I will denote 
 - `replace(oldStr: string, withNewString: string)` (m): is a method that replaces `oldStr` in the string with `withNewString` and returns the new updated string
 - `trim()` (m): is a method that removes starting or ending white spaces of a string and returns a new value
 - `split(key: string)` (m): returns an array of the string where key is used a a divider (to split the string at the point)
+- `substring(startingIndex: number, optionalEndingIndex?: number)` (m): returns a position of a string specified by the \_startingIndex\_ all the way to the character at the _optionalEndingIndex_, when provided.
 
 **Example**
 
@@ -172,7 +194,11 @@ console.log(stringWithStaringAndTrailingSpaces.trim().split(" "));
 // note any difference? Would the assumption still hold that the first element (object) in the
 // array will be the first name and second (which should be the last actually) is the last name?
 // this doesn't hold anymore because of the starting and trailing spaces
+```
 
+Let's create some rules to create some sc
+
+```js
 // indexing a string (or array)
 const someName = "Doe";
 // consider the string Doe, the first letter is 'D', second is 'o' and the third is 'e'
@@ -181,26 +207,3 @@ const someName = "Doe";
 // which is 'e' character at the third position
 // try writing a password validator
 ```
-
-One thing too that you'd hear a lot is indexing (or subscripting). Basically it means you can find or retrieve a character from a string using its numeric position. we will discuss this when dealing with arrays.
-
-Consider the string "Doe", the first letter is 'D', second is 'o' and the third is 'e' In javascript indexing starts at zero, so the first position is at index 0, pointing to 'D'. The second will be 1, after index 0, which will point to 'o', then index 2 will point to the last element, which is 'e' character at the third position.
-try writing a password validator
-
-```js
-
-```
-
-Here are some commonly used string methods in Python:
-
-2. strip(), rstrip(), and lstrip(): Remove whitespace from the beginning, end, or both ends of a string.
-3. split(): Divide a string into a list of substrings based on a separator.
-4. join(): Combine a list of strings into a single string.
-5. replace(): Replace a substring with another string.
-6. find() and index(): Search for a substring and return its position.
-7. len(): Get the length of a string.
-8. startswith() and endswith(): Check if a string starts or ends with a substring.
-9. count(): Count the occurrences of a substring.
-10. format(): Insert values into a string using placeholders.
-    These methods are essential for daily string manipulation tasks, such as data cleaning, text processing, and more!
-    Let me know if you'd like me to expand on any of these methods or provide examples. I'm here to help!
