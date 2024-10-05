@@ -2,12 +2,46 @@
 
 Previously in [JavaScript Essentials: Part 2](https://dev.to/otumianempire/javascript-essentials-part-2-3k6j), we discussed quite a lot about string properties and methods, and indexing strings when split into an array. In this part, we will look at:
 
-- Arrays
 - Object
-- Control structures (if statements, loops)
-- Functions
-- Callbacks, promises, async & await
-- Next big thing
+- Arrays
+
+## Object
+
+We have discussed objects and seen some examples of an object.
+
+**Example**
+
+```js
+const profile = {
+  name: "John Doe",
+  "date of birth": "2000-12-25",
+  profession: "Software Engineer",
+  "number of pets": 2,
+  "weight of protein in grams": 12.5,
+  "has a job": true,
+};
+
+console.log(profile);
+```
+
+We can access the properties of the object using the dot operator. We can do, `profile.name` to the the value for the _name_. We can also assign or reassign a value to any of the properties or a new property. There is another way to access the value of a property. In indexing, we pass a number, but this approach, we pass the property name instead. `profile["property"]`. So `profile.name` and `profile["name"]` will have the same result. We use the latter when we have white spaces in the property name. I might not have mentioned this, however, for the best, avoid property names with whites spaces. (Do you recall camelCasing, snake_casing, PascalCasing, CONSTANT_CASING, etc).
+
+```js
+console.log(`Name on profile: ${profile.name}`);
+console.log(`Profession: ${profile.profession}`);
+console.log(`Number of pets: ${profile["number of pets"]}`);
+console.log(`Protein weight (g): ${profile["weight of protein in grams"]}g`);
+console.log(`Is employed: ${profile["has a job"]}`);
+```
+
+We can also alter the data in the object
+
+```js
+profile.name = "Michael Angelo";
+profile.isBald = false;
+
+console.log(profile);
+```
 
 ## Array
 
@@ -55,7 +89,139 @@ const threeByThreeSudoku = [
 ];
 ```
 
+## Indexing an array
+
+The concepts of indexing as we discussed in the string section applies here. Index starts at zero.
+
+**Example**
+
+```js
+const evenNumbers = [2, 4, 6];
+
+const firstEvenNumber = evenNumbers[0];
+const secondEvenNumber = evenNumbers[1];
+const thirdEvenNumber = evenNumbers[2];
+
+const sumOfEvenNumbers = firstEvenNumber + secondEvenNumber + thirdEvenNumber;
+const productOfEvenNumbers =
+  firstEvenNumber * secondEvenNumber * thirdEvenNumber;
+
+console.log(
+  `The sum and product of the even numbers, ${evenNumbers} are, ${sumOfEvenNumbers} and ${productOfEvenNumbers} respectively`
+);
+// The sum and product of the even numbers, 2,4,6 are, 12 and 48 respectively
+```
+
 ## Array properties and methods
+
+Arrays, like strings, also have properties and methods which can be accessed using the dot operator, `arrayVariable.propertyName` and `arrayVariable.methodName(someArgs)`;
+
+These are some of the properties and methods I have used professionally. There are a lot however I'd mention a few and demonstrate how to use them.
+
+- `length` (p): `arrayVariable.length` returns the length (number of elements) of an array.
+
+  ```js
+  const stringArray = ["math", "meth", "mith", "moth", "muth"];
+
+  // get the length of an array
+  console.log(
+    `There are ${stringArray.length} elements in the array, ${stringArray}`
+  );
+  ```
+
+- `map` (m): returns a new array with the same size as the original with some computations done based on elements of the array. The signature of the `map` method is `(callbackfn: (value: elementType, index: number, array: elementType[]) => callbackfnReturnType, thisArg?: any): callbackfnReturnType[]`.
+
+  - `callbackfn`: stands for callback function, a function passed as an argument (as value to something, here to the map method)
+  - the `callbackfn` takes in `value`, `index` and `array` as parameters. The `value` (first and required parameter) the callback function refers to an element in the array. The `index` refers to the index of that element. The `array` parameter (which could be called anything) is references a copy of the original array.
+  - The callback function is applied on each element of the array
+  - For our use case, we'd need the `value` and sometimes, the `index`.
+
+  ```js
+  const stringArray = ["math", "meth", "mith", "moth", "muth"];
+
+  const uppercaseStringArray = stringArray.map((value, index, theArray) => {
+    return value.toUpperCase();
+  });
+  console.log(uppercaseStringArray);
+  // [ 'MATH', 'METH', 'MITH', 'MOTH', 'MUTH' ]
+  ```
+
+  The index and the `theArray` values were not used in this case. I will modify the use of the map method.
+
+  ```js
+  const stringArray = ["math", "meth", "mith", "moth", "muth"];
+  const uppercaseStringArray = stringArray.map((value) => value.toUpperCase());
+  console.log(uppercaseStringArray);
+  ```
+
+  What we can do with the math function is a limited by our knowledge at the moment.
+
+  Remember that the `=>` returns the new value that will be used to form the array.
+
+- `filter` (m): the `filter` method functions like the `map` method however, it returns an array of the elements that meets condition (some truth statement - returns a boolean).
+
+  ```js
+  const elementInNature = ["water", "earth", "wind", "fire"];
+
+  // filter elements that includes 'a'
+  const elementsThatIncludeA = elementInNature.filter((value) =>
+    value.includes("a")
+  );
+  console.log(elementsThatIncludeA);
+
+  // filter elements that ends with 'er'
+  const elementsThatEndsWithER = elementInNature.filter((value) =>
+    value.endsWith("er")
+  );
+  console.log(elementsThatEndsWithER);
+  ```
+
+- `reduce` (m): just like filter and map, applies a function to each element. However, it returns a value instead of an array. It "reduces" an array to a single value. The signature of the `reduce` method is almost the same as that of `map` and `reduce`. However, `reduces` takes in another required parameter, which is the previous value. `reduce<U>(callbackfn: (previousValue: ReduceToType, currentValue: ElementType, currentIndex: number, array: ElementType[]) => ReduceToType, initialValue: ReduceToType): ReduceToType;`. It is better at this point to use an example rather.
+
+  ```js
+  const numberArray = [4, 6, 5, 9, 2, 8];
+  const sumOfNumbers = numberArray.reduce((prev, curr) => prev + curr, 0);
+  console.log(numberArray);
+  console.log(sumOfNumbers);
+  ```
+
+  We set the initial value to zero. As the looping starts from the first value, the previous value will not be define (or be zero by default). We can choose to set it to another number. Try that and see the results.
+
+  Let me rewrite this using something more pseudo-code like:
+
+  ```js
+  const result = someArray.reduce((initial value, current value)=> some action involving the previous value and current value, set the initial value to be something here)
+  ```
+
+  and another one
+
+  ```js
+  const result = someArray.reduce((expected result, current value)=> some action involving the previous value, which is the expected value, and current value, set a default value for the expected result here)
+  ```
+
+  > We'd surely have a lot of example involving `map`, `filter` and `reduce`.
+
+  - `include` (m): returns a boolean indicating the presence of an element in an array. It is the same as the `includes` method of a _string_.
+
+  - `join` (m): combines the elements in an array with a _separator_ into a string.The _join_ method takes a separator argument. This is a string.
+
+    ```js
+    const numberArray = [4, 6, 5, 9, 2, 8];
+
+    console.log(numberArray.join(""));
+    // 465928
+    console.log(numberArray.join("_"));
+    // 4_6_5_9_2_8
+    console.log(numberArray.join("000"));
+    // 400060005000900020008
+    ```
+
+    We can do awesome things with a string and an array
+
+  - `find` (m): it has the same parameter format as the `map` and `filter`. It returns the first element which meets the condition else it returns undefined. There is a good place to use `find` in place of `filter`. More on that later.
+
+> We will learn more about functions and parameters and arguments in the function section to come.
+> We will discuss the return keyword as well and comments too.
 
 ## Email Validation
 
@@ -156,8 +322,9 @@ Try your hands on the email verification and don't hesitate to share your implem
 
 We have more on javascript to discuss such as:
 
-- Object
 - Arrays
+- Object
+- Operators
 - Control structures (if statements, loops)
 - Functions
 - Callbacks, promises, async & await
