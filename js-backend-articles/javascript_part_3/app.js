@@ -146,7 +146,7 @@ stringArray.filter
     return value.toUpperCase()
 });
 console.log(uppercaseStringArray); */
-/* 
+/*
 const elementInNature = ["water", "earth", "wind", "fire"]
 
 // filter elements that includes 'a'
@@ -218,16 +218,20 @@ findIndex(): Returns the index of the first element that satisfies a condition.
 Some programming languages may have additional array methods or variations on these methods.
 Would you like me to provide language-specific array methods (e.g., JavaScript, Python, Java)? */
 
-// Objects
+// // Objects
 
-const profile = {
-    name: "John Doe",
-    "date of birth": "2000-12-25",
-    profession: "Software Engineer",
-    "number of pets": 2,
-    "weight of protein in grams": 12.5,
-    "has a job": true,
-};
+// const profile = {
+//     name: "John Doe",
+//     "date of birth": "2000-12-25",
+//     profession: "Software Engineer",
+//     "number of pets": 2,
+//     "weight of protein in grams": 12.5,
+//     "has a job": true,
+// };
+
+// console.log(Object.entries(profile))
+// console.log(Object.keys(profile))
+// console.log(Object.values(profile))
 
 // console.log(profile);
 // console.log(`Name on profile: ${profile.name}`);
@@ -240,3 +244,102 @@ const profile = {
 // profile.isBald = false;
 
 // console.log(profile);
+
+// find and reduce
+// const profileArray = [
+//     { id: 1, username: "AdamDoe", pet: "math", isBald: true, salary: 250000 },
+//     { id: 2, username: "PeterPen", pet: "meth", isBald: false, salary: 658000 },
+//     { id: 3, username: "MaxBuffer", pet: "mith", isBald: false, salary: 850000 },
+//     { id: 4, username: "CheeseCake", pet: "moth", isBald: true, salary: 90000 },
+//     { id: 5, username: "PaxTingAA", pet: "muth", isBald: true, salary: 366000 },
+// ];const profileArray = [
+//     { id: 1, username: "AdamDoe", pet: "math", isBald: true, salary: 250000 },
+//     { id: 2, username: "PeterPen", pet: "meth", isBald: false, salary: 658000 },
+//     { id: 3, username: "MaxBuffer", pet: "mith", isBald: false, salary: 850000 },
+//     { id: 4, username: "CheeseCake", pet: "moth", isBald: true, salary: 90000 },
+//     { id: 5, username: "PaxTingAA", pet: "muth", isBald: true, salary: 366000 },
+// ];
+
+
+
+
+
+// we can use reduce to compute the total salary of each user
+
+// we can compute the average salary and filter out those who earn 
+// above the average salary
+
+// const numberOfUsers = profileArray.length
+// const totalSalaries = profileArray.reduce((total, currentUser) => total + currentUser.salary, 0)
+// const averageSalary = totalSalaries / numberOfUsers
+// console.log(`The average salary of ${numberOfUsers} users with a combined total of ${totalSalaries} is ${averageSalary}`)
+
+// // now let's filter the above average salary users
+// const aboveAverageSalaryUsers = profileArray.filter((user) => user.salary > averageSalary)
+// console.log(`There are ${aboveAverageSalaryUsers.length} users who earn above the average salary of ${averageSalary}`)
+
+// // we will get their user names
+// const combinedUsernames = aboveAverageSalaryUsers.map(user => user.username).join(" and ")
+
+// console.log(`These users are ${combinedUsernames}`);
+
+
+// we can use map to another property or update some property's value
+// const exclusiveUsers = profileArray.map(user => {
+//     user.username = user.username.toUpperCase()
+//     user.isExclusive = user.isBald && user.salary > 200000
+
+//     return user
+// })
+// console.log(exclusiveUsers)
+// we can use find to find the first instance of a bald user who makes over 200000
+
+// const exclusiveUsers = profileArray.filter(user => user.isBald).filter(user => user.salary > 200000).map(user => user.username)
+// console.log(exclusiveUsers[0])
+
+// const exclusiveUsers = profileArray.filter(user => user.isBald && user.salary > 200000).map(user => user.username)
+// console.log(exclusiveUsers[0])
+
+// const exclusiveUser = profileArray.find(user => user.isBald && user.salary > 200000)
+// console.log(exclusiveUser)
+
+
+// 
+// we can use filter to find users who have 'a' or 'A' in their user name
+// const usersWithA = profileArray.filter((user) =>
+//     user.username.toLowerCase().includes("a")
+// );
+
+// instead of console logging the whole object, I will just log their usernames
+// const usernamesWithA = usersWithA.map(user => user.username)
+// console.log(usernamesWithA)
+
+// const usernamesWithA = profileArray
+//     .map((user) => user.username)
+//     .filter((username) => username.toLowerCase().includes("a"))
+
+// console.log(usernamesWithA);
+
+
+// const numbers = [1, 2, 3, 4, 5]
+// console.log(numbers)
+// console.log(numbers.length)
+
+// // add an element at the end of the array
+// numbers.push(-1)
+// console.log(numbers)
+// console.log(numbers.length)
+
+
+
+// const numbers = [1, 2, 3, 4, 5]
+// numbers.unshift
+// console.log(numbers)
+// console.log(numbers.length)
+
+// // returns the last element from the array
+// const poppedNumber = numbers.pop()
+// console.log(`${poppedNumber} was popped from the array`)
+// console.log(numbers)
+// console.log(numbers.length)
+
