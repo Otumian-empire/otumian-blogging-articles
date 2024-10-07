@@ -478,7 +478,7 @@ console.log(`These users are ${combinedUsernames}`);
 
 ## Email Validation
 
-These are the rules for the email validation. Email must:
+This is my implementation for the email verification from the previous section. These are the rules for the email validation. Email must:
 
 - be at least sixteen characters
 - be in all lowercase
