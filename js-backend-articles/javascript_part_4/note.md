@@ -361,6 +361,134 @@ console.log({ playerLife });
 
 ## Control structures (if statements, loops)
 
+Control structures are contracts used to alter the flow of data. They can changes how the data flows, either to repeat some action for determined number of times or perform some actions based on some conditions.
+
+### If and else statement
+
+The `if` and `else` statement takes the form
+
+```js
+if (/* some condition */) {
+  // do some thing if the condition mentioned is true
+} else {
+  // do some thing else when the condition doesn't hold
+}
+```
+
+The "some condition" referred to in the above is a boolean (conditional) expression. This or these expressions would evaluate to a truth value. When the resultant value is `true`, the body of `if` block is executed. If not, then the body of the `else` is executed. The body (block) is found within the `{` and `}`.
+
+> `if` and `else` can not be used as variable names.
+
+Consider snippet below:
+
+```js
+let pay = 30;
+const RATE = 0.05;
+const didOverTime = true;
+
+// if employee did overtime
+if (didOverTime) {
+  pay = pay + pay * RATE;
+}
+
+console.log(`Total take home: ${pay}`);
+```
+
+<!--  -->
+
+In [JavaScript Essentials: Part 2](https://dev.to/otumianempire/javascript-essentials-part-2-3k6j), we discussed writing a password and email validation.
+
+**Password rules**
+Password must:
+
+- be six characters
+- start with uppercase p, 'P'
+- end with an underscore
+- have uppercase q, 'Q'
+- have lowercase r, 'r'
+- have its fifth character as uppercase v, 'V'
+
+This is our old password validation
+
+**Password validation**
+
+```js
+// password_verification.js
+const veryWeakPassword = "qwerty12";
+console.log(`Password validation for "${veryWeakPassword}"`);
+
+// - be six characters
+const passwordLength = veryWeakPassword.length;
+console.log(
+  `- Password must have 6 characters => "${veryWeakPassword}" has '${passwordLength}' characters`
+);
+// so it is a valid password based on our rules?
+
+// - start with uppercase p, 'P'
+const startsWithPee = veryWeakPassword.startsWith("P");
+console.log(
+  `- Password must start with 'P' => it is ${startsWithPee} that "${veryWeakPassword}" starts with 'P'`
+);
+
+// we can also check the first character, index 0.
+const firstCharacter = veryWeakPassword[0];
+console.log(
+  `- Password must start with 'P' => "${veryWeakPassword}" starts with '${firstCharacter}'`
+);
+
+// - end with underscore
+const endsWithUnderscore = veryWeakPassword.endsWith("_");
+console.log(
+  `- Password must end with '_' => it is ${endsWithUnderscore} that "${veryWeakPassword}" ends with '_'`
+);
+
+// from the index concept, the last character will be at index, length of string minus one
+const lastCharacter = veryWeakPassword[veryWeakPassword.length - 1];
+console.log(
+  `- Password must start with 'P' => "${veryWeakPassword}" ends with '${lastCharacter}'`
+);
+
+// - have uppercase q, 'Q'
+const hasUppercaseQue = veryWeakPassword.includes("Q");
+console.log(
+  `- Password must have uppercase q, 'Q' => it is ${hasUppercaseQue} that "${veryWeakPassword}" has 'Q'`
+);
+
+// we can use the index approach
+const indexOfUppercaseQue = veryWeakPassword.indexOf("Q");
+console.log(
+  `- Password must have uppercase q, 'Q' => 'Q' is at index '${indexOfUppercaseQue}' of "${veryWeakPassword}"`
+);
+// we know that index -1 means, there 'Q' was not found
+
+// - have lowercase r, 'r'
+const hasLowercaseArr = veryWeakPassword.includes("r");
+console.log(
+  `- Password must have lowercase r, 'r' => it is ${hasLowercaseArr} that "${veryWeakPassword}" has 'r'`
+);
+
+// we can use the index approach too
+const indexOfLowercaseArr = veryWeakPassword.indexOf("r");
+console.log(
+  `- Password must have lowercase r, 'r' => 'r' is at index '${indexOfLowercaseArr}' of "${veryWeakPassword}"`
+);
+// we know that index -1 means, there 'r' was not found
+
+// - have its fifth character as uppercase v, 'V'
+// fifth character with have index = fifth position - 1 = 4
+// const fifthCharacter = veryWeakPassword[4]
+const fifthCharacter = veryWeakPassword.charAt(4);
+console.log(
+  `- Password must have its fifth character as uppercase v, 'V' => "${veryWeakPassword}" has its 5th character as '${fifthCharacter}'`
+);
+
+// using the index approach, 'V' must have an index of 4 (same index logic as above)
+const indexOfVee = veryWeakPassword.indexOf("V");
+console.log(
+  `- Password must have its fifth character as uppercase v, 'V' => 'V' is at index '${indexOfVee}' of "${veryWeakPassword}"`
+);
+```
+
 <!-- | ?: | Conditional (ternary) | condition involving a and b ? a : b | -->
 
 - Functions
