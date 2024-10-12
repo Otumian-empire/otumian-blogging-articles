@@ -179,6 +179,7 @@ Arithmetic operators are binary operators. This means they operator on two value
 |    /     |      Division       |  a / b   |
 |    %     | Modulus (remainder) |  a % b   |
 |   \*\*   |   Exponentiation    | a \*\* b |
+|          |                     |          |
 
 ```js
 // adding numbers with the plus
@@ -217,6 +218,7 @@ console.log(5 ** 2); // answer = 5 * 5 = 25
 |    /=    |    Division assignment    |  a /= b   |
 |    %=    |    Modulus assignment     |  a %= b   |
 |  \*\*=   | Exponentiation assignment | a \*\*= b |
+|          |                           |           |
 
 ```js
 // assignment
@@ -250,8 +252,7 @@ Comparison operators evaluate to a boolean.
 |    <     |        Less than         |  a < b  |
 |    >=    | Greater than or equal to | a >= b  |
 |    <=    |  Less than or equal to   | a <= b  |
-
-_comparison operators_
+|          |                          |         |
 
 ```js
 const a = 10;
@@ -284,26 +285,84 @@ console.log(
 // does this give you some funny ideas to check out??
 ```
 
-_Logical Operators_
+`!` is a logical operator which we will discuss shortly. `!` means not or negation. So, `!=` or `!==` is `not equal to` or `not strictly equal to` respectively. They are the negations. So in the case that a condition is supposed to be `true`, it becomes `false` and `false` when `true`. You can say that the `!`, _not_ operator flips (negates) the truthfulness of a condition.
+
+**Logical Operators**
 
 | Operator | Description | Example  |
 | :------: | :---------: | :------: |
 |    &&    | Logical and |  a && b  |
 |   \|\|   | Logical or  | a \|\| b |
 |    !     | Logical not |    !a    |
+|          |             |          |
 
-_Unary Operators_
+The Logical _not_ as mentioned above negates a truth value.
 
-| Operator |      Description      |               Example               |
-| :------: | :-------------------: | :---------------------------------: |
-|    +     |      Unary plus       |                 +a                  |
-|    -     |      Unary minus      |                 -a                  |
-|    ++    |       Increment       |                 a++                 |
-|    --    |       Decrement       |                 a--                 |
-|  typeof  |        Type of        |              typeof a               |
-|    ?:    | Conditional (ternary) | condition involving a and b ? a : b |
+|   a   |   !a   | result |
+| :---: | :----: | :----: |
+| true  | !true  | false  |
+| false | !false |  true  |
+|       |        |        |
 
-- Control structures (if statements, loops)
+The logical _and_ evaluates to `true` when both values are `true` else `false`.
+
+|   a   |   b   | a && b |
+| :---: | :---: | :----: |
+| true  | true  |  true  |
+| true  | false | false  |
+| false | true  | false  |
+| false | false | false  |
+|       |       |        |
+
+The logical _or_ evaluates to `true` when at least one of the values is `true`.
+
+|   a   |   b   | a \|\| b |
+| :---: | :---: | :------: |
+| true  | true  |   true   |
+| true  | false |   true   |
+| false | true  |   true   |
+| false | false |  false   |
+|       |       |          |
+
+**Unary Operators**
+
+These are operators that works on one value.
+
+| Operator | Description | Example  |
+| :------: | :---------: | :------: |
+|    +     | Unary plus  |    +a    |
+|    -     | Unary minus |    -a    |
+|    ++    |  Increment  |   a++    |
+|    --    |  Decrement  |   a--    |
+|  typeof  |   Type of   | typeof a |
+|          |             |          |
+
+`++` and `--` are are the increment and decrement operators. They operator on the value and assign the result to the same variable.
+
+```js
+// when game starts, set the life and power to the default
+let attackPower = 0;
+let playerLife = 5;
+console.log({ playerLife, attackPower });
+// { playerLife: 5, attackPower: 0 }
+
+// when player picks bullet, increase attack power
+attackPower++;
+// same as attackPower += 1
+console.log({ attackPower });
+// { attackPower: 1 }
+
+// when player gets shot, decrease life
+playerLife--;
+// same as playerLife -= 1
+console.log({ playerLife });
+// { playerLife: 4 }
+```
+
+## Control structures (if statements, loops)
+
+<!-- | ?: | Conditional (ternary) | condition involving a and b ? a : b | -->
+
 - Functions
 - Callbacks, promises, async & await
 - Next big thing

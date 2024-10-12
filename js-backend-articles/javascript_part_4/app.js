@@ -158,3 +158,19 @@
 // console.log(`'${strTwo}' is Equal to ${intTwo} is, ${strTwo == intTwo}`)
 // console.log(`'${strTwo}' is Strictly Equal to is, ${intTwo} ${strTwo === intTwo}`)
 // // does this give you some funny ideas to check out??
+
+// // when game starts, set the life and power to the default
+// let attackPower = 0;
+// let playerLife = 5;
+// console.log({ playerLife, attackPower });
+// // { playerLife: 5, attackPower: 0 }
+
+// // when player picks bullet, increase attack power
+// attackPower++
+// console.log({ attackPower });
+// // { attackPower: 1 }
+
+// // when player gets shot, decrease life
+// playerLife--
+// console.log({ playerLife })
+// // { playerLife: 4 }
