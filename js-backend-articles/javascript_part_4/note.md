@@ -591,6 +591,231 @@ What do you think is the output? Rewrite the above `switch` statement program, u
 
 ## For loop
 
+It is usually the case that we replay our favourite song over and over again. We put the song in a loop. The song is repeatedly played. This same idea applies to loops in programming. One of the looping contrast in JavaScript is the `for` loop. `for` is a keyword so don't use it as a variable. At this point, when you hear something is a keyword, it means don't use it as a variable name.
+
+The fundamental reason to use a looping statement is to execute some logic repeatedly. This can be a finite number of times or based on a condition. For loop is usually used when the number of repetition needed is known (finite).
+
+We can use the loops to:
+
+- go over (iterate) an array or a string. Eg: find the number of characters in a string array
+- execute some logic for some known number of times. Eg: console log "Hello world" 10 times
+
+We would be looking at three kind of for loops here.
+
+- Traditional for loop which is of the form
+
+  ```js
+  for (init; condition; step) {
+    // some logic
+  }
+  ```
+
+  - `init` tells you where the loop starts
+  - `condition` is a boolean expression that indicates when the loop should be terminated (stopped). The body of the loop gets executed as far as the condition hold
+  - `step` indicates how the looping condition is influenced. Sometimes it is an increment and at times it's decrement.
+
+  **Example**
+
+  ```js
+  // console log numbers between 0 and 10
+  for (let loopingNumber = 0; loopingNumber <= 10; loopingNumber++) {
+    console.log(loopingNumber);
+  }
+  ```
+
+  - For this example that we have for the for loop and in the header of the for loop, we set the initial value of the `loopingNumber` to `0`.
+  - Then the _condition_ is that, as far as the `loopingNumber` is less than or equal to `10`, execute the body of the for loop.
+  - The `loopingNumber` is then incremented as the next _step_ in this case. `loopingNumber++` is the same as `loopingNumber += 1` or `loopingNumber = loopingNumber + 1`.
+  - So as far as the `loopingNumber` is less than 10, the condition holds and the `console.log(loopingNumber);` is executed.
+
+  > Usually in the _condition_ part, the comparison operators are used there. What happens when we use `<` instead of `<=`? Try it out. Be curious.
+
+  **Example**
+
+  ```js
+  // let's loop through the array and print out the number of characters in it
+  const daysOfTheWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+
+  for (let index = 0; index < daysOfTheWeek.length; index += 1) {
+    console.log(
+      `${daysOfTheWeek[index]} at index ${index} has ${daysOfTheWeek[index].length} characters`
+    );
+  }
+  // Monday at index 0 has 6 characters
+  // Tuesday at index 1 has 7 characters
+  // Wednesday at index 2 has 9 characters
+  // Thursday at index 3 has 8 characters
+  // Friday at index 4 has 6 characters
+  // Saturday at index 5 has 8 characters
+  // Sunday at index 6 has 6 characters
+  ```
+
+  - Since we wanted to start from the first element in the array, we set the `index` variable to `0` knowing that array indexing starts at `0` in Javascript
+  - We can alter the initial value of `index` to start from another element.
+  - In the _condition_, we check if the `index` is less than the array size, `daysOfTheWeek.length`
+
+- For-In Loop is of the form
+
+  ```js
+  for (variable in object) {
+    // some logic
+  }
+  ```
+
+  The _for in_ loop is used on arrays (anything that can be iterated) and objects. The variable, in the case of an array-like value, is the index and for an object is the key.
+
+  Let's rewrite the above `for` loop, using `for in` loop
+
+  ```js
+  const daysOfTheWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+
+  for (const index in daysOfTheWeek) {
+    console.log(
+      `${daysOfTheWeek[index]} at index ${index} has ${daysOfTheWeek[index].length} characters`
+    );
+  }
+  // Monday at index 0 has 6 characters
+  // Tuesday at index 1 has 7 characters
+  // Wednesday at index 2 has 9 characters
+  // Thursday at index 3 has 8 characters
+  // Friday at index 4 has 6 characters
+  // Saturday at index 5 has 8 characters
+  // Sunday at index 6 has 6 characters
+  ```
+
+  Let's implement one for an object
+
+  ```js
+  const profile = {
+    firstName: "John",
+    lastName: "Doe",
+    job: "Debugger",
+    isBald: false,
+    numberOfPets: 3,
+  };
+
+  for (const key in profile) {
+    console.log(`${key} points to, ${profile[key]}`);
+  }
+  // firstName points to, John
+  // lastName points to, Doe
+  // job points to, Debugger
+  // isBald points to, false
+  // numberOfPets points to, 3
+  ```
+
+- For-Of Loop is of the form
+
+  ```js
+  for (variable of collection) {
+    // some logic
+  }
+  ```
+
+  The _for of_ loop is used on collections, iterables, like an array, strings, etc. The variable, in this case points to the element itself.
+
+  Let's rewrite the above `for` loop, using `for of` loop
+
+  ```js
+  for (const element of daysOfTheWeek) {
+    console.log(
+      `${element} at index ${daysOfTheWeek.indexOf(element)} has ${
+        element.length
+      } characters`
+    );
+  }
+  // Monday at index 0 has 6 characters
+  // Tuesday at index 1 has 7 characters
+  // Wednesday at index 2 has 9 characters
+  // Thursday at index 3 has 8 characters
+  // Friday at index 4 has 6 characters
+  // Saturday at index 5 has 8 characters
+  // Sunday at index 6 has 6 characters
+  ```
+
+  This will not work on an object because an object is not an iterable. If you want to do this on an object, you'd have to manipulate it. `Object.keys(yourObject)` or `Object.values(yourObject)` to get the keys or values as an array.
+
+For the last example on for loops, let's look into the past. One of the validation rules for an email was to have a single '@' sign. So we'd write a program that counts the number of '@' sign in an email. The idea will be same for a list of emails so I will go with the list of emails and also use that as an opportunity to use nested for loops.
+
+**Example**
+
+```js
+const emailList = [
+  "johndoes@email.com",
+  "pancake@email@ny.com",
+  "tenya123@@email@ny.com",
+];
+
+const AT_SIGN = "@";
+
+const validation = {};
+
+for (const email of emailList) {
+  let numberOfAtSigns = 0;
+
+  for (const character of email) {
+    if (character === AT_SIGN) {
+      numberOfAtSigns++;
+    }
+  }
+
+  validation[email] = numberOfAtSigns;
+}
+
+console.log(validation);
+// {
+//     'johndoes@email.com': 1,
+//     'pancake@email@ny.com': 2,
+//     'tenya123@@email@ny.com': 3
+// }
+```
+
+Does this need explanation? What do you think it does? If something is new, it the nested for loops. Look at this new example. There are several ways to write this. So try the others you can think of.
+
+```js
+const emailList = [
+  "johndoes@email.com",
+  "pancake@email@ny.com",
+  "tenya123@@email@ny.com",
+];
+
+const AT_SIGN = "@";
+
+const validation = emailList.map((email) => {
+  const emailPartsLength = email.split(AT_SIGN).length;
+  const numberOfAtSigns = emailPartsLength > 1 ? emailPartsLength - 1 : 0;
+
+  // we can replace the above two lines with
+  // const numberOfAtSigns = email.split("").filter(character => character === AT_SIGN).length
+  // why didn't we split at '@'
+
+  return { [email]: numberOfAtSigns };
+});
+
+console.log(validation);
+// [
+//     { 'johndoes@email.com': 1 },
+//     { 'pancake@email@ny.com': 2 },
+//     { 'tenya123@@email@ny.com': 3 }
+// ]
+```
+
 ## While loop
 
 ## Password and Email validation

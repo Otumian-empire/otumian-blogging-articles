@@ -228,24 +228,177 @@
 
 // console.log(`Total take home: ${pay}`);
 
-const day = "Friday";
+// const day = "Friday";
 
-switch (day) {
-    case "Monday":
-        console.log("Today is Monday");
-        break;
-    case "Tuesday":
-        console.log("Today is Tuesday");
-        break;
-    case "Wednesday":
-        console.log("Today is Wednesday");
-        break;
-    default:
-        console.log("Unknown day");
+// switch (day) {
+//     case "Monday":
+//         console.log("Today is Monday");
+//         break;
+//     case "Tuesday":
+//         console.log("Today is Tuesday");
+//         break;
+//     case "Wednesday":
+//         console.log("Today is Wednesday");
+//         break;
+//     default:
+//         console.log("Unknown day");
+// }
+
+// // console log numbers between 0 and 10
+// for (let loopingNumber = 0; loopingNumber <= 10; loopingNumber++) {
+//     console.log(loopingNumber)
+// }
+/*
+// let's loop through the array and print out the number of characters in it
+const daysOfTheWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+];
+
+for (let index = 0; index < daysOfTheWeek.length; index += 1) {
+    console.log(
+        `${daysOfTheWeek[index]} at index ${index} has ${daysOfTheWeek[index].length} characters`
+    );
 }
+// Monday at index 0 has 6 characters
+// Tuesday at index 1 has 7 characters
+// Wednesday at index 2 has 9 characters
+// Thursday at index 3 has 8 characters
+// Friday at index 4 has 6 characters
+// Saturday at index 5 has 8 characters
+// Sunday at index 6 has 6 characters */
+/*
+const daysOfTheWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+];
+
+for (const index in daysOfTheWeek) {
+    console.log(
+        `${daysOfTheWeek[index]} at index ${index} has ${daysOfTheWeek[index].length} characters`
+    );
+} */
 
 /*
+const profile = {
+    firstName: "John",
+    lastName: "Doe",
+    job: "Debugger",
+    isBald: false,
+    numberOfPets: 3
+}
 
+for (const key in profile) {
+    console.log(`${key} points to, ${profile[key]}`)
+} */
+
+/* const daysOfTheWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+];
+
+for (const element of daysOfTheWeek) {
+    console.log(
+        `${element} at index ${daysOfTheWeek.indexOf(element)} has ${element.length} characters`
+    );
+} */
+
+/* const emailList = [
+    "johndoes@email.com",
+    "pancake@email@ny.com",
+    "tenya123@@email@ny.com"
+]
+
+const AT_SIGN = "@"
+
+const response = {}
+
+for (const email of emailList) {
+    let numberOfAtSigns = 0;
+
+    for (const character of email) {
+        if (character === AT_SIGN) {
+            numberOfAtSigns++
+        }
+    }
+
+    response[email] = numberOfAtSigns
+}
+
+console.log(response)
+// {
+//     'johndoes@email.com': 1,
+//     'pancake@email@ny.com': 2,
+//     'tenya123@@email@ny.com': 3
+// }
+ */
+
+const emailList = [
+    "johndoes@email.com",
+    "pancake@email@ny.com",
+    "tenya123@@email@ny.com",
+];
+
+const AT_SIGN = "@";
+
+const validation = emailList.map((email) => {
+    const emailPartsLength = email.split(AT_SIGN).length;
+    const numberOfAtSigns = emailPartsLength > 1 ? emailPartsLength - 1 : 0;
+
+    // we can replace the above two lines with
+    // const numberOfAtSigns = email.split("").filter(character => character === AT_SIGN).length
+    // why didn't we split at '@'
+
+    return { [email]: numberOfAtSigns };
+});
+
+console.log(validation);
+// [
+//     { 'johndoes@email.com': 1 },
+//     { 'pancake@email@ny.com': 2 },
+//     { 'tenya123@@email@ny.com': 3 }
+// ]
+
+
+
+// {
+//     'johndoes@email.com': 1,
+//     'pancake@email@ny.com': 2,
+//     'tenya123@@email@ny.com': 3
+// }
+
+// // //
+/*
+const daysOfTheWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+];
+
+for (const index in daysOfTheWeek) {
+    console.log(
+        `${daysOfTheWeek[index]} at index ${index} has ${daysOfTheWeek[index].length} characters`
+    );
+}
 
 const daysOfTheWeek = [
   "Monday",
