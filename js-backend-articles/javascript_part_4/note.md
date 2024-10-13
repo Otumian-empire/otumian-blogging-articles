@@ -361,7 +361,7 @@ console.log({ playerLife });
 
 ## JavaScript Operator Precedence
 
-Computations with the operators are done in a certain. This is known as operator precedence.
+Computations with the operators are done in a certain order. This is known as operator precedence.
 
 - _Parentheses ()_ - Evaluate expressions inside parentheses first.
 - _Exponentiation \*\*_ - Right-to-left.
@@ -377,7 +377,7 @@ Computations with the operators are done in a certain. This is known as operator
 
 ## Control structures (if statements, loops)
 
-Control structures are contracts used to alter the flow of data. They can change how the data flows, either to repeat some action for a determined number of times or perform some actions based on some conditions.
+Control structures are constructs used to alter the flow of data. They can change how the data flows, either to repeat some action for a determined number of times or perform some actions based on some conditions.
 
 ### If and else statement
 
@@ -391,9 +391,9 @@ if (/* some condition */) {
 }
 ```
 
-The "some condition" referred to above is a boolean (conditional) expression. This or these expressions would evaluate to a truth value. When the resultant value is `true`, the body of the `if` block is executed. If not, then the body of the `else` is executed. The body (block) is found within the `{` and `}`.
+The "some condition" referred to, is a boolean (conditional) expression. This or these expressions would evaluate to a truth value. When the resultant value is `true`, the body of the `if` block is executed. If not, then the body of the `else` is executed. The body (block) is found within the `{` and `}`.
 
-> `if` and `else` can not be used as variable names.
+> `if` and `else` can not be used as variable names. They are keywords.
 
 Consider the snippet below:
 
@@ -412,7 +412,7 @@ console.log(`Total take home: ${pay}`);
 
 The pay is increased by some rate when the employee does overtime. What happens if the `didOverTime` is `false`? Try it out. Set the `didOverTime` to `false`.
 
-Now, we can choose to do something else when the employee doesn't do overtime. We can be the wicked employer and make a profit by reducing their pay. We can do this by adding some code to the `else` block.
+Now, we can choose to do something else when the employee doesn't do overtime. We can be the wicked employer and make a profit by reducing the employee's pay. We can do this by adding some code to the `else` block.
 
 ```js
 let pay = 30;
@@ -483,9 +483,9 @@ Well, everything is feasible. We can nest an `if` and `else` statements in anoth
 ```txt
 if (condition 1 is true) {
  if (condition 2 and condition 3 are true) {
- do something
+  do something
  } else {
- do something
+    do something
  }
 } else {
  do something
@@ -534,14 +534,14 @@ There is another conditional statement known as the switch statement. Usually, i
 ```txt
 switch someValue {
  case someValue is thisValueA:
- do something
- break;
+  do something
+  break;
  case someValue is thisValueB:
- do something
- break;
+  do something
+  break;
  ...
  default:
- do something by default if none of these values matches the someValue
+  do something by default if none of these values matches the someValue
 }
 ```
 
@@ -604,152 +604,152 @@ We would be looking at three kinds of for loops here.
 
 - Traditional for loop which is of the form
 
-```js
-for (init; condition; step) {
-  // some logic
-}
-```
+  ```js
+  for (init; condition; step) {
+    // some logic
+  }
+  ```
 
-- `init` tells you where the loop starts
-- `condition` is a boolean expression that indicates when the loop should be terminated (stopped). The body of the loop gets executed as far as the condition holds
-- `step` indicates how the looping condition is influenced. Sometimes it is an increment and at times it's a decrement.
+  - `init` tells you where the loop starts
+  - `condition` is a boolean expression that indicates when the loop should be terminated (stopped). The body of the loop gets executed as far as the condition holds
+  - `step` indicates how the looping condition is influenced. Sometimes it is an increment and at times it's a decrement.
 
-**Example**
+  **Example**
 
-```js
-// console log numbers between 0 and 10
-for (let loopingNumber = 0; loopingNumber <= 10; loopingNumber++) {
-  console.log(loopingNumber);
-}
-```
+  ```js
+  // console log numbers between 0 and 10
+  for (let loopingNumber = 0; loopingNumber <= 10; loopingNumber++) {
+    console.log(loopingNumber);
+  }
+  ```
 
-- For this example that we have for the for loop and in the header of the for loop, we set the initial value of the `loopingNumber` to `0`.
-- Then the _condition_ is that, as far as the `loopingNumber` is less than or equal to `10`, execute the body of the for loop.
-- The `loopingNumber` is then incremented as the next _step_ in this case. `loopingNumber++` is the same as `loopingNumber += 1` or `loopingNumber = loopingNumber + 1`.
-- So as far as the `loopingNumber` is less than 10, the condition holds and the `console.log(loopingNumber);` is executed.
+  - For this example that we have for the for loop and in the header of the for loop, we set the initial value of the `loopingNumber` to `0`.
+  - Then the _condition_ is that, as far as the `loopingNumber` is less than or equal to `10`, execute the body of the for loop.
+  - The `loopingNumber` is then incremented as the next _step_ in this case. `loopingNumber++` is the same as `loopingNumber += 1` or `loopingNumber = loopingNumber + 1`.
+  - So as far as the `loopingNumber` is less than 10, the condition holds and the `console.log(loopingNumber);` is executed.
 
-> Usually in the _condition_ part, the comparison operators are used there. What happens when we use `<` instead of `<=`? Try it out. Be curious.
+  > Usually in the _condition_ part, the comparison operators are used there. What happens when we use `<` instead of `<=`? Try it out. Be curious.
 
-**Example**
+  **Example**
 
-```js
-// let's loop through the array and print out the number of characters in it
-const daysOfTheWeek = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
+  ```js
+  // let's loop through the array and print out the number of characters in it
+  const daysOfTheWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
 
-for (let index = 0; index < daysOfTheWeek.length; index += 1) {
-  console.log(
-    `${daysOfTheWeek[index]} at index ${index} has ${daysOfTheWeek[index].length} characters`
-  );
-}
-// Monday at index 0 has 6 characters
-// Tuesday at index 1 has 7 characters
-// Wednesday at index 2 has 9 characters
-// Thursday at index 3 has 8 characters
-// Friday at index 4 has 6 characters
-// Saturday at index 5 has 8 characters
-// Sunday at index 6 has 6 characters
-```
+  for (let index = 0; index < daysOfTheWeek.length; index += 1) {
+    console.log(
+      `${daysOfTheWeek[index]} at index ${index} has ${daysOfTheWeek[index].length} characters`
+    );
+  }
+  // Monday at index 0 has 6 characters
+  // Tuesday at index 1 has 7 characters
+  // Wednesday at index 2 has 9 characters
+  // Thursday at index 3 has 8 characters
+  // Friday at index 4 has 6 characters
+  // Saturday at index 5 has 8 characters
+  // Sunday at index 6 has 6 characters
+  ```
 
-- Since we wanted to start from the first element in the array, we set the `index` variable to `0` knowing that array indexing starts at `0` in Javascript
-- We can alter the initial value of `index` to start from another element.
-- In the _condition_, we check if the `index` is less than the array size, `daysOfTheWeek.length`
+  - Since we wanted to start from the first element in the array, we set the `index` variable to `0` knowing that array indexing starts at `0` in Javascript
+  - We can alter the initial value of `index` to start from another element.
+  - In the _condition_, we check if the `index` is less than the array size, `daysOfTheWeek.length`
 
 - For-In Loop is of the form
 
-```js
-for (variable in object) {
-  // some logic
-}
-```
+  ```js
+  for (variable in object) {
+    // some logic
+  }
+  ```
 
-The _for in_ loop is used on arrays (anything that can be iterated) and objects. The variable, in the case of an array-like value, is the index and for an object is the key.
+  The _for in_ loop is used on arrays (anything that can be iterated) and objects. The variable, in the case of an array-like value, is the index and for an object is the key.
 
-Let's rewrite the above `for` loop, using `for in` loop.
+  Let's rewrite the above `for` loop, using `for in` loop.
 
-```js
-const daysOfTheWeek = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
+  ```js
+  const daysOfTheWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
 
-for (const index in daysOfTheWeek) {
-  console.log(
-    `${daysOfTheWeek[index]} at index ${index} has ${daysOfTheWeek[index].length} characters`
-  );
-}
-// Monday at index 0 has 6 characters
-// Tuesday at index 1 has 7 characters
-// Wednesday at index 2 has 9 characters
-// Thursday at index 3 has 8 characters
-// Friday at index 4 has 6 characters
-// Saturday at index 5 has 8 characters
-// Sunday at index 6 has 6 characters
-```
+  for (const index in daysOfTheWeek) {
+    console.log(
+      `${daysOfTheWeek[index]} at index ${index} has ${daysOfTheWeek[index].length} characters`
+    );
+  }
+  // Monday at index 0 has 6 characters
+  // Tuesday at index 1 has 7 characters
+  // Wednesday at index 2 has 9 characters
+  // Thursday at index 3 has 8 characters
+  // Friday at index 4 has 6 characters
+  // Saturday at index 5 has 8 characters
+  // Sunday at index 6 has 6 characters
+  ```
 
-Let's implement one for an object.
+  Let's implement one for an object.
 
-```js
-const profile = {
-  firstName: "John",
-  lastName: "Doe",
-  job: "Debugger",
-  isBald: false,
-  numberOfPets: 3,
-};
+  ```js
+  const profile = {
+    firstName: "John",
+    lastName: "Doe",
+    job: "Debugger",
+    isBald: false,
+    numberOfPets: 3,
+  };
 
-for (const key in profile) {
-  console.log(`${key} points to, ${profile[key]}`);
-}
-// firstName points to, John
-// lastName points to, Doe
-// job points to, Debugger
-// isBald points to, false
-// numberOfPets points to, 3
-```
+  for (const key in profile) {
+    console.log(`${key} points to, ${profile[key]}`);
+  }
+  // firstName points to, John
+  // lastName points to, Doe
+  // job points to, Debugger
+  // isBald points to, false
+  // numberOfPets points to, 3
+  ```
 
 - For-Of Loop is of the form
 
-```js
-for (variable of collection) {
-  // some logic
-}
-```
+  ```js
+  for (variable of collection) {
+    // some logic
+  }
+  ```
 
-The _for of_ loop is used on collections, iterables, like an array, strings, etc. The variable, in this case, points to the element itself.
+  The _for of_ loop is used on collections, iterables, like an array, strings, etc. The variable, in this case, points to the element itself.
 
-Let's rewrite the above `for` loop, using `for of` loop.
+  Let's rewrite the above `for` loop, using `for of` loop.
 
-```js
-for (const element of daysOfTheWeek) {
-  console.log(
-    `${element} at index ${daysOfTheWeek.indexOf(element)} has ${
-      element.length
-    } characters`
-  );
-}
-// Monday at index 0 has 6 characters
-// Tuesday at index 1 has 7 characters
-// Wednesday at index 2 has 9 characters
-// Thursday at index 3 has 8 characters
-// Friday at index 4 has 6 characters
-// Saturday at index 5 has 8 characters
-// Sunday at index 6 has 6 characters
-```
+  ```js
+  for (const element of daysOfTheWeek) {
+    console.log(
+      `${element} at index ${daysOfTheWeek.indexOf(element)} has ${
+        element.length
+      } characters`
+    );
+  }
+  // Monday at index 0 has 6 characters
+  // Tuesday at index 1 has 7 characters
+  // Wednesday at index 2 has 9 characters
+  // Thursday at index 3 has 8 characters
+  // Friday at index 4 has 6 characters
+  // Saturday at index 5 has 8 characters
+  // Sunday at index 6 has 6 characters
+  ```
 
-This will not work on an object because an object is not an iterable. If you want to do this on an object, you'd have to manipulate it. `Object.keys(yourObject)` or `Object.values(yourObject)` to get the keys or values as an array.
+  This will not work on an object because an object is not an iterable. If you want to do this on an object, you'd have to manipulate it. `Object.keys(yourObject)` or `Object.values(yourObject)` to get the keys or values as an array.
 
 For the last example of loops, let's look into the past. One of the validation rules for an email was to have a single '@' sign. So we'd write a program that counts the number of '@' signs in an email. The idea will be the same for a list of emails so I will go with the list of emails and also use that as an opportunity to use nested for loops.
 
