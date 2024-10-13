@@ -449,6 +449,8 @@ console.log(`Total take home: ${pay}`);
 
 We introduced a new variable, `payChange`, which holds the amount to be added or deducted from the employee's pay based on the state (value) of the `didOverTime`.
 
+> It is not compulsory to always add the else block. You can write your program in smart way so that you will not need to add an `else` block. Know that there are cases that this works well and there are cases that it doesn't. You need to be calculative here.
+
 Let's look at the `FizzBuzz` program. So, the _fizz buzz_ is a program that say:
 
 - "fizz" when a value is a multiple of 3
@@ -461,19 +463,79 @@ In this program, we would use these operators `===` and `%`. `===` is to check i
 
 This is a pseudocode.
 
-```md
-if the given number is a multiple of 3, print "fizz"
-else if the given number is a multiple of 5, print "buzz"
-else if the given number is a multiple of 3 and 5, print "fizzbuzz"
+```txt
+if the given number is a multiple of 3
+  print "fizz"
+else if the given number is a multiple of 5
+  print "buzz"
+else if the given number is a multiple of 3 and 5
+  print "fizzbuzz"
 ```
 
 Try it. Write the fizzbuzz program using the hints left in the above pseudocode. Try your solution with the given value as, 3, 6, 10, 15. You'd have a problem. Most certainly. The solution is to rearrange the if statements. I hope this helps you resolve the problem.
 
 > It is helpful to think in pseudocode when you are having a hard time grasping how to implement a solution. Pseudocode, is more a less how you are thinking about the approach to the solution rather the code to solve the problem. It is like writing down what you are thinking about when brainstorming.
 
-<!--  -->
+## Nested if and else statements
 
-In [JavaScript Essentials: Part 2](https://dev.to/otumianempire/javascript-essentials-part-2-3k6j), we discussed writing a password and email validation.
+Well, everything is feasible. We can nest an `if` and `else` statement in another if and else statement. It is fun and not fun sometimes.
+
+```txt
+if (condition 1 is true) {
+  if (condition 2 and condition 3 are true) {
+    do something
+  } else {
+    do something
+  }
+} else {
+  do something
+}
+
+```
+
+Be creative and create a nested and nested `if` and `else` statements. Frankly, I am not a fun of nesting the `if` and `else` statements. So I find another way to do it. We will discuss short circuiting in the future.
+
+## Ternary operator
+
+The ternary operator is a one-line `if` `else` statement put together. It is devoid of complex logic that would span more than a line. We will modify the two `if` `else` statements above. With ternary operator, we reduce the `if` and `else` block to an inline expression.
+
+```md
+variable = condition ? true body : false body;
+```
+
+The `condition` is a boolean expression. _true body_ is what happens when the condition resolves to `true` and the _false body_, when `false`.
+
+```js
+let pay = 30;
+const RATE = 0.05;
+const didOverTime = true;
+
+// if (didOverTime) {
+//   pay = pay + pay * RATE;
+// } else {
+//   pay = pay - pay * RATE;
+// }
+
+// using ternary
+pay = didOverTime ? pay + pay * RATE : pay - pay * RATE;
+
+console.log(`Total take home: ${pay}`);
+// Total take home: 31.5
+```
+
+Use the ternary operator for the second example.
+
+> It is cool to be smart in programming but there are times that smartness can be dangerous not just to you but also the company and team. So be smart wisely. For the fact that it is feasible doesn't mean do it.
+
+## Switch statement
+
+## For loop
+
+## While loop
+
+## Password and Email validation
+
+In [JavaScript Essentials: Part 2](https://dev.to/otumianempire/javascript-essentials-part-2-3k6j), we discussed writing a password and email validation. We will rewrite them now that we have some
 
 **Password rules**
 Password must:

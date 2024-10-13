@@ -212,6 +212,21 @@
 
 // fizz buzz program
 
+let pay = 30;
+const RATE = 0.05;
+const didOverTime = true;
+
+// if employee did overtime
+// if (didOverTime) {
+//   pay = pay + pay * RATE;
+// } else {
+//   pay = pay - pay * RATE;
+// }
+
+// using ternary
+pay = didOverTime ? pay + pay * RATE : pay - pay * RATE;
+
+console.log(`Total take home: ${pay}`);
 
 
 // const sampleEmail = "johndoes@gmail.com"
