@@ -6,7 +6,7 @@ Previously in [JavaScript Essentials: Part 3](https://dev.to/otumianempire/javas
 
 We can destructure an array and an object. The idea of destructuring has something to do with "breaking down" a value into various parts. It has to do with assignments.
 
-Let's consider an array. We know the first item in the array is at index `0` and so on. When we want to assign the first element in the array to a variable, usually we'd do, `variable = array[0]`.
+Let's consider an array. We know the first item in the array is at index `0`. When we want to assign the first element in the array to a variable, usually we'd do, `variable = array[0]`.
 
 **Example**
 
@@ -20,7 +20,7 @@ console.log(secondElement);
 console.log(thirdElement);
 ```
 
-We positioned the variables in the same manner as the values are in the array. So in a way, it is as if we are creating array. The above would have been:
+We positioned the variables in the same manner as the values in the array. So in a way, it is as if we are creating an array. The above would have been:
 
 ```js
 const numbers = [1, 2, 3];
@@ -29,7 +29,7 @@ const firstElement = numbers[0],
   secondElement = numbers[1],
   thirdElement = numbers[2];
 
-// the variables could have had their on `const` keyword on different lines
+// the variables could have had their own `const` keyword on different lines
 
 console.log(firstElement);
 console.log(secondElement);
@@ -47,7 +47,7 @@ const lastName = profile.lastName;
 console.log(`Full name: ${firstName} ${lastName}`);
 ```
 
-We can extract the first and last name only.
+We can extract the first and last names only.
 
 ```js
 const profile = {
@@ -73,7 +73,7 @@ console.log(`Full name: ${anotherVarForFirstName} ${lastName}`);
 
 ## Rest
 
-Rest in JavaScript is the same as destructuring an array or object. In the array example, how would you extract just the first element and not bother about the "rest"? We could use indexing. True. Then what about getting the rest of the data and not the first?
+Rest in JavaScript is the same as destructuring an array or object. In the array example, how would you extract the first element and not bother about the "rest"? We could use indexing. True. Then what about getting the rest of the data and not the first?
 
 ```js
 const numbers = [1, 2, 3];
@@ -87,7 +87,7 @@ console.log(theRestOfTheElements);
 // [ 2, 3 ]
 ```
 
-We can do the same for an object
+We can do the same for an object.
 
 ```js
 const profile = {
@@ -110,13 +110,13 @@ Know that when destructuring using the rest approach, the rest variable must be 
 
 ## Spreading
 
-Let's try this out. I want you to play with it and let me know what you think. Create an array variable and assign some values to it. Create another array and assign it the previous array variable. Modify one of the values in the first array. Print out both arrays. What did you notice? Try the process with two objects. You really have to try it out else, you won't know first-hand what I am talking about and how devastating it could be.
+Let's try this out. I want you to play with it and let me know what you think. Create an array variable and assign some values to it. Create another array and assign it to the previous array variable. Modify one of the values in the first array. Print out both arrays. What did you notice? Try the process with two objects. You really have to try it out else, you won't know first-hand what I am talking about and how devastating it could be.
 
 ```js
 // we have the original array
 const firstArray = [1, 3];
 
-// we assign a reference (not a copy of the original to another another)
+// we assign a reference (not a copy of the original to another)
 const secondArray = firstArray;
 
 // we update the first element in the original array
@@ -126,7 +126,7 @@ firstArray[0] = 5;
 console.log({ firstArray, secondArray });
 // { firstArray: [ 5, 3 ], secondArray: [ 5, 3 ] }
 
-// we actually have to copy the original and assign the value to the
+// we have to copy the original and assign the value to the
 // new array or use spreading
 const thirdArray = [...firstArray];
 
@@ -169,7 +169,7 @@ We discussed the mathematical operators previously in [JavaScript Essentials: Pa
 
 **Arithmetic Operators**
 
-Arithmetic operators are binary operators. This means they operator on two values.
+Arithmetic operators are binary operators. This means they operate on two values.
 
 | Operator |     Description     | Example  |
 | :------: | :-----------------: | :------: |
@@ -263,7 +263,7 @@ console.log(`${a} is Equal to ${b} is, ${a == b}`);
 console.log(`${a} is Strictly Equal to is, ${b} ${a === b}`);
 ```
 
-> `=` is different from `==` and `===`. The single equal to sign (symbol) is known as the assignment operator. It is used when "putting" values into a variable.
+> `=` is different from `==` and `===`. The single equal to sign (symbol) is the assignment operator. It is used when "putting" values into a variable.
 
 ```js
 // it will be in your best interest to stick to === instead of ==
@@ -273,8 +273,8 @@ const intTwo = 2;
 // is "2" the same as 2???
 // the answer is yes and no
 // javascript is javascript
-// yes because the value (look) are the same... they are all 'two'
-// however, strictly speaking, they two values are of different types
+// yes because the values (look) are the same... they are all 'two'
+// however, strictly speaking, the two values are of different types
 // strTwo is a string and intTwo is a number so if we are going to compare them,
 // we have to be strict
 
@@ -304,7 +304,7 @@ The Logical _not_ as mentioned above negates a truth value.
 | false | !false |  true  |
 |       |        |        |
 
-The logical _and_ evaluates to `true` when both values are `true` else `false`.
+The logical _and_ evaluates to `true` when both values are `true` or else `false`.
 
 |   a   |   b   | a && b |
 | :---: | :---: | :----: |
@@ -326,7 +326,7 @@ The logical _or_ evaluates to `true` when at least one of the values is `true`.
 
 **Unary Operators**
 
-These are operators that works on one value.
+These are operators that work on one value.
 
 | Operator | Description | Example  |
 | :------: | :---------: | :------: |
@@ -337,22 +337,22 @@ These are operators that works on one value.
 |  typeof  |   Type of   | typeof a |
 |          |             |          |
 
-`++` and `--` are are the increment and decrement operators. They operator on the value and assign the result to the same variable.
+`++` and `--` are the increment and decrement operators. They operate on the value and assign the result to the same variable.
 
 ```js
-// when game starts, set the life and power to the default
+// when the game starts, set the life and power to the default
 let attackPower = 0;
 let playerLife = 5;
 console.log({ playerLife, attackPower });
 // { playerLife: 5, attackPower: 0 }
 
-// when player picks bullet, increase attack power
+// when the player picks a bullet, increase the attack power
 attackPower++;
 // same as attackPower += 1
 console.log({ attackPower });
 // { attackPower: 1 }
 
-// when player gets shot, decrease life
+// when the player gets shot, decrease the player's life
 playerLife--;
 // same as playerLife -= 1
 console.log({ playerLife });
@@ -377,11 +377,11 @@ Computations with the operators are done in a certain. This is known as operator
 
 ## Control structures (if statements, loops)
 
-Control structures are contracts used to alter the flow of data. They can changes how the data flows, either to repeat some action for determined number of times or perform some actions based on some conditions.
+Control structures are contracts used to alter the flow of data. They can change how the data flows, either to repeat some action for a determined number of times or perform some actions based on some conditions.
 
 ### If and else statement
 
-The `if` and `else` statement takes the form
+The `if` and `else` statement takes the form.
 
 ```js
 if (/* some condition */) {
@@ -391,18 +391,18 @@ if (/* some condition */) {
 }
 ```
 
-The "some condition" referred to in the above is a boolean (conditional) expression. This or these expressions would evaluate to a truth value. When the resultant value is `true`, the body of `if` block is executed. If not, then the body of the `else` is executed. The body (block) is found within the `{` and `}`.
+The "some condition" referred to above is a boolean (conditional) expression. This or these expressions would evaluate to a truth value. When the resultant value is `true`, the body of the `if` block is executed. If not, then the body of the `else` is executed. The body (block) is found within the `{` and `}`.
 
 > `if` and `else` can not be used as variable names.
 
-Consider snippet below:
+Consider the snippet below:
 
 ```js
 let pay = 30;
 const RATE = 0.05;
 const didOverTime = true;
 
-// if employee did overtime
+// if the employee did overtime
 if (didOverTime) {
   pay = pay + pay * RATE;
 }
@@ -410,16 +410,16 @@ if (didOverTime) {
 console.log(`Total take home: ${pay}`);
 ```
 
-The pay is increase by some rate when the employee did an overtime. What happens if the `didOverTime` is `false`? Try it out. Set the `didOverTime` to `false`.
+The pay is increased by some rate when the employee does overtime. What happens if the `didOverTime` is `false`? Try it out. Set the `didOverTime` to `false`.
 
-Now, we can choose to do something else when the employee didn't do over time. We can be the wicked employer and make profit by reducing their pay. We can do this by addition some code to the `else` block.
+Now, we can choose to do something else when the employee doesn't do overtime. We can be the wicked employer and make a profit by reducing their pay. We can do this by adding some code to the `else` block.
 
 ```js
 let pay = 30;
 const RATE = 0.05;
 const didOverTime = true;
 
-// if employee did overtime
+// if the employee did overtime
 if (didOverTime) {
   pay = pay + pay * RATE;
 } else {
@@ -429,7 +429,7 @@ if (didOverTime) {
 console.log(`Total take home: ${pay}`);
 ```
 
-We can rewrite this snippet is a simple way, improving it.
+We can rewrite this snippet in a simple way, improving it.
 
 ```js
 let pay = 30;
@@ -449,7 +449,7 @@ console.log(`Total take home: ${pay}`);
 
 We introduced a new variable, `payChange`, which holds the amount to be added or deducted from the employee's pay based on the state (value) of the `didOverTime`.
 
-> It is not compulsory to always add the else block. You can write your program in smart way so that you will not need to add an `else` block. Know that there are cases that this works well and there are cases that it doesn't. You need to be calculative here.
+> It is not compulsory to always add the else block. You can smartly write your program so that you will not need to add an `else` block. Know that there are cases that this works well and there are cases that it doesn't. You need to be calculative here.
 
 Let's look at the `FizzBuzz` program. So, the _fizz buzz_ is a program that say:
 
@@ -457,7 +457,7 @@ Let's look at the `FizzBuzz` program. So, the _fizz buzz_ is a program that say:
 - "buzz" when a value is a multiple of 5
 - "fizzbuzz" when a value is a multiple of 3 and 5
 
-The idea here is to demonstrate the we can change the `if` and `else` statement to have the `else if` statement.
+The idea here is to demonstrate that we can change the `if` and `else` statements to have the `else if` statement.
 
 In this program, we would use these operators `===` and `%`. `===` is to check if the values are equal to and `%` for the remainder.
 
@@ -465,39 +465,39 @@ This is a pseudocode.
 
 ```txt
 if the given number is a multiple of 3
-  print "fizz"
+ print "fizz"
 else if the given number is a multiple of 5
-  print "buzz"
+ print "buzz"
 else if the given number is a multiple of 3 and 5
-  print "fizzbuzz"
+ print "fizzbuzz"
 ```
 
 Try it. Write the fizzbuzz program using the hints left in the above pseudocode. Try your solution with the given value as, 3, 6, 10, 15. You'd have a problem. Most certainly. The solution is to rearrange the if statements. I hope this helps you resolve the problem.
 
-> It is helpful to think in pseudocode when you are having a hard time grasping how to implement a solution. Pseudocode, is more a less how you are thinking about the approach to the solution rather the code to solve the problem. It is like writing down what you are thinking about when brainstorming.
+> It is helpful to think in pseudocode when you are having a hard time grasping how to implement a solution. Pseudocode is more a less how you are thinking about the approach to the solution rather than the code to solve the problem. It is like writing down what you are thinking about when brainstorming.
 
-## Nested if and else statements
+### Nested if and else statements
 
-Well, everything is feasible. We can nest an `if` and `else` statement in another if and else statement. It is fun and not fun sometimes.
+Well, everything is feasible. We can nest an `if` and `else` statements in another if and else statement. It is fun and not fun sometimes.
 
 ```txt
 if (condition 1 is true) {
-  if (condition 2 and condition 3 are true) {
-    do something
-  } else {
-    do something
-  }
+ if (condition 2 and condition 3 are true) {
+ do something
+ } else {
+ do something
+ }
 } else {
-  do something
+ do something
 }
 
 ```
 
-Be creative and create a nested a nested `if` and `else` statements. Frankly, I am not a fun of nesting the `if` and `else` statements. So I find another way to do it. We will discuss short circuiting in the future.
+Be creative and create a nested nested `if` and `else` statements. Frankly, I am not fun of nesting the `if` and `else` statements. So I find another way to do it. We will discuss short-circuiting in the future.
 
-## Ternary operator
+### Ternary operator
 
-The ternary operator is a one-line `if` `else` statement put together. It is devoid of complex logic that would span more than a line. We will modify the two `if` `else` statements above. With ternary operator, we reduce the `if` and `else` block to an inline expression.
+The ternary operator is a one-line `if` and `else` statement. It is devoid of complex logic that would span more than a line. We will modify the two `if` and `else` statements above. With the ternary operator, we reduce the `if` and `else` block to an inline expression.
 
 ```md
 variable = condition ? true body : false body;
@@ -525,23 +525,23 @@ console.log(`Total take home: ${pay}`);
 
 Use the ternary operator for the second example.
 
-> It is cool to be smart in programming but there are times that smartness can be dangerous not just to you but also the company and team. So be smart wisely. For the fact that it is feasible doesn't mean do it.
+> It is cool to be smart in programming but there are times that smartness can be dangerous not just to you but also to the company and team. So be smart and wise. The fact that it is feasible doesn't mean doing it.
 
-## Switch statement
+### Switch statement
 
 There is another conditional statement known as the switch statement. Usually, it is preferred a chain of `if` and `else` statements. The basic form of a switch statement is:
 
 ```txt
 switch someValue {
-  case someValue is thisValueA:
-    do something
-    break;
-  case someValue is thisValueB:
-    do something
-    break;
-  ...
-  default:
-    do something by default if none of these values matches the someValue
+ case someValue is thisValueA:
+ do something
+ break;
+ case someValue is thisValueB:
+ do something
+ break;
+ ...
+ default:
+ do something by default if none of these values matches the someValue
 }
 ```
 
@@ -551,13 +551,13 @@ The above is the same as:
 
 ```txt
 if (someValue is thisValueA) {
-  do something
+ do something
 } else if (someValue is thisValueB) {
-  do something
+ do something
 }
 ...
 else {
-  do something by default if none of these values matches the someValue
+ do something by default if none of these values matches the someValue
 }
 ```
 
@@ -585,173 +585,173 @@ switch (day) {
 
 What do you think is the output? Rewrite the above `switch` statement program, using `if` and `else`.
 
-> The `break` keyword jumps (moves) the execution (data) flow out of the switch statement. What happens when you don't put break? Try it out.
+> The `break` keyword jumps (moves) the execution (data) flow out of the switch statement. What happens when you don't put a break? Try it out.
 
 > `switch`, `case` and `break` are Javascript keywords so don't use them as variable names.
 
-## For loop
+### For loop
 
 It is usually the case that we replay our favourite song over and over again. We put the song in a loop. The song is repeatedly played. This same idea applies to loops in programming. One of the looping contrast in JavaScript is the `for` loop. `for` is a keyword so don't use it as a variable. At this point, when you hear something is a keyword, it means don't use it as a variable name.
 
-The fundamental reason to use a looping statement is to execute some logic repeatedly. This can be a finite number of times or based on a condition. For loop is usually used when the number of repetition needed is known (finite).
+The fundamental reason to use a looping statement is to execute some logic repeatedly. This can be a finite number of times or based on a condition. For loop is usually used when the number of repetitions needed is known (finite).
 
 We can use the loops to:
 
 - go over (iterate) an array or a string. Eg: find the number of characters in a string array
 - execute some logic for some known number of times. Eg: console log "Hello world" 10 times
 
-We would be looking at three kind of for loops here.
+We would be looking at three kinds of for loops here.
 
 - Traditional for loop which is of the form
 
-  ```js
-  for (init; condition; step) {
-    // some logic
-  }
-  ```
+```js
+for (init; condition; step) {
+  // some logic
+}
+```
 
-  - `init` tells you where the loop starts
-  - `condition` is a boolean expression that indicates when the loop should be terminated (stopped). The body of the loop gets executed as far as the condition hold
-  - `step` indicates how the looping condition is influenced. Sometimes it is an increment and at times it's decrement.
+- `init` tells you where the loop starts
+- `condition` is a boolean expression that indicates when the loop should be terminated (stopped). The body of the loop gets executed as far as the condition holds
+- `step` indicates how the looping condition is influenced. Sometimes it is an increment and at times it's a decrement.
 
-  **Example**
+**Example**
 
-  ```js
-  // console log numbers between 0 and 10
-  for (let loopingNumber = 0; loopingNumber <= 10; loopingNumber++) {
-    console.log(loopingNumber);
-  }
-  ```
+```js
+// console log numbers between 0 and 10
+for (let loopingNumber = 0; loopingNumber <= 10; loopingNumber++) {
+  console.log(loopingNumber);
+}
+```
 
-  - For this example that we have for the for loop and in the header of the for loop, we set the initial value of the `loopingNumber` to `0`.
-  - Then the _condition_ is that, as far as the `loopingNumber` is less than or equal to `10`, execute the body of the for loop.
-  - The `loopingNumber` is then incremented as the next _step_ in this case. `loopingNumber++` is the same as `loopingNumber += 1` or `loopingNumber = loopingNumber + 1`.
-  - So as far as the `loopingNumber` is less than 10, the condition holds and the `console.log(loopingNumber);` is executed.
+- For this example that we have for the for loop and in the header of the for loop, we set the initial value of the `loopingNumber` to `0`.
+- Then the _condition_ is that, as far as the `loopingNumber` is less than or equal to `10`, execute the body of the for loop.
+- The `loopingNumber` is then incremented as the next _step_ in this case. `loopingNumber++` is the same as `loopingNumber += 1` or `loopingNumber = loopingNumber + 1`.
+- So as far as the `loopingNumber` is less than 10, the condition holds and the `console.log(loopingNumber);` is executed.
 
-  > Usually in the _condition_ part, the comparison operators are used there. What happens when we use `<` instead of `<=`? Try it out. Be curious.
+> Usually in the _condition_ part, the comparison operators are used there. What happens when we use `<` instead of `<=`? Try it out. Be curious.
 
-  **Example**
+**Example**
 
-  ```js
-  // let's loop through the array and print out the number of characters in it
-  const daysOfTheWeek = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
+```js
+// let's loop through the array and print out the number of characters in it
+const daysOfTheWeek = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
-  for (let index = 0; index < daysOfTheWeek.length; index += 1) {
-    console.log(
-      `${daysOfTheWeek[index]} at index ${index} has ${daysOfTheWeek[index].length} characters`
-    );
-  }
-  // Monday at index 0 has 6 characters
-  // Tuesday at index 1 has 7 characters
-  // Wednesday at index 2 has 9 characters
-  // Thursday at index 3 has 8 characters
-  // Friday at index 4 has 6 characters
-  // Saturday at index 5 has 8 characters
-  // Sunday at index 6 has 6 characters
-  ```
+for (let index = 0; index < daysOfTheWeek.length; index += 1) {
+  console.log(
+    `${daysOfTheWeek[index]} at index ${index} has ${daysOfTheWeek[index].length} characters`
+  );
+}
+// Monday at index 0 has 6 characters
+// Tuesday at index 1 has 7 characters
+// Wednesday at index 2 has 9 characters
+// Thursday at index 3 has 8 characters
+// Friday at index 4 has 6 characters
+// Saturday at index 5 has 8 characters
+// Sunday at index 6 has 6 characters
+```
 
-  - Since we wanted to start from the first element in the array, we set the `index` variable to `0` knowing that array indexing starts at `0` in Javascript
-  - We can alter the initial value of `index` to start from another element.
-  - In the _condition_, we check if the `index` is less than the array size, `daysOfTheWeek.length`
+- Since we wanted to start from the first element in the array, we set the `index` variable to `0` knowing that array indexing starts at `0` in Javascript
+- We can alter the initial value of `index` to start from another element.
+- In the _condition_, we check if the `index` is less than the array size, `daysOfTheWeek.length`
 
 - For-In Loop is of the form
 
-  ```js
-  for (variable in object) {
-    // some logic
-  }
-  ```
+```js
+for (variable in object) {
+  // some logic
+}
+```
 
-  The _for in_ loop is used on arrays (anything that can be iterated) and objects. The variable, in the case of an array-like value, is the index and for an object is the key.
+The _for in_ loop is used on arrays (anything that can be iterated) and objects. The variable, in the case of an array-like value, is the index and for an object is the key.
 
-  Let's rewrite the above `for` loop, using `for in` loop
+Let's rewrite the above `for` loop, using `for in` loop.
 
-  ```js
-  const daysOfTheWeek = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
+```js
+const daysOfTheWeek = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
-  for (const index in daysOfTheWeek) {
-    console.log(
-      `${daysOfTheWeek[index]} at index ${index} has ${daysOfTheWeek[index].length} characters`
-    );
-  }
-  // Monday at index 0 has 6 characters
-  // Tuesday at index 1 has 7 characters
-  // Wednesday at index 2 has 9 characters
-  // Thursday at index 3 has 8 characters
-  // Friday at index 4 has 6 characters
-  // Saturday at index 5 has 8 characters
-  // Sunday at index 6 has 6 characters
-  ```
+for (const index in daysOfTheWeek) {
+  console.log(
+    `${daysOfTheWeek[index]} at index ${index} has ${daysOfTheWeek[index].length} characters`
+  );
+}
+// Monday at index 0 has 6 characters
+// Tuesday at index 1 has 7 characters
+// Wednesday at index 2 has 9 characters
+// Thursday at index 3 has 8 characters
+// Friday at index 4 has 6 characters
+// Saturday at index 5 has 8 characters
+// Sunday at index 6 has 6 characters
+```
 
-  Let's implement one for an object
+Let's implement one for an object.
 
-  ```js
-  const profile = {
-    firstName: "John",
-    lastName: "Doe",
-    job: "Debugger",
-    isBald: false,
-    numberOfPets: 3,
-  };
+```js
+const profile = {
+  firstName: "John",
+  lastName: "Doe",
+  job: "Debugger",
+  isBald: false,
+  numberOfPets: 3,
+};
 
-  for (const key in profile) {
-    console.log(`${key} points to, ${profile[key]}`);
-  }
-  // firstName points to, John
-  // lastName points to, Doe
-  // job points to, Debugger
-  // isBald points to, false
-  // numberOfPets points to, 3
-  ```
+for (const key in profile) {
+  console.log(`${key} points to, ${profile[key]}`);
+}
+// firstName points to, John
+// lastName points to, Doe
+// job points to, Debugger
+// isBald points to, false
+// numberOfPets points to, 3
+```
 
 - For-Of Loop is of the form
 
-  ```js
-  for (variable of collection) {
-    // some logic
-  }
-  ```
+```js
+for (variable of collection) {
+  // some logic
+}
+```
 
-  The _for of_ loop is used on collections, iterables, like an array, strings, etc. The variable, in this case points to the element itself.
+The _for of_ loop is used on collections, iterables, like an array, strings, etc. The variable, in this case, points to the element itself.
 
-  Let's rewrite the above `for` loop, using `for of` loop
+Let's rewrite the above `for` loop, using `for of` loop.
 
-  ```js
-  for (const element of daysOfTheWeek) {
-    console.log(
-      `${element} at index ${daysOfTheWeek.indexOf(element)} has ${
-        element.length
-      } characters`
-    );
-  }
-  // Monday at index 0 has 6 characters
-  // Tuesday at index 1 has 7 characters
-  // Wednesday at index 2 has 9 characters
-  // Thursday at index 3 has 8 characters
-  // Friday at index 4 has 6 characters
-  // Saturday at index 5 has 8 characters
-  // Sunday at index 6 has 6 characters
-  ```
+```js
+for (const element of daysOfTheWeek) {
+  console.log(
+    `${element} at index ${daysOfTheWeek.indexOf(element)} has ${
+      element.length
+    } characters`
+  );
+}
+// Monday at index 0 has 6 characters
+// Tuesday at index 1 has 7 characters
+// Wednesday at index 2 has 9 characters
+// Thursday at index 3 has 8 characters
+// Friday at index 4 has 6 characters
+// Saturday at index 5 has 8 characters
+// Sunday at index 6 has 6 characters
+```
 
-  This will not work on an object because an object is not an iterable. If you want to do this on an object, you'd have to manipulate it. `Object.keys(yourObject)` or `Object.values(yourObject)` to get the keys or values as an array.
+This will not work on an object because an object is not an iterable. If you want to do this on an object, you'd have to manipulate it. `Object.keys(yourObject)` or `Object.values(yourObject)` to get the keys or values as an array.
 
-For the last example on for loops, let's look into the past. One of the validation rules for an email was to have a single '@' sign. So we'd write a program that counts the number of '@' sign in an email. The idea will be same for a list of emails so I will go with the list of emails and also use that as an opportunity to use nested for loops.
+For the last example of loops, let's look into the past. One of the validation rules for an email was to have a single '@' sign. So we'd write a program that counts the number of '@' signs in an email. The idea will be the same for a list of emails so I will go with the list of emails and also use that as an opportunity to use nested for loops.
 
 **Example**
 
@@ -786,7 +786,7 @@ console.log(validation);
 // }
 ```
 
-Does this need explanation? What do you think it does? If something is new, it the nested for loops. Look at this new example. There are several ways to write this. So try the others you can think of.
+Does this need an explanation? What do you think it does? If something is new, it the nested for loops. Look at this new example. There are several ways to write this. So try the others you can think of.
 
 ```js
 const emailList = [
@@ -816,108 +816,63 @@ console.log(validation);
 // ]
 ```
 
-There is a keyword know as `break` and `continue` used in for loops. So let's say based on some conditions, you want to stop the for loop at some point. Use the `break`. If you want to skip the computation on a certain element or based on some condition, you can use `continue`. The `continue` skips the current iteration and goes to the next. You can experiment with it.
+There a keywords known as `break` and `continue` used in for loops. So let's say based on some conditions, you want to stop the for loop at some point. Use the `break`. If you want to skip the computation on a certain element or based on some condition, you can use `continue`. The `continue` skips the current iteration and goes to the next. You can experiment with it.
 
-## While loop
+### While loop
 
-The while loop
-
-## Password and Email validation
-
-In [JavaScript Essentials: Part 2](https://dev.to/otumianempire/javascript-essentials-part-2-3k6j), we discussed writing a password and email validation. We will rewrite them now that we have some
-
-**Password rules**
-Password must:
-
-- be six characters
-- start with uppercase p, 'P'
-- end with an underscore
-- have uppercase q, 'Q'
-- have lowercase r, 'r'
-- have its fifth character as uppercase v, 'V'
-
-This is our old password validation
-
-**Password validation**
+The while loop is like the for loop. However, it is used when the repetition is infinite or the termination of the loop is conditional. In general, a while loop is in the form:
 
 ```js
-// password_verification.js
-const veryWeakPassword = "qwerty12";
-console.log(`Password validation for "${veryWeakPassword}"`);
-
-// - be six characters
-const passwordLength = veryWeakPassword.length;
-console.log(
-  `- Password must have 6 characters => "${veryWeakPassword}" has '${passwordLength}' characters`
-);
-// so it is a valid password based on our rules?
-
-// - start with uppercase p, 'P'
-const startsWithPee = veryWeakPassword.startsWith("P");
-console.log(
-  `- Password must start with 'P' => it is ${startsWithPee} that "${veryWeakPassword}" starts with 'P'`
-);
-
-// we can also check the first character, index 0.
-const firstCharacter = veryWeakPassword[0];
-console.log(
-  `- Password must start with 'P' => "${veryWeakPassword}" starts with '${firstCharacter}'`
-);
-
-// - end with underscore
-const endsWithUnderscore = veryWeakPassword.endsWith("_");
-console.log(
-  `- Password must end with '_' => it is ${endsWithUnderscore} that "${veryWeakPassword}" ends with '_'`
-);
-
-// from the index concept, the last character will be at index, length of string minus one
-const lastCharacter = veryWeakPassword[veryWeakPassword.length - 1];
-console.log(
-  `- Password must start with 'P' => "${veryWeakPassword}" ends with '${lastCharacter}'`
-);
-
-// - have uppercase q, 'Q'
-const hasUppercaseQue = veryWeakPassword.includes("Q");
-console.log(
-  `- Password must have uppercase q, 'Q' => it is ${hasUppercaseQue} that "${veryWeakPassword}" has 'Q'`
-);
-
-// we can use the index approach
-const indexOfUppercaseQue = veryWeakPassword.indexOf("Q");
-console.log(
-  `- Password must have uppercase q, 'Q' => 'Q' is at index '${indexOfUppercaseQue}' of "${veryWeakPassword}"`
-);
-// we know that index -1 means, there 'Q' was not found
-
-// - have lowercase r, 'r'
-const hasLowercaseArr = veryWeakPassword.includes("r");
-console.log(
-  `- Password must have lowercase r, 'r' => it is ${hasLowercaseArr} that "${veryWeakPassword}" has 'r'`
-);
-
-// we can use the index approach too
-const indexOfLowercaseArr = veryWeakPassword.indexOf("r");
-console.log(
-  `- Password must have lowercase r, 'r' => 'r' is at index '${indexOfLowercaseArr}' of "${veryWeakPassword}"`
-);
-// we know that index -1 means, there 'r' was not found
-
-// - have its fifth character as uppercase v, 'V'
-// fifth character with have index = fifth position - 1 = 4
-// const fifthCharacter = veryWeakPassword[4]
-const fifthCharacter = veryWeakPassword.charAt(4);
-console.log(
-  `- Password must have its fifth character as uppercase v, 'V' => "${veryWeakPassword}" has its 5th character as '${fifthCharacter}'`
-);
-
-// using the index approach, 'V' must have an index of 4 (same index logic as above)
-const indexOfVee = veryWeakPassword.indexOf("V");
-console.log(
-  `- Password must have its fifth character as uppercase v, 'V' => 'V' is at index '${indexOfVee}' of "${veryWeakPassword}"`
-);
+while (condition) {
+  // do something as far as the condition is true
+}
 ```
 
-<!-- | ?: | Conditional (ternary) | condition involving a and b ? a : b | -->
+Let's do this for a loop using a while loop.
+
+```js
+// console log numbers between 0 and 10
+for (let loopingNumber = 0; loopingNumber <= 10; loopingNumber++) {
+  console.log(loopingNumber);
+}
+```
+
+while loop version
+
+```js
+let loopingNumber = 0;
+
+while (loopingNumber <= 10) {
+  console.log(loopingNumber);
+  loopingNumber++;
+}
+```
+
+Here, the _init_ part is moved outside the header of the header and the _step_ is moved inside the body of the while loop. What remains is the condition. So as far as the condition holds, the `console.log(loopingNumber);` is executed and the looping number is incremented.
+
+**Example**
+
+Let's write a fizz buzz program using a while loop. In this case, we want the first "fizzbuzz" value which will be 15, a multiple of 3 and 5.
+
+```js
+let number = 1;
+
+// as far as the number is not a fizzbuzz
+while (!(number % 3 === 0 && number % 5 === 0)) {
+  number++;
+}
+
+// the loop breaks when find a number that is a fizzbuzz
+
+console.log(`The first fizzbuzz is ${number}`);
+// The first fizzbuzz is 15
+```
+
+## Conclusion
+
+So far we have updated our knowledge and arsenal. We can control the following execution using conditionals and loops. We can now write some huge programs efficiently. We will look into the password and email validation in the next part. Try writing your own validations based on what we have done so far.
+
+We have more on javascript to discuss such as:
 
 - Functions
 - Callbacks, promises, async & await

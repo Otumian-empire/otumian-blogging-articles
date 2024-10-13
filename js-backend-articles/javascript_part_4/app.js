@@ -347,7 +347,7 @@ console.log(response)
 //     'tenya123@@email@ny.com': 3
 // }
  */
-
+/* 
 const emailList = [
     "johndoes@email.com",
     "pancake@email@ny.com",
@@ -373,8 +373,23 @@ console.log(validation);
 //     { 'pancake@email@ny.com': 2 },
 //     { 'tenya123@@email@ny.com': 3 }
 // ]
+ */
 
 
+// let loopingNumber = 0;
+
+// while (loopingNumber <= 10) {
+//     console.log(loopingNumber);
+//     loopingNumber++
+// }
+
+let number = 1;
+
+while (!(number % 3 === 0 && number % 5 === 0)) {
+    number++
+}
+
+console.log(`The first fizzbuzz is ${number}`)
 
 // {
 //     'johndoes@email.com': 1,
