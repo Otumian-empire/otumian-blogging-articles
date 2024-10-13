@@ -493,7 +493,7 @@ if (condition 1 is true) {
 
 ```
 
-Be creative and create a nested and nested `if` and `else` statements. Frankly, I am not a fun of nesting the `if` and `else` statements. So I find another way to do it. We will discuss short circuiting in the future.
+Be creative and create a nested a nested `if` and `else` statements. Frankly, I am not a fun of nesting the `if` and `else` statements. So I find another way to do it. We will discuss short circuiting in the future.
 
 ## Ternary operator
 
@@ -518,7 +518,7 @@ const didOverTime = true;
 
 // using ternary
 pay = didOverTime ? pay + pay * RATE : pay - pay * RATE;
-
+// this reads as, if didOverTime, pay = pay + pay * RATE, else pay = pay - pay * RATE
 console.log(`Total take home: ${pay}`);
 // Total take home: 31.5
 ```
@@ -528,6 +528,66 @@ Use the ternary operator for the second example.
 > It is cool to be smart in programming but there are times that smartness can be dangerous not just to you but also the company and team. So be smart wisely. For the fact that it is feasible doesn't mean do it.
 
 ## Switch statement
+
+There is another conditional statement known as the switch statement. Usually, it is preferred a chain of `if` and `else` statements. The basic form of a switch statement is:
+
+```txt
+switch someValue {
+  case someValue is thisValueA:
+    do something
+    break;
+  case someValue is thisValueB:
+    do something
+    break;
+  ...
+  default:
+    do something by default if none of these values matches the someValue
+}
+```
+
+> The `...` means a bunch of other cases.
+
+The above is the same as:
+
+```txt
+if (someValue is thisValueA) {
+  do something
+} else if (someValue is thisValueB) {
+  do something
+}
+...
+else {
+  do something by default if none of these values matches the someValue
+}
+```
+
+> `...` is a bunch of `else if` statements. And it is for this reason that we'd use a switch in place of `if` and `else` statements.
+
+Here is an example of a switch statement
+
+```js
+const day = "Friday";
+
+switch (day) {
+  case "Monday":
+    console.log("Today is Monday");
+    break;
+  case "Tuesday":
+    console.log("Today is Tuesday");
+    break;
+  case "Wednesday":
+    console.log("Today is Wednesday");
+    break;
+  default:
+    console.log("Unknown day");
+}
+```
+
+What do you think is the output? Rewrite the above `switch` statement program, using `if` and `else`.
+
+> The `break` keyword jumps (moves) the execution (data) flow out of the switch statement. What happens when you don't put break? Try it out.
+
+> `switch`, `case` and `break` are Javascript keywords so don't use them as variable names.
 
 ## For loop
 

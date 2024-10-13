@@ -212,22 +212,52 @@
 
 // fizz buzz program
 
-let pay = 30;
-const RATE = 0.05;
-const didOverTime = true;
+// let pay = 30;
+// const RATE = 0.05;
+// const didOverTime = true;
 
-// if employee did overtime
-// if (didOverTime) {
-//   pay = pay + pay * RATE;
-// } else {
-//   pay = pay - pay * RATE;
-// }
+// // if employee did overtime
+// // if (didOverTime) {
+// //   pay = pay + pay * RATE;
+// // } else {
+// //   pay = pay - pay * RATE;
+// // }
 
-// using ternary
-pay = didOverTime ? pay + pay * RATE : pay - pay * RATE;
+// // using ternary
+// pay = didOverTime ? pay + pay * RATE : pay - pay * RATE;
 
-console.log(`Total take home: ${pay}`);
+// console.log(`Total take home: ${pay}`);
 
+const day = "Friday";
+
+switch (day) {
+    case "Monday":
+        console.log("Today is Monday");
+        break;
+    case "Tuesday":
+        console.log("Today is Tuesday");
+        break;
+    case "Wednesday":
+        console.log("Today is Wednesday");
+        break;
+    default:
+        console.log("Unknown day");
+}
+
+/*
+
+
+const daysOfTheWeek = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
+
+const someDayOfTheWeek = "" */
 
 // const sampleEmail = "johndoes@gmail.com"
 
