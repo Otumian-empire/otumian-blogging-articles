@@ -816,7 +816,11 @@ console.log(validation);
 // ]
 ```
 
+There is a keyword know as `break` and `continue` used in for loops. So let's say based on some conditions, you want to stop the for loop at some point. Use the `break`. If you want to skip the computation on a certain element or based on some condition, you can use `continue`. The `continue` skips the current iteration and goes to the next. You can experiment with it.
+
 ## While loop
+
+The while loop
 
 ## Password and Email validation
 
