@@ -94,7 +94,6 @@
 
 // console.log({ firstArray, secondArray, thirdArray });
 
-
 // const personal = {
 //     firstName: "John",
 //     lastName: "Doe",
@@ -113,7 +112,6 @@
 // const emotional = {
 //     isHappy: true
 // }
-
 
 // const profile = { ...personal, physical, employment, emotional }
 
@@ -154,7 +152,6 @@
 // // strTwo is a string and intTwo is a number so if we are going to compare them,
 // // we have to be strict
 
-
 // console.log(`'${strTwo}' is Equal to ${intTwo} is, ${strTwo == intTwo}`)
 // console.log(`'${strTwo}' is Strictly Equal to is, ${intTwo} ${strTwo === intTwo}`)
 // // does this give you some funny ideas to check out??
@@ -175,19 +172,49 @@
 // console.log({ playerLife })
 // // { playerLife: 4 }
 
-let pay = 30
-const RATE = 0.05
-const didOverTime = true
+// let pay = 30
+// const RATE = 0.05
+// const didOverTime = true
 
-// if employee did overtime 
-if (didOverTime) {
-    pay = pay + (pay * RATE)
-}
+// // if employee did overtime
+// if (didOverTime) {
+//     pay = pay + (pay * RATE)
+// }
 
-console.log(`Total take home: ${pay}`)
+// console.log(`Total take home: ${pay}`)
+
+// let pay = 30;
+// const RATE = 0.05;
+// const didOverTime = true;
+
+// // if employee did overtime
+// if (didOverTime) {
+//     pay = pay + pay * RATE;
+// } else {
+//     pay = pay - pay * RATE;
+// }
+
+// console.log(`Total take home: ${pay}`);
+
+// let pay = 30;
+// const RATE = 0.05;
+// const didOverTime = true;
+
+// let payChange = pay * RATE;
+
+// if (didOverTime) {
+//     pay += payChange;
+// } else {
+//     pay -= payChange;
+// }
+
+// console.log(`Total take home: ${pay}`);
+
+// fizz buzz program
+
+
 
 // const sampleEmail = "johndoes@gmail.com"
-
 
 /* 
 // password_verification.js
@@ -264,5 +291,3 @@ const indexOfVee = veryWeakPassword.indexOf("V");
 console.log(
   `- Password must have its fifth character as uppercase v, 'V' => 'V' is at index '${indexOfVee}' of "${veryWeakPassword}"`
 ); */
-
-

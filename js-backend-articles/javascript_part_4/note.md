@@ -359,6 +359,22 @@ console.log({ playerLife });
 // { playerLife: 4 }
 ```
 
+## JavaScript Operator Precedence
+
+Computations with the operators are done in a certain. This is known as operator precedence.
+
+- _Parentheses ()_ - Evaluate expressions inside parentheses first.
+- _Exponentiation \*\*_ - Right-to-left.
+- _Unary +, -, !, ++, --, typeof_ - Right-to-left.
+- _Multiplication \*, /, %_ - Left-to-right.
+- _Addition +, -_ - Left-to-right.
+- _Relational <, >, <=, >=_ - Left-to-right.
+- Equality ==, !=, ===, !== - Left-to-right.
+- _Logical AND &&_ - Left-to-right.
+- _Logical OR ||_ - Left-to-right.
+- _Conditional ?:_ - Right-to-left.
+- _Assignment =, +=, -=, \*=, /=, %= , ..._ - Right-to-left.
+
 ## Control structures (if statements, loops)
 
 Control structures are contracts used to alter the flow of data. They can changes how the data flows, either to repeat some action for determined number of times or perform some actions based on some conditions.
@@ -393,6 +409,67 @@ if (didOverTime) {
 
 console.log(`Total take home: ${pay}`);
 ```
+
+The pay is increase by some rate when the employee did an overtime. What happens if the `didOverTime` is `false`? Try it out. Set the `didOverTime` to `false`.
+
+Now, we can choose to do something else when the employee didn't do over time. We can be the wicked employer and make profit by reducing their pay. We can do this by addition some code to the `else` block.
+
+```js
+let pay = 30;
+const RATE = 0.05;
+const didOverTime = true;
+
+// if employee did overtime
+if (didOverTime) {
+  pay = pay + pay * RATE;
+} else {
+  pay = pay - pay * RATE;
+}
+
+console.log(`Total take home: ${pay}`);
+```
+
+We can rewrite this snippet is a simple way, improving it.
+
+```js
+let pay = 30;
+const RATE = 0.05;
+const didOverTime = true;
+
+let payChange = pay * RATE;
+
+if (didOverTime) {
+  pay += payChange;
+} else {
+  pay -= payChange;
+}
+
+console.log(`Total take home: ${pay}`);
+```
+
+We introduced a new variable, `payChange`, which holds the amount to be added or deducted from the employee's pay based on the state (value) of the `didOverTime`.
+
+Let's look at the `FizzBuzz` program. So, the _fizz buzz_ is a program that say:
+
+- "fizz" when a value is a multiple of 3
+- "buzz" when a value is a multiple of 5
+- "fizzbuzz" when a value is a multiple of 3 and 5
+
+The idea here is to demonstrate the we can change the `if` and `else` statement to have the `else if` statement.
+
+In this program, we would use these operators `===` and `%`. `===` is to check if the values are equal to and `%` for the remainder.
+
+This is a pseudocode.
+
+```md
+if the given number is a multiple of 3, print "fizz"
+else if the given number is a multiple of 5, print "buzz"
+else if the given number is a multiple of 3 and 5, print "fizzbuzz"
+```
+
+Try it. Write the fizzbuzz program using the hints left in the above pseudocode. Try your solution with the given value as, 3, 6, 10, 15. You'd have a problem. Most certainly. The solution is to rearrange the if statements. I hope this helps you resolve the problem.
+
+> It is helpful to think in pseudocode when you are having a hard time grasping how to implement a solution. Pseudocode, is more a less how you are thinking about the approach to the solution rather the code to solve the problem. It is like writing down what you are thinking about when brainstorming.
 
 <!--  -->
 
