@@ -99,3 +99,105 @@ else if (veryWeakPassword.charAt(4) !== "V") {
   console.log(`${veryWeakPassword} is a valid password`);
 }
 ```
+
+Some other solutions would be using nested `if` and `else`.
+
+```js
+// password validation
+const veryWeakPassword = "PrQ1V_";
+// const veryWeakPassword = "rtfy67Fg";
+// const veryWeakPassword = "OlJgRc__1qwPVa";
+console.log(`Password validation for "${veryWeakPassword}"`);
+
+// - be six characters
+if (veryWeakPassword.length === 6) {
+  if (veryWeakPassword.startsWith("P")) {
+    if (veryWeakPassword.endsWith("_")) {
+      if (veryWeakPassword.includes("Q")) {
+        if (veryWeakPassword.includes("r")) {
+          if (veryWeakPassword.charAt(4) === "V") {
+            console.log(`${veryWeakPassword} is a valid password`);
+          } else {
+            console.log(
+              `- Password must have its fifth character as uppercase v, 'V' => "${veryWeakPassword}" has its 5th character as '${veryWeakPassword.charAt(
+                4
+              )}'`
+            );
+          }
+        } else {
+          console.log(
+            `- Password must have lowercase r, 'r' => it is ${veryWeakPassword.includes(
+              "r"
+            )} that "${veryWeakPassword}" has 'r'`
+          );
+        }
+      } else {
+        console.log(
+          `- Password must have uppercase q, 'Q' => it is ${veryWeakPassword.includes(
+            "Q"
+          )} that "${veryWeakPassword}" has 'Q'`
+        );
+      }
+    } else {
+      console.log(
+        `- Password must end with '_' => it is ${veryWeakPassword.endsWith(
+          "_"
+        )} that "${veryWeakPassword}" ends with '_'`
+      );
+    }
+  } else {
+    console.log(
+      `- Password must start with 'P' => it is ${veryWeakPassword.startsWith(
+        "P"
+      )} that "${veryWeakPassword}" starts with 'P'`
+    );
+  }
+} else {
+  console.log(
+    `- Password must have 6 characters => "${veryWeakPassword}" has '${veryWeakPassword.length}' characters`
+  );
+}
+```
+
+What do you think about the two snippets? Practically the second snippet, even though it works, it is not that great.
+
+## Comments
+
+Comments are great and we are now going to talk about. It is so late that you should know what a comment is. Anyway, a comment in our program is not executed. A comment is meant to document our code. There are three ways to add comments in Javascript. We have the inline, multiline and JsDoc.
+
+**In-line**
+
+```js
+// this is a number
+const numberOfBirds = 3;
+
+// the above comment is useless since the initial value assigned to the variable
+// is physically a number and the variable name also has number in it
+// so use comments wisely by using proper naming
+```
+
+**Multiline**
+
+```js
+/* 
+Everything in here is or will be ignored
+
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+
+*/
+
+const emptyString = "";
+```
+
+**JsDoc**
+
+```js
+/**
+ * This is a multiline comment
+ *
+ * But used for documentations
+ */
+```
+
+##
