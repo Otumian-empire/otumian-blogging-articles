@@ -6,6 +6,55 @@ Previously in [JavaScript Essentials: Part 4](https://dev.to/otumianempire/javas
 - Callbacks, promises, async & await
 - Next big thing
 
+## Comments
+
+Comments are great and we are now going to talk about. It is so late that you should know what a comment is. Anyway, a comment in our program is not executed. A comment is meant to document our code. There are three ways to add comments in Javascript. We have the inline, multiline and JsDoc.
+
+**In-line**
+
+```js
+// this is a number
+const numberOfBirds = 3;
+
+// the above comment is useless since the initial value assigned to the variable
+// is physically a number and the variable name also has number in it
+// so use comments wisely by using proper naming
+```
+
+**Multiline**
+
+```js
+/* 
+Everything in here is or will be ignored
+
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+
+*/
+
+const emptyString = "";
+```
+
+**JsDoc**
+
+```js
+/**
+ * This is a multiline comment
+ *
+ * But used for documentations
+ */
+```
+
+> comments can be placed anywhere however be careful it is after (or at the end) of a line of code or below or above it.
+
+## Semi-colon
+
+In javascript, semi-colon, `;`, is not required however, it helps sometimes. There are tools that helps you with it. Semi-colon indicates the end of a statement. Good.
+
+## Indentation
+
+Indentations is used to arrange code for clarity and ease reading. The tab key (on the keyboard) is used in indenting. Indentations are sometimes "tabs" or "spaces". The space is usually 2 or 4. If you are using [vscode](https://code.visualstudio.com/download), you don't really have to worry.
+
 ## Examples
 
 There were some exercises from [JavaScript Essentials: Part 4](https://dev.to/otumianempire/javascript-essentials-part-4-2ne6) which included but not limited to "fizzbuzz", password and email validation, etc. If you were to have followed my pseudocode, you'd run into some issues. I will provide a snippet that considers the order.
@@ -161,43 +210,174 @@ if (veryWeakPassword.length === 6) {
 
 What do you think about the two snippets? Practically the second snippet, even though it works, it is not that great.
 
-## Comments
+## Functions
 
-Comments are great and we are now going to talk about. It is so late that you should know what a comment is. Anyway, a comment in our program is not executed. A comment is meant to document our code. There are three ways to add comments in Javascript. We have the inline, multiline and JsDoc.
+A function a piece of code that can be reused. Usually a function does a specific thing. One thing. It can be anything.
 
-**In-line**
-
-```js
-// this is a number
-const numberOfBirds = 3;
-
-// the above comment is useless since the initial value assigned to the variable
-// is physically a number and the variable name also has number in it
-// so use comments wisely by using proper naming
-```
-
-**Multiline**
+Let's look at the general form (structure) of a function in JavaScript
 
 ```js
-/* 
-Everything in here is or will be ignored
-
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-
-
-*/
-
-const emptyString = "";
+function functionName(/* parameters */) {
+  // do something
+}
 ```
 
-**JsDoc**
+- `function` is a keyword and it is required when creating a function. `for` keyword is needed when you want to use a `for` loop.
+- `functionName` is supposed to be the name given to the function. Idea of naming a variable applies to function.
+- `/* parameters */` refers to the data that you want to pass to the function.
+- `// do something` is the action or computation we desired to be performed. Functions usually return data after some processing is done. There are times it doesn't. It just updates some data and done.
+- `{ // do something }` is the functions body or block
+
+We can have a function that prints "hello world"
 
 ```js
-/**
- * This is a multiline comment
- *
- * But used for documentations
- */
+// function to print "hello world"
+function printHelloWorld() {
+  console.log("Hello world");
+}
 ```
 
-##
+We did ourselves the favour to name our function with a name that describes what the function does.
+
+Now, when we have a function, we have to "call" it for it to be executed. To call a function, you need the function's name followed by `(` and `)`. If the function takes a _parameter_, then you'd pass the _argument_ in the `(` and `)`. In our case for the "hello world" function, we have to do, `printHelloWorld();`.
+
+```js
+printHelloWorld();
+
+// the output of this function will be on the console/terminal
+```
+
+Let's move in a little direction that will broaden our arsenal and make creating functions fun. Consider this function that adds two numbers then prints a texting telling you what happened.
+
+```js
+function add() {
+  const x = 3;
+  const y = 20;
+
+  const sum = x + y;
+
+  console.log(`${x} + ${y} = ${sum}`);
+}
+
+add(); // 3 + 20 = 23
+```
+
+Is this giving you ideas? We can write our "fizzbuzz" and validations using functions. We can be soo stingy and delicate that we'd write each validation requirement as a function. It happens. Just don't over do it.
+
+Now, consider the add function. What if we want to add different numbers, what do we do? We can create another function that. We can also alter the values directly. Right? Yeah. You will be marvelled by what we can accomplish with functions.
+
+First of all, if we want to add difference numbers we can change the numbers
+
+```js
+function add() {
+  const x = 10;
+  const y = 2;
+
+  const sum = x + y;
+
+  console.log(`${x} + ${y} = ${sum}`);
+}
+
+add(); // 10 + 2 = 12
+```
+
+Okay, let's alter the function to add 6 and 100 rather. Now we have to alter the function. There is a solution to this and it is to introduce parameters (data via variables). Then we'd pass those data as arguments.
+
+Let's analyze our `add` function. The add function operates on `x` and `y` and operands. We can pass different values to `x` and `y` by passing `x` and `y` as parameters.
+
+```js
+function add(x, y) {
+  // const x = 3;
+  // const y = 20;
+
+  const sum = x + y;
+
+  console.log(`${x} + ${y} = ${sum}`);
+}
+
+add(3, 30);
+add(10, 2);
+add(6, 100);
+// 3 + 30 = 33
+// 10 + 2 = 12
+// 6 + 100 = 106
+```
+
+Instead of having the value of `x` and `y` as internal values in `add`, we pass them. Now the difference between parameters and arguments is that, parameters are passed when creating (defining) the function. Argument are the values passed when calling the function. So in `function add(x, y)`, `x` and `y` are parameters (we can say place holders, representing the data to be passed to the function). In `add(3, 30);`, `3` and `30` are passed as arguments (the actual values to be processed). Note that the order of the argument and parameters must match else we'd be in a serious debt.
+
+You think it is enough to take on the big guns? Well, I think you can. You just have to be calm and know what you are doing. I will provide some snippets.
+
+```js
+function passwordValidation(password) {
+  // write the password validation program here
+}
+
+passwordValidation("HillBilly676");
+passwordValidation("Nixton009");
+passwordValidation("PrQ1V_");
+```
+
+Do the same for the "fizzbuzz". Wrap a function around the snippet. You don't have to comment out the variables been used. Look at what data needs to passed to the function (input).
+
+> We can pass as many parameters to a function. However I'd encourage your to set some limits. There are some professionals who say about three is enough. Some say about fewer than five. Ypu have to be smart about it. For now, let's say that whenever the number of parameters exceeds three, we would use an array or an object. Yeah. We can pass an array or an object as an argument.
+
+```js
+// interest = (principal * rate * time) / 100
+function calculateInterest(principal, rate, time) {
+  const interest = (principal * rate * time) / 100;
+
+  console.log(
+    `The interest on \$${principal} for ${time} years at a rate of ${rate}% is \$${interest}`
+  );
+}
+
+calculateInterest(2000, 0.05, 3);
+// The interest on $2000 for 3 years at a rate of 0.05% is $3
+calculateInterest(1000, 0.25, 6);
+// The interest on $1000 for 6 years at a rate of 0.25% is $15
+```
+
+Write a function the calculates the average of an array of numbers by completing this functions.
+
+```js
+function printAverage(arrayOfNumbers) {
+  // implement your logic here... Your output should match that after the function call
+}
+
+printAverage([1, 2, 3, 4, 5]);
+// The average of 1,2,3,4,5 of size 5 is 3
+printAverage([9, 8, 0, 6]);
+// The average of 9,8,0,6 of size 4 is 5.75
+```
+
+At this point it should be clear that functions can take arguments. Practically, our functions will return a value or something value after a computation is done. The computed value is returned from the function. A function that return a value is of the form:
+
+```js
+function functionName(/* parameters */) {
+  // do something
+  // return someValue
+}
+```
+
+- `// return someValue` is the only new thing here. `return` is a keyword.
+- `someValue` is the value returned from the function. And it could be anything to nothing, a void function. Don't sweat it. We will modify some of these functions we have written so before so things will be simpler.
+
+Remember the `add` function? Instead logging the value inside the function, we will return it and assign that value to a variable then reuse the value later.
+
+```js
+function add(x, y) {
+  const sum = x + y;
+
+  // usually, we an just do, return x + y and that will also work
+  return sum;
+}
+
+console.log(`${3} + ${30} = ${add(3, 30)}`);
+// 3 + 30 = 33
+console.log(`${10} + ${2} = ${add(10, 2)}`);
+// 10 + 2 = 12
+console.log(`${6} + ${100} = ${add(6, 100)}`);
+// 6 + 100 = 106
+```
+
+This is as simple as we can put it. Do the same for the the `calculateInterest` function.
