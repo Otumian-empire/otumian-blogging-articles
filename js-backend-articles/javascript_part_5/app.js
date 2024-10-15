@@ -193,12 +193,10 @@
 //     console.log(`The average of ${arrayOfNumbers} of size ${arrayOfNumbers.length} is ${avg}`)
 // }
 
-
 // printAverage([1, 2, 3, 4, 5])
 // // The average of 1,2,3,4,5 of size 5 is 3
 // printAverage([9, 8, 0, 6])
 // // The average of 9,8,0,6 of size 4 is 5.75
-
 
 // // interest = (principal * rate * time) / 100
 // function calculateInterest(principal, rate, time) {
@@ -222,3 +220,78 @@
 // // 10 + 2 = 12
 // console.log(`${6} + ${100} = ${add(6, 100)}`);
 // // 6 + 100 = 106
+
+// const add = (x, y) => x + y;
+
+// const callback = (outFunction) => {
+//     console.log(`${outFunction.name} function was called`)
+// }
+
+// const login = (username, password, logger) => {
+//     console.log(`localhost://${username}:${password}@weird.com/login`)
+//     logger(login)
+// }
+
+// const clearAccount = (username, logger) => {
+//     console.log(`localhost://${username}@weird.com/clear`)
+//     logger(clearAccount)
+// }
+
+// login("johndoe", "password", callback)
+// clearAccount("johndoe", callback)
+//
+/* 
+const calculateSumOfNumbersInArray = (numericArray) =>
+    numericArray.reduce((total, element) => total + element, 0);
+
+const numArray = [1, 2, 3]
+const total = calculateSumOfNumbersInArray(numArray)
+
+console.log(`The total of the array, ${numArray} is ${total}`)
+// The total of the array, 1,2,3 is 6 */
+
+// const reducer = (total, element, someFunction) => someFunction(total, element)
+
+/* const equ = (x, y) => x === y;
+
+const add = (x, y) => x + y;
+
+const sub = (x, y) => x - y;
+
+const mul = (x, y) => x * y;
+
+const div = (x, y) => (equ(y, 0) ? 0 : x / y);
+
+const remainder = (x, y) => (equ(y, 0) ? 0 : x % y);
+
+const calculate = (firstOperand, secondOperand, operation) =>
+    operation(firstOperand, secondOperand);
+
+console.log(calculate(2, 3, equ))
+console.log(calculate(2, 3, add))
+console.log(calculate(2, 3, sub))
+console.log(calculate(2, 3, mul))
+console.log(calculate(2, 3, div))
+console.log(calculate(calculate(1, 2, add), calculate(3, 4, sub), mul));
+ */
+
+// the last parameter is called a default parameter and usually it is placed as
+// the last argument. This is something that you have to do if you are going to
+// use default values. This snippet is not that different than the previous
+// except the introduction of the default parameter which means for the third
+// argument, we can choose to pass a value for it or not
+const performActionOnArray = (numericArray, someAction, initialValue = 0) => {
+    return numericArray.reduce(
+        (result, element) => someAction(result, element),
+        initialValue
+    );
+};
+
+const add = (x, y) => x + y;
+
+const numArray = [1, 2, 3];
+// const total = performActionOnArray(numArray, add);
+const total = performActionOnArray(numArray, (value1, value2) => value1 + value2);
+
+console.log(`The total of the array, ${numArray} is ${total}`);
+// The total of the array, 1,2,3 is 6

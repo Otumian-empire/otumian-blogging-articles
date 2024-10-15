@@ -381,3 +381,143 @@ console.log(`${6} + ${100} = ${add(6, 100)}`);
 ```
 
 This is as simple as we can put it. Do the same for the the `calculateInterest` function.
+
+> A function can return anything returnable.
+
+## Arrow functions
+
+An arrow function is another away to write a function. Usually I use arrow functions when I have a simple function that does a very minute "thing" or in array or string methods for looping. You can use it in place of the function declarations (named functions). We say, `function`, to indicate we want to create a function. Arrow functions have the same features as the declarative function.
+
+Arrow functions are called so because of `=>`, the fat arrow operator. It is of the form, perhaps you've have seen before:
+
+```js
+const arrowFunctionName = (/* parameter list */) => /* some expression */
+```
+
+or
+
+```js
+const arrowFunctionName = (/* parameter list */) => {
+  /* some huge logic */
+};
+```
+
+Let's rewrite the `add` function using arrow function.
+
+```js
+const add = (x, y) => x + y;
+```
+
+`=>`, indicates a `return` of the value from the `x + y` express. So the `return` keyword is used implicitly. Again we can explicitly return a value from the function using the `return` keyword however, we have to add the functions block.
+
+```js
+const add = (x, y) => {
+  // usually the body here would be longer
+  return x + y;
+};
+```
+
+The difference in the two is that in the second, we added a block, `{` and `}` and a `return` keyword that returns a value from the function. Again, you can choose to return a value or not.
+
+## Passing functions as arguments
+
+We can pass functions as arguments to other functions. Essentially, we treat functions as values. Let's consider this trivial example.
+
+```js
+const callback = (outFunction) => {
+  console.log(`${outFunction.name} function was called`);
+};
+
+const login = (username, password, logger) => {
+  console.log(`localhost://${username}:${password}@weird.com/login`);
+  logger(login);
+};
+
+const clearAccount = (username, logger) => {
+  console.log(`localhost://${username}@weird.com/clear`);
+  logger(clearAccount);
+};
+
+login("johndoe", "password", callback);
+clearAccount("johndoe", callback);
+```
+
+Another place we can do this with array methods or string methods. Consider this function
+
+```js
+const calculateSumOfNumbersInArray = (numericArray) =>
+  numericArray.reduce((total, element) => total + element, 0);
+
+const numArray = [1, 2, 3];
+const total = calculateSumOfNumbersInArray(numArray);
+
+console.log(`The total of the array, ${numArray} is ${total}`);
+// The total of the array, 1,2,3 is 6
+```
+
+We can see that we can pullout the callback function, `(total, element) => total + element, 0`. In fact, it is the `total + element` we can replace.
+
+```js
+const calculateSumOfNumbersInArray = (numericArray, someFunction) =>
+  numericArray.reduce((total, element) => someFunction(total, element), 0);
+
+const add = (x, y) => x + y;
+
+const numArray = [1, 2, 3];
+const total = calculateSumOfNumbersInArray(numArray, add);
+
+console.log(`The total of the array, ${numArray} is ${total}`);
+// The total of the array, 1,2,3 is 6
+```
+
+You know we pass another function that takes 2 numbers argument and returns a number. We don't even have to create a function.
+
+We have done some maths before but this time we will use functions to abstract the operators.
+
+```js
+const add = (x, y) => x + y;
+
+const sub = (x, y) => x - y;
+
+const mul = (x, y) => x * y;
+
+const calculate = (firstOperand, secondOperand, operation) =>
+  operation(firstOperand, secondOperand);
+
+console.log(calculate(2, 3, add));
+console.log(calculate(2, 3, sub));
+console.log(calculate(2, 3, mul));
+console.log(calculate(calculate(1, 2, add), calculate(3, 4, sub), mul));
+```
+
+The last parameter is called a default parameter and usually it is placed as
+the last argument. This is something that you have to do if you are going to
+use default values. This snippet is not that different than the previous
+except the introduction of the default parameter which means for the third
+argument, we can choose to pass a value for it or not.
+
+```js
+const performActionOnArray = (numericArray, someAction, initialValue = 0) => {
+  return numericArray.reduce(
+    (result, element) => someAction(result, element),
+    initialValue
+  );
+};
+
+const add = (x, y) => x + y;
+
+const numArray = [1, 2, 3];
+const total = performActionOnArray(numArray, add);
+
+console.log(`The total of the array, ${numArray} is ${total}`);
+// The total of the array, 1,2,3 is 6
+```
+
+In `const total = performActionOnArray(numArray, add);` we could have passed a function directly
+
+```js
+const total = performActionOnArray(
+  numArray,
+  (value1, value2) => value1 + value2
+);
+```
