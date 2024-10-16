@@ -1,6 +1,6 @@
 # JavaScript Essentials: Part 5
 
-Previously in [JavaScript Essentials: Part 4](https://dev.to/otumianempire/javascript-essentials-part-4-2ne6), We discussed `if` and `else` statements, `for` and `while` loops. In this part we will look at:
+Previously in [JavaScript Essentials: Part 4](https://dev.to/otumianempire/javascript-essentials-part-4-2ne6), We discussed `if` and `else` statements, `for` and `while` loops. In this part, we will look at:
 
 - Functions
 - Callbacks, promises, async & await
@@ -8,7 +8,7 @@ Previously in [JavaScript Essentials: Part 4](https://dev.to/otumianempire/javas
 
 ## Comments
 
-Comments are great and we are now going to talk about. It is so late that you should know what a comment is. Anyway, a comment in our program is not executed. A comment is meant to document our code. There are three ways to add comments in Javascript. We have the inline, multiline and JsDoc.
+Comments are great and we are now going to talk about it. It is so late that you should know what a comment is. Anyway, a comment in our program is not executed. A comment is meant to document our code. There are three ways to add comments in Javascript. We have the inline, multiline and JsDoc.
 
 **In-line**
 
@@ -17,7 +17,7 @@ Comments are great and we are now going to talk about. It is so late that you sh
 const numberOfBirds = 3;
 
 // the above comment is useless since the initial value assigned to the variable
-// is physically a number and the variable name also has number in it
+// is physically a number and the variable name also has a number in it
 // so use comments wisely by using proper naming
 ```
 
@@ -25,9 +25,9 @@ const numberOfBirds = 3;
 
 ```js
 /* 
-Everything in here is or will be ignored
+Everything in here is or will be ignored.
 
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 
 
 */
@@ -41,23 +41,23 @@ const emptyString = "";
 /**
  * This is a multiline comment
  *
- * But used for documentations
+ * But used for documentation
  */
 ```
 
-> comments can be placed anywhere however be careful it is after (or at the end) of a line of code or below or above it.
+> Comments can be placed anywhere; however, be careful when placing them after (or at the end) a line of code or below or above it.
 
 ## Semi-colon
 
-In javascript, semi-colon, `;`, is not required however, it helps sometimes. There are tools that helps you with it. Semi-colon indicates the end of a statement. Good.
+In javascript, semi-colon, `;`, is not required however, it helps sometimes. There are tools that help you with it. A semi-colon indicates the end of a statement. Good.
 
 ## Indentation
 
-Indentations is used to arrange code for clarity and ease reading. The tab key (on the keyboard) is used in indenting. Indentations are sometimes "tabs" or "spaces". The space is usually 2 or 4. If you are using [vscode](https://code.visualstudio.com/download), you don't really have to worry.
+Indentations are used to arrange code for clarity and ease of reading. The tab key (on the keyboard) is used in indenting. Indentations are sometimes "tabs" or "spaces". The space is usually 2 or 4. If you are using [vscode](https://code.visualstudio.com/download), you don't have to worry.
 
 ## Examples
 
-There were some exercises from [JavaScript Essentials: Part 4](https://dev.to/otumianempire/javascript-essentials-part-4-2ne6) which included but not limited to "fizzbuzz", password and email validation, etc. If you were to have followed my pseudocode, you'd run into some issues. I will provide a snippet that considers the order.
+There were some exercises from [JavaScript Essentials: Part 4](https://dev.to/otumianempire/javascript-essentials-part-4-2ne6) which included but were not limited to "fizzbuzz", password and email validation, etc. If you were to have followed my pseudocode, you'd run into some issues. I will provide a snippet that considers the order.
 
 **fizzbuzz for a single number**
 
@@ -208,13 +208,13 @@ if (veryWeakPassword.length === 6) {
 }
 ```
 
-What do you think about the two snippets? Practically the second snippet, even though it works, it is not that great.
+What do you think about the two snippets? Practically the second snippet, even though it works, is not that great.
 
 ## Functions
 
-A function a piece of code that can be reused. Usually a function does a specific thing. One thing. It can be anything.
+A function is a piece of code that can be reused. Usually, a function does a specific thing. One thing. It can be anything.
 
-Let's look at the general form (structure) of a function in JavaScript
+Let's look at the general form (structure) of a function in JavaScript.
 
 ```js
 function functionName(/* parameters */) {
@@ -222,10 +222,10 @@ function functionName(/* parameters */) {
 }
 ```
 
-- `function` is a keyword and it is required when creating a function. `for` keyword is needed when you want to use a `for` loop.
-- `functionName` is supposed to be the name given to the function. Idea of naming a variable applies to function.
-- `/* parameters */` refers to the data that you want to pass to the function.
-- `// do something` is the action or computation we desired to be performed. Functions usually return data after some processing is done. There are times it doesn't. It just updates some data and done.
+- `function` is a keyword required when creating a function. The `for` keyword is needed when you want to use a `for` loop.
+- `functionName` is supposed to be the name given to the function. The idea of naming a variable applies to a function.
+- `/* parameters */` refers to the data you want to pass to the function.
+- `// do something` is the action or computation we desire to be performed. Functions usually return data after some processing is done. There are times when it doesn't. It just updates some data and is done.
 - `{ // do something }` is the functions body or block
 
 We can have a function that prints "hello world"
@@ -239,7 +239,7 @@ function printHelloWorld() {
 
 We did ourselves the favour to name our function with a name that describes what the function does.
 
-Now, when we have a function, we have to "call" it for it to be executed. To call a function, you need the function's name followed by `(` and `)`. If the function takes a _parameter_, then you'd pass the _argument_ in the `(` and `)`. In our case for the "hello world" function, we have to do, `printHelloWorld();`.
+Now, when we have a function, we have to "call" it for it to be executed. To call a function, you need the function's name followed by `(` and `)`. If the function takes a _parameter_, you'd pass the _argument_ in the `(` and `)`. In our case, for the "hello world" function, we have to do, `printHelloWorld();`.
 
 ```js
 printHelloWorld();
@@ -247,7 +247,7 @@ printHelloWorld();
 // the output of this function will be on the console/terminal
 ```
 
-Let's move in a little direction that will broaden our arsenal and make creating functions fun. Consider this function that adds two numbers then prints a texting telling you what happened.
+Let's move in a little direction that will broaden our arsenal and make creating functions fun. Consider this function that adds two numbers and then prints a text telling you what happened.
 
 ```js
 function add() {
@@ -262,11 +262,11 @@ function add() {
 add(); // 3 + 20 = 23
 ```
 
-Is this giving you ideas? We can write our "fizzbuzz" and validations using functions. We can be soo stingy and delicate that we'd write each validation requirement as a function. It happens. Just don't over do it.
+Is this giving you ideas? We can write our "fizzbuzz" and validations using functions. We can be so stingy and delicate that we'd write each validation requirement as a function. It happens. Just don't overdo it.
 
-Now, consider the add function. What if we want to add different numbers, what do we do? We can create another function that. We can also alter the values directly. Right? Yeah. You will be marvelled by what we can accomplish with functions.
+Now, consider the add function. What if we want to add different numbers, what do we do? We can create another function that. We can also alter the values directly. Right? Yeah. You will be amazed by what we can accomplish with functions.
 
-First of all, if we want to add difference numbers we can change the numbers
+First of all, if we want to add different numbers we can change the numbers.
 
 ```js
 function add() {
@@ -303,9 +303,9 @@ add(6, 100);
 // 6 + 100 = 106
 ```
 
-Instead of having the value of `x` and `y` as internal values in `add`, we pass them. Now the difference between parameters and arguments is that, parameters are passed when creating (defining) the function. Argument are the values passed when calling the function. So in `function add(x, y)`, `x` and `y` are parameters (we can say place holders, representing the data to be passed to the function). In `add(3, 30);`, `3` and `30` are passed as arguments (the actual values to be processed). Note that the order of the argument and parameters must match else we'd be in a serious debt.
+Instead of having the values of `x` and `y` as internal values in `add`, we pass them. Now the difference between parameters and arguments is that parameters are passed when creating (defining) the function. Arguments are the values passed when calling the function. So in `function add(x, y)`, `x` and `y` are parameters (we can say placeholders, representing the data to be passed to the function). In `add(3, 30);`, `3` and `30` are passed as arguments (the actual values to be processed). Note that the order of the argument and parameters must match else we'd be in serious debt.
 
-You think it is enough to take on the big guns? Well, I think you can. You just have to be calm and know what you are doing. I will provide some snippets.
+Do you think it is enough to take on the big guns? Well, I think you can. You just have to be calm and know what you are doing. I will provide some snippets.
 
 ```js
 function passwordValidation(password) {
@@ -317,9 +317,9 @@ passwordValidation("Nixton009");
 passwordValidation("PrQ1V_");
 ```
 
-Do the same for the "fizzbuzz". Wrap a function around the snippet. You don't have to comment out the variables been used. Look at what data needs to passed to the function (input).
+Do the same for the "fizzbuzz". Wrap a function around the snippet. You don't have to comment on the variables used. Look at what data needs to be passed to the function (input).
 
-> We can pass as many parameters to a function. However I'd encourage your to set some limits. There are some professionals who say about three is enough. Some say about fewer than five. Ypu have to be smart about it. For now, let's say that whenever the number of parameters exceeds three, we would use an array or an object. Yeah. We can pass an array or an object as an argument.
+> We can pass as many parameters to a function. However, I'd encourage you to set some limits. There are some professionals who say about three is enough. Some say about fewer than five. You have to be smart about it. For now, let's say that whenever the number of parameters exceeds three, we would use an array or an object. Yeah. We can pass an array or an object as an argument.
 
 ```js
 // interest = (principal * rate * time) / 100
@@ -337,11 +337,11 @@ calculateInterest(1000, 0.25, 6);
 // The interest on $1000 for 6 years at a rate of 0.25% is $15
 ```
 
-Write a function the calculates the average of an array of numbers by completing this functions.
+Write a function that calculates the average of an array of numbers by completing this function.
 
 ```js
 function printAverage(arrayOfNumbers) {
-  // implement your logic here... Your output should match that after the function call
+  // implement your logic here... Your output should match that after the function call.
 }
 
 printAverage([1, 2, 3, 4, 5]);
@@ -350,7 +350,7 @@ printAverage([9, 8, 0, 6]);
 // The average of 9,8,0,6 of size 4 is 5.75
 ```
 
-At this point it should be clear that functions can take arguments. Practically, our functions will return a value or something value after a computation is done. The computed value is returned from the function. A function that return a value is of the form:
+At this point, it should be clear that functions can take arguments. Practically, our functions will return a value or something value after a computation is done. The computed value is returned from the function. A function that returns a value is of the form:
 
 ```js
 function functionName(/* parameters */) {
@@ -360,15 +360,15 @@ function functionName(/* parameters */) {
 ```
 
 - `// return someValue` is the only new thing here. `return` is a keyword.
-- `someValue` is the value returned from the function. And it could be anything to nothing, a void function. Don't sweat it. We will modify some of these functions we have written so before so things will be simpler.
+- `someValue` is the value returned from the function. And it could be anything to nothing, a void function. Don't sweat it. We will modify some of these functions we have written before so things will be simpler.
 
-Remember the `add` function? Instead logging the value inside the function, we will return it and assign that value to a variable then reuse the value later.
+Remember the `add` function? Instead of logging the value inside the function, we will return it and assign that value to a variable then reuse the value later.
 
 ```js
 function add(x, y) {
   const sum = x + y;
 
-  // usually, we an just do, return x + y and that will also work
+  // usually, we can just do, return x + y and that will also work
   return sum;
 }
 
@@ -380,15 +380,15 @@ console.log(`${6} + ${100} = ${add(6, 100)}`);
 // 6 + 100 = 106
 ```
 
-This is as simple as we can put it. Do the same for the the `calculateInterest` function.
+This is as simple as we can put it. Do the same for the `calculateInterest` function.
 
 > A function can return anything returnable.
 
 ## Arrow functions
 
-An arrow function is another away to write a function. Usually I use arrow functions when I have a simple function that does a very minute "thing" or in array or string methods for looping. You can use it in place of the function declarations (named functions). We say, `function`, to indicate we want to create a function. Arrow functions have the same features as the declarative function.
+An arrow function is another way to write a function. Usually, I use arrow functions when I have a simple function that does a very minute "thing" or in array or string methods for looping. You can use it in place of the function declarations (named functions). We say, `function`, to indicate we want to create a function. Arrow functions have the same features as the declarative function.
 
-Arrow functions are called so because of `=>`, the fat arrow operator. It is of the form, perhaps you've have seen before:
+Arrow functions are called so because of `=>`, the fat arrow operator. It is of the form, perhaps you've seen before:
 
 ```js
 const arrowFunctionName = (/* parameter list */) => /* some expression */
@@ -402,7 +402,7 @@ const arrowFunctionName = (/* parameter list */) => {
 };
 ```
 
-Let's rewrite the `add` function using arrow function.
+Let's rewrite the `add` function using the arrow function.
 
 ```js
 const add = (x, y) => x + y;
@@ -417,7 +417,7 @@ const add = (x, y) => {
 };
 ```
 
-The difference in the two is that in the second, we added a block, `{` and `}` and a `return` keyword that returns a value from the function. Again, you can choose to return a value or not.
+The difference between the two is that in the second, we added a block, `{` and `}` and a `return` keyword that returns a value from the function. Again, you can choose to return a value or not.
 
 ## Passing functions as arguments
 
@@ -442,7 +442,7 @@ login("johndoe", "password", callback);
 clearAccount("johndoe", callback);
 ```
 
-Another place we can do this with array methods or string methods. Consider this function
+Another place we can do this is with array methods or string methods. Consider this function
 
 ```js
 const calculateSumOfNumbersInArray = (numericArray) =>
@@ -455,7 +455,7 @@ console.log(`The total of the array, ${numArray} is ${total}`);
 // The total of the array, 1,2,3 is 6
 ```
 
-We can see that we can pullout the callback function, `(total, element) => total + element, 0`. In fact, it is the `total + element` we can replace.
+We can see that we can pull out the callback function, `(total, element) => total + element, 0`. In fact, it is the `total + element` we can replace.
 
 ```js
 const calculateSumOfNumbersInArray = (numericArray, someFunction) =>
@@ -490,10 +490,10 @@ console.log(calculate(2, 3, mul));
 console.log(calculate(calculate(1, 2, add), calculate(3, 4, sub), mul));
 ```
 
-The last parameter is called a default parameter and usually it is placed as
+The last parameter is called a default parameter and usually, it is placed as
 the last argument. This is something that you have to do if you are going to
-use default values. This snippet is not that different than the previous
-except the introduction of the default parameter which means for the third
+use default values. This snippet is not that different from the previous
+one except for the introduction of the default parameter which means for the third
 argument, we can choose to pass a value for it or not.
 
 ```js
@@ -526,7 +526,7 @@ const total = performActionOnArray(
 
 Before anything, let's define some terms. Promises are important in our niche.
 
-**Synchronous operation**: These are operations that executed sequentially, from top to bottom, one after the other. For some operations _A1_ and _A2_, _A1_ has to be completed before _A2_ will be executed. This way, _A2_ will not be executed until _A1_. At a time one operation is executed. This drawback is called blocking.
+**Synchronous operation**: These are operations that are executed sequentially, from top to bottom, one after the other. For some operations _A1_ and _A2_, _A1_ has to be completed before _A2_ will be executed. This way, _A2_ will not be executed until _A1_. At a time one operation is executed. This drawback is called blocking.
 
 ```js
 console.log("Hello there");
@@ -537,7 +537,7 @@ someSyncFunction();
 console.log("Bye");
 ```
 
-The output for the above is in a linear order as written above
+The output for the above is in a linear order as written above.
 
 ```txt
 Hello there
@@ -545,9 +545,9 @@ I am synchronous
 Bye
 ```
 
-In short, the code we have written so far are all executed in a synchronous order and we can tell when one line will be executed.
+In short, the code we have written so far is all executed in a synchronous order and we can tell when one line will be executed.
 
-**Asynchronous operations**: These are operations that are not executed sequentially. These operations run concurrently. These could be several operations running at the same time, practically, bit by bit. Since one operations success or execution is independent of the order and doesn't impede the execution of other lines, we call this behaviour non-blocking. We can not tell when an asynchronous line would be done executing.
+**Asynchronous operations**: These are operations that are not executed sequentially. These operations run concurrently. These could be several operations running at the same time, practically, bit by bit. Since the success or execution of one operation is independent of the order and doesn't impede the execution of other lines, we call this behaviour non-blocking. We can not tell when an asynchronous line will be executed.
 
 ```js
 console.log("Hello there");
@@ -561,7 +561,7 @@ someSyncFunction();
 console.log("Bye");
 ```
 
-And this is the output
+And this is the output.
 
 ```txt
 Hello there
@@ -572,7 +572,7 @@ I am asynchronous
 
 Can you identify the async operation based on the output?
 
-it is the `setTimeout` function. Let's say it runs in the background. It is non-blocking, so the last `console.log` was executed.
+It is the `setTimeout` function. Let's say it runs in the background. It is non-blocking, so the last `console.log` was executed.
 
 **Some Async Operations**
 
@@ -581,21 +581,21 @@ it is the `setTimeout` function. Let's say it runs in the background. It is non-
 - File I/O operations
 - Javascript Web APIs (setTimeout, setInterval, fetch, etc)
 
-A `Promise` provides a means for managing or handling asynchronous operations. It is way of knowing the state an async operation is in, when it is executed, whether it is "fulfilled" or it failed.
+A `Promise` provides a means for managing or handling asynchronous operations. It is a way of knowing the state an async operation is in, when it is executed, and whether it is "fulfilled" or it failed.
 
 **Let's create a Promise**
 
-A promise has the form
+A promise has the form:
 
 ```js
 new Promise((resolve, reject) => {
     // an async operation is executed
     if (/* on completion resolve promise with a value */) {
         resolve(value);
-    } else {
+ } else {
         /* on failure reject promise with an error */
         reject(error);
-    }
+ }
 });
 ```
 
@@ -609,7 +609,7 @@ Promise has `then` method which provides the resolved value, `catch` method whic
 console.log("Hello there");
 
 const madeAPromise = new Promise((resolve, reject) => {
-  // this could have been a database or api call
+  // this could have been a database or API call
   const result = true;
 
   /* on completion resolve promise with a value */
@@ -633,7 +633,7 @@ madeAPromise
 console.log("Bye");
 ```
 
-Look at the output and see how the code is executed. `console.log("Bye");` was not the last to be executed. We created our own async operation using a promise and handled it using `then` and `catch`. If we are thinking of executing these operations in order, then we can or have to put the remaining logic inside the then block.
+Look at the output and see how the code is executed. `console.log("Bye");` was not the last to be executed. We created our async operation using a promise and handled it using `then` and `catch`. If we are thinking of executing these operations in order, then we can or have to put the remaining logic inside the then block.
 
 ```js
 madeAPromise
@@ -649,11 +649,11 @@ madeAPromise
 
 What happened?
 
-The issue with this approach of handling promises is that we tend to nest or chain this operations, the `then` block fattens and it is not that friendly. So let's look at `async` and `await`.
+The issue with this approach to handling promises is that we tend to nest or chain this operation, the `then` block fattens and it is not that friendly. So let's look at `async` and `await`.
 
 ## async and await
 
-In the normal flow of data, we don't want the async operation to run in the background. We want to listen on it and use its result to do something else (as we did in the `then` and `catch`).
+In the normal flow of data, we don't want the async operation to run in the background. We want to listen to it and use its result to do something else (as we did in the `then` and `catch`).
 
 Let's create an async operation and handle it using `async` and `await`.
 
@@ -692,7 +692,7 @@ console.log("Hello there");
 
 async function asyncFunction() {
   return new Promise((resolve, reject) => {
-    // this could have been a database or api call
+    // this could have been a database or API call
     const result = true;
 
     /* on completion resolve promise with a value */
@@ -714,7 +714,7 @@ console.log("Bye");
 
 When we execute the above snippet we get an error similar to, `Warning: To load an ES module, set "type": "module" in the package.json or use the .mjs extension.`.
 
-We can fix this issue easily. Run the command, `npm init -y`. go into the `package.json` file and add the line, `"type": "module"`. The `package.json` should look more less like
+We can fix this issue easily. Run the command, `npm init -y`. Go into the `package.json` file and add the line, `"type": "module"`. The `package.json` should look like
 
 ```json
 {
@@ -748,7 +748,7 @@ console.log("Hello there");
 
 async function asyncFunction() {
   return new Promise((resolve, reject) => {
-    // this could have been a database or api call
+    // this could have been a database or API call
     const result = true;
 
     /* on completion resolve promise with a value */
@@ -774,7 +774,7 @@ try {
 console.log("Bye");
 ```
 
-There won't be any promise rejection because we set, `const result = true`. Set it to `false`. and our output should be similar to
+There won't be any promise rejection because we set, `const result = true`. Set it to `false`. And our output should be similar to
 
 ```txt
 Hello there
@@ -784,15 +784,15 @@ We have handled the async call, now we can all have pizza
 Bye
 ```
 
-So the purpose of talking about promises and async and await is to let you know that we will be doing to that a lot. Refer to the examples of asynchronous operations listed above.
+So the purpose of talking about promises and async and await is to let you know that we will be doing that a lot. Refer to the examples of asynchronous operations listed above.
 
 > `async` and `await`, `try` and `catch` and `finally` are keywords.
 
 ## Conclusion
 
-At this point where we have discussed function and promises and how to handle them, I think we are about 50% equipped with the "knowledge" to manipulate data (flow). What is left is to become used to writing javascript code and be a competent javascript programmer. Get your hands dirty with javascript. That's the only way you will code a backend api and not feel restrained because you have the idea but don't know what to do.
+At this point where we have discussed functions and promises and how to handle them, I think we are about 50% equipped with the "knowledge" to manipulate data (flow). What is left is to become used to writing javascript code and be a competent javascript programmer. Get your hands dirty with JavaScript. That's the only way you will code a backend API and not feel restrained because you have the idea but don't know what to do.
 
-Next is to write some code and solve some problems then actually start building apis.
+Next is to write some code and solve some problems then actually start building APIs.
 
 ## Resource
 
@@ -804,7 +804,7 @@ These are materials that will be helpful in understanding Promises, async and aw
 - [JavaScript Promises In 10 Minutes](https://www.youtube.com/watch?v=DHvZLI7Db8E)
 - [How JavaScript Promises Work – Tutorial for Beginners](https://www.freecodecamp.org/news/javascript-promise-object-explained/)
 
-These are some exercise you'd like to try your hands on
+These are some exercises you'd like to try your hands on.
 
 - [jschallenger - javascript-basics](https://jschallenger.com/javascript-basics/variables)
 - [codecademy - 10 javascript-code-challenges-for-beginners](https://www.codecademy.com/resources/blog/10-javascript-code-challenges-for-beginners/)
