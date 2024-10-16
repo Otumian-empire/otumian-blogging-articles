@@ -521,3 +521,298 @@ const total = performActionOnArray(
   (value1, value2) => value1 + value2
 );
 ```
+
+## Promise
+
+Before anything, let's define some terms. Promises are important in our niche.
+
+**Synchronous operation**: These are operations that executed sequentially, from top to bottom, one after the other. For some operations _A1_ and _A2_, _A1_ has to be completed before _A2_ will be executed. This way, _A2_ will not be executed until _A1_. At a time one operation is executed. This drawback is called blocking.
+
+```js
+console.log("Hello there");
+const someSyncFunction = () => {
+  console.log("I am synchronous");
+};
+someSyncFunction();
+console.log("Bye");
+```
+
+The output for the above is in a linear order as written above
+
+```txt
+Hello there
+I am synchronous
+Bye
+```
+
+In short, the code we have written so far are all executed in a synchronous order and we can tell when one line will be executed.
+
+**Asynchronous operations**: These are operations that are not executed sequentially. These operations run concurrently. These could be several operations running at the same time, practically, bit by bit. Since one operations success or execution is independent of the order and doesn't impede the execution of other lines, we call this behaviour non-blocking. We can not tell when an asynchronous line would be done executing.
+
+```js
+console.log("Hello there");
+setTimeout(() => {
+  console.log("I am asynchronous");
+}, 2000);
+const someSyncFunction = () => {
+  console.log("I am synchronous");
+};
+someSyncFunction();
+console.log("Bye");
+```
+
+And this is the output
+
+```txt
+Hello there
+I am synchronous
+Bye
+I am asynchronous
+```
+
+Can you identify the async operation based on the output?
+
+it is the `setTimeout` function. Let's say it runs in the background. It is non-blocking, so the last `console.log` was executed.
+
+**Some Async Operations**
+
+- Network requests (Eg: API calls)
+- Database queries
+- File I/O operations
+- Javascript Web APIs (setTimeout, setInterval, fetch, etc)
+
+A `Promise` provides a means for managing or handling asynchronous operations. It is way of knowing the state an async operation is in, when it is executed, whether it is "fulfilled" or it failed.
+
+**Let's create a Promise**
+
+A promise has the form
+
+```js
+new Promise((resolve, reject) => {
+    // an async operation is executed
+    if (/* on completion resolve promise with a value */) {
+        resolve(value);
+    } else {
+        /* on failure reject promise with an error */
+        reject(error);
+    }
+});
+```
+
+`new` and `Promise` are keywords. `resolve` and `reject` are callback functions. We can replace them with other names. By conversion, we use `resolve` and `reject`.
+
+**Handle a promise**
+
+Promise has `then` method which provides the resolved value, `catch` method which provides the rejected error and there is the `finally` which is a way to clean up after the whole process. `finally` is optional though. Here is a simple example you can play with.
+
+```js
+console.log("Hello there");
+
+const madeAPromise = new Promise((resolve, reject) => {
+  // this could have been a database or api call
+  const result = true;
+
+  /* on completion resolve promise with a value */
+  if (result) {
+    resolve("🥦 is good for your health");
+  } else {
+    /* on failure reject promise with an error */
+    reject("Well, 🙄, an error occurred");
+  }
+});
+
+console.log("After the promise is created");
+
+madeAPromise
+  .then((value) => console.log({ value }))
+  .catch((error) => console.log({ error }))
+  .finally(() =>
+    console.log("We have handled the async call, now we can all have pizza")
+  );
+
+console.log("Bye");
+```
+
+Look at the output and see how the code is executed. `console.log("Bye");` was not the last to be executed. We created our own async operation using a promise and handled it using `then` and `catch`. If we are thinking of executing these operations in order, then we can or have to put the remaining logic inside the then block.
+
+```js
+madeAPromise
+  .then((value) => {
+    console.log({ value });
+    console.log("Bye");
+  })
+  .catch((error) => console.log({ error }))
+  .finally(() =>
+    console.log("We have handled the async call, now we can all have pizza")
+  );
+```
+
+What happened?
+
+The issue with this approach of handling promises is that we tend to nest or chain this operations, the `then` block fattens and it is not that friendly. So let's look at `async` and `await`.
+
+## async and await
+
+In the normal flow of data, we don't want the async operation to run in the background. We want to listen on it and use its result to do something else (as we did in the `then` and `catch`).
+
+Let's create an async operation and handle it using `async` and `await`.
+
+We know how to create named functions and arrow functions.
+
+```js
+function functionName() {}
+
+const functionName = () => {};
+```
+
+To make a function asynchronous, we use the `async` keyword.
+
+```js
+async function functionName() {}
+
+const functionName = async () => {};
+```
+
+Now whatever operation goes into the block of the function and let's say in the async function we want to create, we would have to deal with another async operation, then we can use the `await`.
+
+```js
+async function functionName() {
+  const responseFromAsyncOperation = await SomeAsyncOperation(someArguments);
+}
+
+const functionName = async () => {
+  const responseFromAsyncOperation = await SomeAsyncOperation(someArguments);
+};
+```
+
+The `await` tells javascript to "wait" and receive the resolved or fulfilled value from the promise.
+
+```js
+console.log("Hello there");
+
+async function asyncFunction() {
+  return new Promise((resolve, reject) => {
+    // this could have been a database or api call
+    const result = true;
+
+    /* on completion resolve promise with a value */
+    if (result) {
+      resolve("🥦 is good for your health");
+    } else {
+      /* on failure reject promise with an error */
+      reject("Well, 🙄, an error occurred");
+    }
+  });
+}
+
+console.log("After the promise is created");
+const value = await asyncFunction();
+console.log({ value });
+
+console.log("Bye");
+```
+
+When we execute the above snippet we get an error similar to, `Warning: To load an ES module, set "type": "module" in the package.json or use the .mjs extension.`.
+
+We can fix this issue easily. Run the command, `npm init -y`. go into the `package.json` file and add the line, `"type": "module"`. The `package.json` should look more less like
+
+```json
+{
+  "name": "javascript_part_5",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module"
+}
+```
+
+Now, rerun the snippet and you should get an output similar to
+
+```txt
+Hello there
+After the promise is created
+{ value: '🥦 is good for your health' }
+Bye
+```
+
+Now, let's say we want to handle the promise rejection error, in case there is no, we have to use the `try` and `catch` clause around the async call.
+
+```js
+console.log("Hello there");
+
+async function asyncFunction() {
+  return new Promise((resolve, reject) => {
+    // this could have been a database or api call
+    const result = true;
+
+    /* on completion resolve promise with a value */
+    if (result) {
+      resolve("🥦 is good for your health");
+    } else {
+      /* on failure reject promise with an error */
+      reject("Well, 🙄, an error occurred");
+    }
+  });
+}
+
+console.log("After the promise is created");
+try {
+  const value = await asyncFunction();
+  console.log({ value });
+} catch (error) {
+  console.log({ error });
+} finally {
+  console.log("We have handled the async call, now we can all have pizza");
+}
+
+console.log("Bye");
+```
+
+There won't be any promise rejection because we set, `const result = true`. Set it to `false`. and our output should be similar to
+
+```txt
+Hello there
+After the promise is created
+{ error: 'Well, 🙄, an error occurred' }
+We have handled the async call, now we can all have pizza
+Bye
+```
+
+So the purpose of talking about promises and async and await is to let you know that we will be doing to that a lot. Refer to the examples of asynchronous operations listed above.
+
+> `async` and `await`, `try` and `catch` and `finally` are keywords.
+
+## Conclusion
+
+At this point where we have discussed function and promises and how to handle them, I think we are about 50% equipped with the "knowledge" to manipulate data (flow). What is left is to become used to writing javascript code and be a competent javascript programmer. Get your hands dirty with javascript. That's the only way you will code a backend api and not feel restrained because you have the idea but don't know what to do.
+
+Next is to write some code and solve some problems then actually start building apis.
+
+## Resource
+
+These are materials that will be helpful in understanding Promises, async and await and event loop.
+
+- [What the heck is the event loop anyway? | Philip Roberts | JSConf EU](https://www.youtube.com/watch?v=8aGhZQkoFbQ)
+- [Node.js animated: Event Loop](https://dev.to/nodedoctors/an-animated-guide-to-nodejs-event-loop-3g62)
+- [JavaScript Visualized - Event Loop, Web APIs, (Micro)task Queue](https://www.youtube.com/watch?v=eiC58R16hb8)
+- [JavaScript Promises In 10 Minutes](https://www.youtube.com/watch?v=DHvZLI7Db8E)
+- [How JavaScript Promises Work – Tutorial for Beginners](https://www.freecodecamp.org/news/javascript-promise-object-explained/)
+
+These are some exercise you'd like to try your hands on
+
+- [jschallenger - javascript-basics](https://jschallenger.com/javascript-basics/variables)
+- [codecademy - 10 javascript-code-challenges-for-beginners](https://www.codecademy.com/resources/blog/10-javascript-code-challenges-for-beginners/)
+- [TheOdinProject-javascript-exercises](https://github.com/TheOdinProject/javascript-exercises)
+- [codewars - javascript](https://www.codewars.com/kata/search/javascript?q=&r%5B%5D=-8&r%5B%5D=-7&r%5B%5D=-6&xids=played&order_by=rank_id%20asc)
+- [RepublicServicesRepository-javascript-exercises]https://github.com/RepublicServicesRepository/javascript-exercises
+- [leonardomso - 33-js-concepts](https://github.com/leonardomso/33-js-concepts)
+- This is a good read, [getify - You-Dont-Know-JS](https://github.com/getify/You-Dont-Know-JS)
+- [TheAlgorithms - Javascript](https://github.com/TheAlgorithms/Javascript)
+- [denysdovhan - wtfjs](https://github.com/denysdovhan/wtfjs)
+- [w3schools - js exercise](https://www.w3schools.com/js/exercise_js.asp)

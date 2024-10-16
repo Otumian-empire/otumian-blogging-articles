@@ -240,7 +240,7 @@
 // login("johndoe", "password", callback)
 // clearAccount("johndoe", callback)
 //
-/* 
+/*
 const calculateSumOfNumbersInArray = (numericArray) =>
     numericArray.reduce((total, element) => total + element, 0);
 
@@ -280,18 +280,110 @@ console.log(calculate(calculate(1, 2, add), calculate(3, 4, sub), mul));
 // use default values. This snippet is not that different than the previous
 // except the introduction of the default parameter which means for the third
 // argument, we can choose to pass a value for it or not
-const performActionOnArray = (numericArray, someAction, initialValue = 0) => {
-    return numericArray.reduce(
-        (result, element) => someAction(result, element),
-        initialValue
-    );
+// const performActionOnArray = (numericArray, someAction, initialValue = 0) => {
+//     return numericArray.reduce(
+//         (result, element) => someAction(result, element),
+//         initialValue
+//     );
+// };
+
+// const add = (x, y) => x + y;
+
+// const numArray = [1, 2, 3];
+// // const total = performActionOnArray(numArray, add);
+// const total = performActionOnArray(numArray, (value1, value2) => value1 + value2);
+
+// console.log(`The total of the array, ${numArray} is ${total}`);
+// // The total of the array, 1,2,3 is 6
+/*
+console.log("Hello there");
+const someSyncFunction = () => {
+    console.log("I am synchronous");
 };
+someSyncFunction();
+console.log(`Bye`); */
 
-const add = (x, y) => x + y;
+// console.log("Hello there");
+// setTimeout(() => {
+//     console.log("I am asynchronous");
+// }, 2000);
+// const someSyncFunction = () => {
+//     console.log("I am synchronous");
+// };
+// someSyncFunction();
+// console.log("Bye");
 
-const numArray = [1, 2, 3];
-// const total = performActionOnArray(numArray, add);
-const total = performActionOnArray(numArray, (value1, value2) => value1 + value2);
+// new Promise((resolve, reject) => {
+//     // an async operation is executed
+//     if (/* on completion resolve promise with a value */) {
+//         resolve(value);
+//     } else {
+//         /* on failure reject promise with an error */
+//         reject(error);
+//     }
+// });
 
-console.log(`The total of the array, ${numArray} is ${total}`);
-// The total of the array, 1,2,3 is 6
+// console.log("Hello there");
+
+// const madeAPromise = new Promise((resolve, reject) => {
+//     // this could have been a database or api call
+//     const result = true
+
+//     /* on completion resolve promise with a value */
+//     if (result) {
+//         resolve("🥦 is good for your health");
+//     } else {
+//         /* on failure reject promise with an error */
+//         reject("Well, 🙄, an error occurred");
+//     }
+// });
+
+// console.log("After the promise is created");
+
+// // madeAPromise
+// //     .then((value) => console.log({ value }))
+// //     .catch((error) => console.log({ error }))
+// //     .finally(() =>
+// //         console.log("We have handled the async call, now we can all have pizza")
+// //     );
+
+// // console.log("Bye");
+
+// madeAPromise
+//     .then((value) => {
+//         console.log({ value })
+//         console.log("Bye");
+//     })
+//     .catch((error) => console.log({ error }))
+//     .finally(() =>
+//         console.log("We have handled the async call, now we can all have pizza")
+//     );
+
+console.log("Hello there");
+
+async function asyncFunction() {
+    return new Promise((resolve, reject) => {
+        // this could have been a database or api call
+        const result = false;
+
+        /* on completion resolve promise with a value */
+        if (result) {
+            resolve("🥦 is good for your health");
+        } else {
+            /* on failure reject promise with an error */
+            reject("Well, 🙄, an error occurred");
+        }
+    });
+}
+
+console.log("After the promise is created");
+try {
+    const value = await asyncFunction();
+    console.log({ value });
+} catch (error) {
+    console.log({ error });
+} finally {
+    console.log("We have handled the async call, now we can all have pizza")
+}
+
+console.log("Bye");
