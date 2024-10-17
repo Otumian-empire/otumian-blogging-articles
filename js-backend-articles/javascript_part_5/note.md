@@ -806,11 +806,12 @@ These are materials that will be helpful in understanding Promises, async and aw
 
 These are some exercises you'd like to try your hands on.
 
+- [exercism - javascript](https://exercism.org/tracks/javascript)
 - [jschallenger - javascript-basics](https://jschallenger.com/javascript-basics/variables)
 - [codecademy - 10 javascript-code-challenges-for-beginners](https://www.codecademy.com/resources/blog/10-javascript-code-challenges-for-beginners/)
 - [TheOdinProject-javascript-exercises](https://github.com/TheOdinProject/javascript-exercises)
 - [codewars - javascript](https://www.codewars.com/kata/search/javascript?q=&r%5B%5D=-8&r%5B%5D=-7&r%5B%5D=-6&xids=played&order_by=rank_id%20asc)
-- [RepublicServicesRepository-javascript-exercises]https://github.com/RepublicServicesRepository/javascript-exercises
+- [RepublicServicesRepository-javascript-exercises](https://github.com/RepublicServicesRepository/javascript-exercises)
 - [leonardomso - 33-js-concepts](https://github.com/leonardomso/33-js-concepts)
 - This is a good read, [getify - You-Dont-Know-JS](https://github.com/getify/You-Dont-Know-JS)
 - [TheAlgorithms - Javascript](https://github.com/TheAlgorithms/Javascript)
