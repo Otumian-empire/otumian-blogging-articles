@@ -27,9 +27,6 @@
  *  - Local Part (Username):
  *      - Maximum length: 64 characters
  *  - Domain:
- *      - Can contain letters (a-z), numbers (0-9), and hyphens (-)
- *      - Must not start or end with a hyphen
- *      - Must not have consecutive hyphens
  *      - Maximum length: 253 characters
  *  - TLD (Top-Level Domain):
  *      - Must be one of the recognized TLDs (e.g., .com, .org, .net, etc.)
@@ -93,6 +90,10 @@ function generateRandomKey() {
     return crypto.randomUUID();
 }
 
+async function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 // usually, password validators will return a boolean, whether the password is valid or not
 // however, we should consider adding an error message too
 function isValidPassword(password = "") {
@@ -142,7 +143,7 @@ function isValidPassword(password = "") {
 
     // have at least one uppercase
     const hasAtLeastOneUppercase =
-        lettersInPassword.filter((char) => char === char.toUpperCase()).length > 0;
+        lettersInPassword.filter((char) => char === char.toLowerCase()).length > 0;
     if (!hasAtLeastOneUppercase) {
         return {
             isValid: false,
@@ -246,7 +247,11 @@ function isValidEmail(email = "") {
         };
     }
 
-    const { local, domain, tld } = splitEmailIntoLocalDomainAndTld(email.toLowerCase(), indexOfAt, indexOfDot)
+    const { local, domain, tld } = splitEmailIntoLocalDomainAndTld(
+        email.toLowerCase(),
+        indexOfAt,
+        indexOfDot
+    );
 
     //  - not have 'email' in it
     if ([local, domain, tld].includes("email")) {
@@ -281,26 +286,18 @@ function isValidEmail(email = "") {
     }
 
     //  - TLD: Must be one of the recognized TLDs (e.g., .com, .org, .net, etc.)
-    const TLDs = [
-        '.com',
-        '.org',
-        '.net',
-        '.edu',
-        '.gov',
-        '.io',
-        '.ai',
-    ];
+    const TLDs = [".com", ".org", ".net", ".edu", ".gov", ".io", ".ai"];
     if (!TLDs.includes(tld)) {
         return {
             isValid: false,
-            message: `Email tld must be one of: ${TLDs}`
-        }
+            message: `Email tld must be one of: ${TLDs}`,
+        };
     }
 
     return {
         isValid: true,
-        message: ""
-    }
+        message: "",
+    };
 }
 
 // When signing up, we have to make sure that the email doesn't exist
@@ -322,6 +319,20 @@ async function App() {
     console.log("Running authentication app");
 
     const userInput = await getUserInput("\n$ ");
+
+    if (["help", "h"].includes(userInput)) {
+        console.log(
+            "About: Simple User Authentication Logic\n- Expected format->[action] [email] [password]\n\t[action] can be 'signup' or 'login'\n\n- Expected format->[action]\n\t[action] can be 'exit', 'quit', 'help', or 'h'"
+        );
+        return;
+    }
+
+    if (["exit", "quit", "\n"].includes(userInput)) {
+        console.clear();
+        console.log("Application ended");
+        process.exit()
+    }
+
     if (!isValidateInputFormat(userInput)) {
         console.log(
             "FormatError: Invalid date format. Expected format->[action] [email] [password]"
@@ -336,7 +347,7 @@ async function App() {
         return;
     }
 
-    const emailValidation = isValidEmail(email)
+    const emailValidation = isValidEmail(email);
     if (!emailValidation.isValid) {
         console.log(emailValidation.message);
         return;
@@ -354,9 +365,10 @@ async function App() {
         return;
     }
 
+    // had we several actions, we could use switch instead
     if (action === AUTH_ACTIONS.LOGIN) {
         console.log("We are doing a login");
-    } else if (action === AUTH_ACTIONS.LOGIN) {
+    } else if (action === AUTH_ACTIONS.SIGNUP) {
         console.log("We are doing a login");
     } else {
         console.log(
@@ -367,4 +379,11 @@ async function App() {
     console.log({ userInput });
 }
 
-App();
+(async () => {
+    while (true) {
+        // Run the App function
+        await App();
+        await sleep(5000)
+
+    }
+})();
