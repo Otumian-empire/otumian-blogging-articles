@@ -79,7 +79,7 @@ function destructureInput(input = "") {
 }
 
 function isValidationAction(action = "") {
-    return action && Object.values(AUTH_ACTIONS).includes(action)
+    return action && Object.values(AUTH_ACTIONS).includes(action);
 }
 
 function generateRandomKey() {
@@ -124,25 +124,41 @@ function isValidPassword(password = "") {
     if (!hasNumber) {
         return {
             isValid: false,
-            message: `Password must have at a number`,
+            message: "Password must have at a number",
         };
     }
 
     // for the sake of getting the upper and lower case letters, we'd pull out all the letters
     const lettersInPassword = password
         .split("")
-        .filter((char) => !SPECIAL_CHARS.includes(char) || !NUMBERS.includes(char))
-        .join("");
+        .filter((char) => !SPECIAL_CHARS.includes(char) || !NUMBERS.includes(char));
 
     // have at least one uppercase
-
+    const hasAtLeastOneUppercase =
+        lettersInPassword.filter((char) => char === char.toUpperCase()).length > 0;
+    if (!hasAtLeastOneUppercase) {
+        return {
+            isValid: false,
+            message: "Password must have at one uppercase character",
+        };
+    }
 
     // have at least one lowercase
+    const hasAtLeastOneLowercase =
+        lettersInPassword.filter((char) => char === char.toUpperCase()).length > 0;
+    if (!hasAtLeastOneLowercase) {
+        return {
+            isValid: false,
+            message: "Password must have at one lower character",
+        };
+    }
 
+    // at this point, we've met all the rules we've set however there are some values
+    // that will pass through because of the approach we took 
     return {
         isValid: true,
-        message: ""
-    }
+        message: "",
+    };
 }
 
 function isValidEmail(email = "") { }
@@ -181,12 +197,19 @@ async function App() {
     }
 
     /* if (!isValidEmail(email)) {
-        console.log("FormatError: Invalid email");
-        return;
-    }
- */
-    if (!isValidPassword(password)) {
-        console.log("FormatError: Invalid password");
+          console.log("FormatError: Invalid email");
+          return;
+      }
+   */
+    const passwordValidation = isValidPassword(password)
+    if (!passwordValidation.isValid) {
+        // It is not a good idea to trust what api (message) your are using, especially if the 
+        // message is from a vendor (a 3rd party and the error messages aren't predefined)
+        // Usually, I'd just say invalid credentials or throw some error that the client can catch
+        // and knowing the error type, they'd be certain of what to do based on the rules
+        // the client has set (just print everything out, all the rules regarding a valid password)
+        // And most vendors will just return true or false but in our case, we'd add a message
+        console.log(passwordValidation.message);
         return;
     }
 
