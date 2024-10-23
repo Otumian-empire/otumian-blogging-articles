@@ -21,11 +21,25 @@
  * -> Implement email validation with the following rules. Email must:
  *  - not be null or empty, hence, required
  *  - not exceed 256 characters in length
- *  - not contain prohibited characters (e.g. spaces, quotes, parentheses, etc.)
+ *  - not contain prohibited characters (spaces, quotes, parentheses, brackets, comma, semicolon, colon, exclamation)
  *  - have a valid syntax (local part + "@" + domain + "." + tld)
  *  - not have 'email' in it
- */
+ *  - Local Part (Username):
+ *      - Can contain letters (a-z), numbers (0-9), and special characters (!, $, &, ', *, +, -, /, =, ?, ^, _, `, {, |, }, ~)
+ *      - Must not start or end with a special character
+ *      - Must not have consecutive special characters
+ *      - Maximum length: 64 characters
+ *  - Domain:
+ *      - Can contain letters (a-z), numbers (0-9), and hyphens (-)
+ *      - Must not start or end with a hyphen
+ *      - Must not have consecutive hyphens
+ *      - Maximum length: 253 characters
+ *  - TLD (Top-Level Domain):
+ *      - Must be one of the recognized TLDs (e.g., .com, .org, .net, etc.)
+ *      - Maximum length: 6 characters
 
+
+ */
 const readline = require("readline");
 const crypto = require("node:crypto");
 
