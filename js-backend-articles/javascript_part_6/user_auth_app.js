@@ -25,9 +25,6 @@
  *  - have a valid syntax (local part + "@" + domain + "." + tld)
  *  - not have 'email' in it
  *  - Local Part (Username):
- *      - Can contain letters (a-z), numbers (0-9), and special characters (!, $, &, ', *, +, -, /, =, ?, ^, _, `, {, |, }, ~)
- *      - Must not start or end with a special character
- *      - Must not have consecutive special characters
  *      - Maximum length: 64 characters
  *  - Domain:
  *      - Can contain letters (a-z), numbers (0-9), and hyphens (-)
@@ -37,9 +34,8 @@
  *  - TLD (Top-Level Domain):
  *      - Must be one of the recognized TLDs (e.g., .com, .org, .net, etc.)
  *      - Maximum length: 6 characters
-
-
  */
+
 const readline = require("readline");
 const crypto = require("node:crypto");
 
@@ -72,6 +68,7 @@ async function getUserInput(question) {
         });
     });
 }
+
 // We expect user to enter-> [action] [email] [password]
 function isValidateInputFormat(input = "") {
     return input.split(" ").length === 3;
@@ -100,7 +97,7 @@ function generateRandomKey() {
 // however, we should consider adding an error message too
 function isValidPassword(password = "") {
     // not be null or empty, hence, required
-    if (!password || password === "" || password.length === 0) {
+    if (!password || password === "") {
         return {
             isValid: false,
             message: "Password is required",
@@ -164,14 +161,147 @@ function isValidPassword(password = "") {
     }
 
     // at this point, we've met all the rules we've set however there are some values
-    // that will pass through because of the approach we took 
+    // that will pass through because of the approach we took
     return {
         isValid: true,
         message: "",
     };
 }
 
-function isValidEmail(email = "") { }
+function splitEmailIntoLocalDomainAndTld(email, indexOfAt, indexOfDot) {
+    const local = email.substring(0, indexOfAt);
+    const domain = email.substring(indexOfAt + 1, indexOfDot);
+    const tld = email.substring(indexOfDot);
+
+    return { local, domain, tld };
+}
+
+function isValidEmail(email = "") {
+    //  - not be null or empty, hence, required
+    if (!email || email.length === "") {
+        return {
+            isValid: false,
+            message: "Email is required",
+        };
+    }
+
+    //  - not exceed 256 characters in length
+    if (email.length > 256) {
+        return {
+            isValid: false,
+            message: "Email must not exceed 256 characters",
+        };
+    }
+
+    //  - not contain prohibited characters (spaces, quotes, parentheses, brackets, comma, semicolon, colon, exclamation)
+    const INVALID_CHARACTERS = [
+        "!",
+        "$",
+        "&",
+        "'",
+        "*",
+        "+",
+        "-",
+        "/",
+        "=",
+        "?",
+        "^",
+        "_",
+        "`",
+        "{",
+        "|",
+        "}",
+        "~",
+        '"',
+        "[",
+        "]",
+        "{",
+        "}",
+    ];
+
+    const hasInvalidCharacter =
+        INVALID_CHARACTERS.filter((char) => email.includes(char)).length > 0;
+    if (hasInvalidCharacter) {
+        return {
+            isValid: false,
+            message: `Email must not contain any of these characters: ${INVALID_CHARACTERS}`,
+        };
+    }
+
+    //  - have a valid syntax (local part + "@" + domain + "." + tld)
+
+    const indexOfAt = email.indexOf("@");
+    if (indexOfAt < 0) {
+        return {
+            isValid: false,
+            message: "Email must have an '@'",
+        };
+    }
+
+    const indexOfDot = email.indexOf(".");
+    if (indexOfDot < 0) {
+        return {
+            isValid: false,
+            message: "Email must have a '.'",
+        };
+    }
+
+    const { local, domain, tld } = splitEmailIntoLocalDomainAndTld(email.toLowerCase(), indexOfAt, indexOfDot)
+
+    //  - not have 'email' in it
+    if ([local, domain, tld].includes("email")) {
+        return {
+            isValid: false,
+            message: "Email must have an '.'",
+        };
+    }
+
+    //  - Local Part (Username): Maximum length: 64 characters
+    if (local.length > 64) {
+        return {
+            isValid: false,
+            message: "Email local be at most 64 characters",
+        };
+    }
+
+    //  - Domain: Maximum length: 253 characters
+    if (domain.length > 253) {
+        return {
+            isValid: false,
+            message: "Email domain be at most 253 characters",
+        };
+    }
+
+    //  - TLD: Maximum length: 6 characters
+    if (tld.length > 6) {
+        return {
+            isValid: false,
+            message: "Email tld be at most 6 characters",
+        };
+    }
+
+    //  - TLD: Must be one of the recognized TLDs (e.g., .com, .org, .net, etc.)
+    const TLDs = [
+        '.com',
+        '.org',
+        '.net',
+        '.edu',
+        '.gov',
+        '.io',
+        '.ai',
+    ];
+    if (!TLDs.includes(tld)) {
+        return {
+            isValid: false,
+            message: `Email tld must be one of: ${TLDs}`
+        }
+    }
+
+    return {
+        isValid: true,
+        message: ""
+    }
+}
 
 // When signing up, we have to make sure that the email doesn't exist
 // The email and password are valid
@@ -206,14 +336,15 @@ async function App() {
         return;
     }
 
-    /* if (!isValidEmail(email)) {
-          console.log("FormatError: Invalid email");
-          return;
-      }
-   */
-    const passwordValidation = isValidPassword(password)
+    const emailValidation = isValidEmail(email)
+    if (!emailValidation.isValid) {
+        console.log(emailValidation.message);
+        return;
+    }
+
+    const passwordValidation = isValidPassword(password);
     if (!passwordValidation.isValid) {
-        // It is not a good idea to trust what api (message) your are using, especially if the 
+        // It is not a good idea to trust what api (message) your are using, especially if the
         // message is from a vendor (a 3rd party and the error messages aren't predefined)
         // Usually, I'd just say invalid credentials or throw some error that the client can catch
         // and knowing the error type, they'd be certain of what to do based on the rules
