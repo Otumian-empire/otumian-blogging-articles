@@ -20,13 +20,9 @@
  *  - have at least one number
  * -> Implement email validation with the following rules. Email must:
  *  - not be null or empty, hence, required
- *  - have a valid syntax (local part + "@" + domain + "." + tld)
  *  - not exceed 256 characters in length
  *  - not contain prohibited characters (e.g. spaces, quotes, parentheses, etc.)
- *  - have a valid domain (verified via dns)
- *  - not be a disposable email address (e.g. mailinator, 10 minute mail)
- *  - not be a role-based email address (e.g. info@, support@, sales@)
- *  - not be on an email address blacklist (known spam or abusive addresses)
+ *  - have a valid syntax (local part + "@" + domain + "." + tld)
  *  - not have 'email' in it
  */
 
