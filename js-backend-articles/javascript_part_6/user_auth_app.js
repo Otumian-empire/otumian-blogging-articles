@@ -317,7 +317,24 @@ function isValidHash(password, passwordHash) {
 // Then generate a key that hasn't been used and create an object
 // and assign an object of the credentials as value
 // Log that signup successful and log the key and email of the user
-function signUpLogin({ email, password }) { }
+function signUpLogic({ email, password }) {
+    const user = findUserByEmail(email)
+    if (user) {
+        return {
+            success: false,
+            message: "User with such email already exist"
+        }
+    }
+
+    const passwordHash = hashPassword(password)
+
+    USERS[email] = { email, password: passwordHash }
+
+    return {
+        success: true,
+        message: "User created successfully, you can now login"
+    }
+}
 
 // When logging in, we have to make sure that the email exists
 // We have to validate the email and password
