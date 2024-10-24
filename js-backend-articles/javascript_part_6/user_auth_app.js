@@ -86,9 +86,6 @@ function isValidationAction(action = "") {
     return action && Object.values(AUTH_ACTIONS).includes(action);
 }
 
-function generateRandomKey() {
-    return crypto.randomUUID();
-}
 
 async function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
