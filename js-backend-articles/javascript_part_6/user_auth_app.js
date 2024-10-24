@@ -297,6 +297,21 @@ function isValidEmail(email = "") {
     };
 }
 
+// will return undefine or the user object
+function findUserByEmail(email) {
+    return USERS[email]
+}
+
+// hashes the password using sha256, we could use something better
+// usually something like bcrypt, argon, etc
+function hashPassword(password) {
+    return crypto.hash("sha256", password);
+}
+
+function isValidHash(password, passwordHash) {
+    return hashPassword(password) === passwordHash
+}
+
 // When signing up, we have to make sure that the email doesn't exist
 // The email and password are valid
 // Then generate a key that hasn't been used and create an object
