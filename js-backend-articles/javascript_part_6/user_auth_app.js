@@ -341,7 +341,28 @@ function signUpLogic({ email, password }) {
 // Opinion here: I learn from one of the devs that there is no need to
 // validate data that you are not going to write to the db
 // What do you think
-function loginLogic({ email, password }) { }
+function loginLogic({ email, password }) {
+    const user = findUserByEmail(email)
+    if (!user) {
+        // here the message could just be invalid credentials
+        return {
+            success: false,
+            message: "User with not found"
+        }
+    }
+
+    if (!isValidHash(password, user.password)) {
+        return {
+            success: false,
+            message: "Invalid credentials"
+        }
+    }
+
+    return {
+        success: true,
+        message: `${user.email} has logged in`
+    }
+}
 
 async function App() {
     console.clear();
@@ -349,17 +370,26 @@ async function App() {
 
     const userInput = await getUserInput("\n$ ");
 
-    if (["help", "h"].includes(userInput)) {
+    if (["help", "h", "about"].includes(userInput)) {
         console.log(
             "About: Simple User Authentication Logic\n- Expected format->[action] [email] [password]\n\t[action] can be 'signup' or 'login'\n\n- Expected format->[action]\n\t[action] can be 'exit', 'quit', 'help', or 'h'"
         );
         return;
     }
 
+    if (["list", 'l'].includes(userInput)) {
+        console.clear()
+        console.log("Users\n-----")
+        for (const user of Object.values(USERS)) {
+            console.log(`${user.email}`)
+        }
+        return
+    }
+
     if (["exit", "quit", "\n"].includes(userInput)) {
         console.clear();
         console.log("Application ended");
-        process.exit()
+        process.exit();
     }
 
     if (!isValidateInputFormat(userInput)) {
@@ -398,21 +428,25 @@ async function App() {
     if (action === AUTH_ACTIONS.LOGIN) {
         console.log("We are doing a login");
     } else if (action === AUTH_ACTIONS.SIGNUP) {
-        console.log("We are doing a login");
+        // console.log("We are doing a signup");
+        const { success, message } = signUpLogic({ email, password })
+        if (!success) {
+            console.log(message)
+            return
+        }
+
+        console.log(message)
     } else {
         console.log(
             `FormatError: Action must be one of ${Object.values(AUTH_ACTIONS)}`
         );
     }
-
-    console.log({ userInput });
 }
 
 (async () => {
     while (true) {
         // Run the App function
         await App();
-        await sleep(5000)
-
+        await sleep(5000);
     }
 })();
