@@ -118,53 +118,6 @@ async function sleep(ms) {
 }
 
 /**
- * Generates a random number between two integers.
- *
- * Uses the Math.random() function to generate a random number within the specified range.
- *
- * @param {number} min - The minimum value of the range (inclusive).
- * @param {number} max - The maximum value of the range (inclusive).
- * @returns {number} A random number between min and max.
- */
-function generateRandomNumbersBetween(min, max) {
-    return min + Math.floor(Math.random() * (max - min + 1));
-}
-
-/**
- * Gets user input from the console.
- *
- * Creates a readline interface and prompts the user with a question.
- *
- * @param {string} question - The question to prompt the user with.
- * @returns {Promise<string>} A promise that resolves with the user's input.
- */
-async function getInput(question) {
-    const ReadLine = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
-
-    return await new Promise((resolve) => {
-        ReadLine.question(question, (answer) => {
-            resolve(answer);
-            ReadLine.close();
-        });
-    });
-}
-
-/**
- * Pauses execution for a specified amount of time.
- *
- * Uses the setTimeout function to create a promise that resolves after the specified time.
- *
- * @param {number} ms - The time to pause in milliseconds.
- * @returns {Promise<void>} A promise that resolves after the specified time.
- */
-async function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-/**
  * Declares the result of the game.
  *
  * Prints a win or loss message to the console based on the number of rounds.
