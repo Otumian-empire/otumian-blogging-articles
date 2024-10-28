@@ -1,381 +1,715 @@
-## Introduction
+# Mastermind in Javascript
 
-We are going to implement some programs to put what we have learnt so far into use. The programs to write includes:
+In this section we are going to implement a game called [Mastermind][wiki-play-mastermind] in JavaScript. This game development would cover a lot of the concepts that we have discussed so far. We will define functions, pass arguments to them, make use of variables, makes use of loops and if statements. We would briefly look at another concept around functions, known as IIFE, Immediately Invoked Function Expression. We will also look at how to take input from users via the command line. At this point it is just console applications.
 
-- [mastermind][wiki-play-mastermind]
-- > We are going to implement the master mind board game in JavScript. You can reference similar implementation here, [Master mind in python](https://dev.to/otumianempire/mastermind-board-game-implementation-in-python-26le)
+> You can reference a similar implementation here, [Master mind in python][Master-mind-in-python]
 
-Let's code a [mastermind][wiki-play-mastermind]. This is a simple board game that uses colours but We'd use numbers instead.
+[Mastermind][wiki-play-mastermind] is a simple board game that uses colours but We'd use numbers instead.
 
-**Summary**: Behind a bar are four colours put up by one player. The other player can not see the first player's colours. The first player's colours are called the code maker and the other player's colours are the code breaker. The code breaker has, inclusively, between 2 to 12 attempts at guessing the code makers'. The number of attempts must be even.
+**Summary**: Behind a bar are four colours put up by one player. The other player can not see the first player's colours. The first player's colours are called the _code maker_ and the other player's colours are the _code breaker_. The code breaker has, inclusively, between 2 to 12 attempts at guessing the code makers'. The number of attempts must be even.
 
 ## Implementation
 
-- Import the _random_ module
+- Create a folder called _mastermind_ on your pc (or where you put your projects) and in _mastermind_, initialize a node project using `npm init -y` (on the commandline). I am on a linux machine so this is how I will set up my project.
 
-  ```py
-  import random
+  - Open my terminal, run, `cd` to move me to the user folder.
+  - Then, `cd ~/projects`. `projects` is where I keep my projects.
+  - Then `mkdir mastermind` and `cd mastermind` to create the _mastermind_ folder and change into that folder.
+  - Initialize a node project with `npm init -y`. A _package.json_ file will be created.
+  - Create _app.js_ with `touch app.js`.
+  - Write `console.log("Mastermind")` into _app.js_ and run it with `node app.js`. I expect to see _Mastermind_ else I have an issue with my setup.
 
+- The starting (entry) point of this game will be in _App_, a function. Let's create a function called _App_ and add `console.log("App")`. We can then call `App()` and execute the code with `node app.js`. I won't be telling you to run your code but it is something you should be doing as you code along. This is the current content of my `app.js` file.
+
+  ```js
+  console.log("Mastermind");
+
+  function App() {
+    console.log("App");
+  }
+
+  App();
   ```
 
-- The number of times to play must be even between 2 to 12 rounds
+- When the game starts
 
-  ```py
-  while True:
-      try:
-          rounds = int(input("Enter number of rounds (Even): "))
+  - user enters the number rounds they want to play and the value enter must be validated
+  - user chooses whether to allow duplicates or not
+  - some where the code maker is randomly generated
+  - user has enter the code breaker
+  - code breaker is compared to the code make and hint is given if it doesn't match
+  - in the process we make the number of rounds
+  - and to make this more game like we put the whole _App_ into an infinite loop
 
-          if rounds >= 2 and rounds <= 12 and rounds % 2 == 0:
-              break
+- Let's implement a function to generate random numbers for the code make, there by setting random values to the code maker.
 
-      except ValueError:
-          print("Round must be an even number from 2 to 12 includes")
+- First we need a way to generate random numbers. Not to interfere with the code in the _app.js_, let's create another file called _scratch_pad.js_ and in this file we experiment.
+- JavaScript has a simple way to generate random numbers calling `Math.random()`. In the scratch pad, lets log 4 random numbers using a looping construct.
 
+  ```js
+  for (let i = 0; i < 4; i++) {
+    console.log(Math.random());
+  }
+  // 0.10037268097853191
+  // 0.20981624777230534
+  // 0.47828165742292583
+  // 0.8160883929470153
   ```
 
-- settings: should there be duplicates and blanks? Let's allow the user to enter _1_ for _true_ and _0_ for _false_. I don't think we'd need a blank since we are using numbers for the (this) mastermind game. We will make it such that when the user enters a number that is not specified, we'd set the duplication to _0_.
+- what we want are integers (numbers like) `0, 1, 2, ..., 9` not decimals. We can multiply the value returned from the `Math.random()` by 10 and we would have `x.something` where `x` will now be in `1,2,3,...,9`. Remember this experiments are all done in the scratch pad. Give it a try.
 
-  ```py
-  try:
-      duplicates_allowed = int(input("Duplicates allowed? (1/0) "))
-  except ValueError:
-      duplicates_allowed = 0
+- What we want is a number before the dot, the whole number part. We can write some code to convert the number to string and then split is by the "." and get the first element. However there is a functionality for that called floor which we can use.
 
+  ```js
+  for (let i = 0; i < 4; i++) {
+    console.log(Math.floor(Math.random() * 10));
+  }
+  // 4
+  // 7
+  // 3
+  // 4
   ```
 
-- The number of codes we will be dealing with will be four. So we will have four codes in the code breaker.
+- The way this works is that, if we want to get random numbers between between some number `min` and `max`, where `max` is greater than `min`, then we can do, `min + Math.floor(Math.random() * (max - min + 1))`. `min` is the minimum expected value and `max` is the maximum expected value. In our case we have our minimum value to be `0` and maximum to be `9`.
+- This is my snippet for generating the random number. I added parameters to the function because I don't want the function to have an internal state.
 
-  ```py
-  NUMBER_CODE = 4
+  ```js
+  function generateRandomNumbersBetween(min, max) {
+    return min + Math.floor(Math.random() * (max - min + 1));
+  }
 
+  for (let i = 0; i < 4; i++) {
+    console.log(generateRandomNumbersBetween(0, 9));
+  }
   ```
 
-- The code maker is that which the user has to guess, with the code breaker. We will create the code maker taking into account the option, _duplicates_allowed_.
+- At this point we can now go back into our _app.js_ and add the function above to generate the random numbers for the code maker. Put it above the _App_ function.
 
-  ```py
-  code_maker = []
-  counter = 0
+- From th e summary the number of colours used is 4. So we need to generate 4 numbers for the code maker. We also have to handle if duplicates are allowed. Back to the scratch pad.
 
-  while counter < NUMBER_CODE:
-      code = random.randint(0, 9)
+- We have functions, `if` and `else` statements, we have the `for` and `while` loops, etc. These constructs all have a block or a body. Variables initialized in this blocks can be used within the block and not outside of it. This is known as the scope of a variable. So a variable can exist in the global scope, this means that that variable can be used or assessed everywhere. When we declare a variable in a block. The variable becomes internal or limited in the that scope. Run this in the scratch pad.
 
-      if duplicates_allowed:
-          code_maker.append(code)
-          counter += 1
+  ```js
+  const HP = 100;
 
-      else:
-          if not code in code_maker:
-              code_maker.append(code)
-              counter += 1
+  if (true) {
+    console.log("IF BLOCK::", HP);
+  }
+
+  console.log("End::", HP);
+
+  // IF BLOCK:: 100
+  // End:: 100
   ```
 
-- Since this is a game, it must prove challenging but not too challenging as such we have to provide the user with some hints. we will hint the user if they are close to the code. Let `[0, 0, 0, 0]` represents each code and if the code breaker is greater than the code maker, hint _1_, hint _0_ when equal else _-1_. It would be okay had we used numbers other than _-1_, _0_ or _1_ as hints. (Python would let me get away with using string for the `hints` list.
+- Now update this by initializing a variable,`x`, in the `if` statement, `console.log(x)` outside the `if` block and run your scratch pad. You should get an error similar to this.
 
-  ```py
-  hints = ['h', 'i', 'n', 't']
+  ```sh
+  IF BLOCK:: 100
+  /home/Projects/mastermind/scratch_pad.js:8
+  console.log(x)
+              ^
 
+  ReferenceError: x is not defined
+      at Object.<anonymous> (/home/Projects/mastermind/scratch_pad.js:8:13)
+      at Module._compile (node:internal/modules/cjs/loader:1469:14)
+      at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+      at Module.load (node:internal/modules/cjs/loader:1288:32)
+      at Module._load (node:internal/modules/cjs/loader:1104:12)
+      at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:174:12)
+      at node:internal/main/run_main_module:28:49
+
+  Node.js v20.17.0
   ```
 
-- Now we can take in the user's guess, which is the code breaker. The user will be playing our mastermind, where the user guesses the code maker. The game terminates when the number of rounds is exhausted or the code breaker matches the code maker, in this case, all the hints will `[0, 0, 0, 0]`.
+  At this point I want bring to your attention the idea about scopes.
 
-  ```py
-  # code breaker guesses the code by the code maker
-  while rounds > 0:
+- When generating the code maker, we want to know if duplicates are allowed and at this point, we know that the code maker is an array of number (or numeric strings). Let's starts from the scratch pad. We want to implement a function that takes in a boolean argument indicating if duplicates is allowed. The function will add (push) four numbers into the code maker but before that we have to check if duplicates are allowed and handle when not.
 
-      # enter guess with spaces
-      code_breaker = list(map(int, input("Enter codes space separated: ").split()))
+  ```js
+  // a global code maker that is accessible inside any other scope
+  let CODE_MAKER = [];
 
-      # compare the code_breaker to the code maker
-      for i in range(NUMBER_CODE):
-          if code_breaker[i] > code_maker[i]:
-              hints[i] = 1
-          elif code_breaker[i] == code_maker[i]:
-              hints[i] = 0
-          else:
-              hints[i] = -1
+  function generateRandomNumbersBetween(min, max) {
+    return min + Math.floor(Math.random() * (max - min + 1));
+  }
 
-      # because of the values that we used to hint the user
-      # we have to find some dicey way to break the program
-      # when the user guesses the code (all hints go to 0)
-      if hints.count(0) == 4:
-          break
+  function generateCodeMaker(isDuplicatesAllowed = false) {
+    let counter = 0;
 
-      print(hints)
+    while (counter < 4) {
+      let code = generateRandomNumbersBetween(0, 9);
 
-      rounds -= 1
+      if (isDuplicatesAllowed) {
+        CODE_MAKER.push(code);
+        counter += 1;
+      } else if (!CODE_MAKER.includes(code)) {
+        CODE_MAKER.push(code);
+        counter += 1;
+      }
+    }
+  }
+
+  console.log(CODE_MAKER);
+  generateCodeMaker(true);
+  console.log(CODE_MAKER);
+
+  // reset the code maker
+  CODE_MAKER = [];
+  generateCodeMaker(false);
+  console.log(CODE_MAKER);
+  // []
+  // [ 6, 6, 0, 9 ]
+  // [ 2, 5, 0, 8 ]
   ```
 
-- we now decide who won the game base on the number of rounds
+- we also have written our code in such as a way that the code maker isn't accessed globally in the code maker function. So will return the code maker instead.
 
-  ```py
-  if rounds > 0:
-      print("You won the rounds")
-  else:
-      print("You lost bitterly to a computer")
+  ```js
+  // a global code maker that is accessible inside any other scope
+  let CODE_MAKER = [];
 
-  print(code_maker)
+  function generateRandomNumbersBetween(min, max) {
+    return min + Math.floor(Math.random() * (max - min + 1));
+  }
+
+  function generateCodeMaker(isDuplicatesAllowed = false) {
+    let counter = 0;
+    let codeMaker = [];
+
+    while (counter < 4) {
+      let code = generateRandomNumbersBetween(0, 9);
+
+      if (isDuplicatesAllowed) {
+        codeMaker.push(code);
+        counter += 1;
+      } else if (!codeMaker.includes(code)) {
+        codeMaker.push(code);
+        counter += 1;
+      }
+    }
+
+    return codeMaker;
+  }
+
+  console.log(CODE_MAKER);
+  CODE_MAKER = generateCodeMaker(true);
+  console.log(CODE_MAKER);
+
+  CODE_MAKER = generateCodeMaker(false);
+  console.log(CODE_MAKER);
+
+  // []
+  // [ 6, 6, 0, 9 ]
+  // [ 2, 5, 0, 8 ]
   ```
 
-### Final snippet
-
-```py
-# app.py
-
-# Import the _random_ module
-import random
-
-# The number of times to play must be even between 2 to 12 rounds
-while True:
-    try:
-        rounds = int(input("Enter number of rounds (Even in [2, 12]): "))
-
-        if rounds >= 2 and rounds <= 12 and rounds % 2 == 0:
-            break
-
-    except ValueError:
-        print("Round must be an even number from 2 to 12 includes")
-
-
-# should there be duplicates
-try:
-    duplicates_allowed = int(input("Duplicates allowed? (1/0) "))
-except ValueError:
-    duplicates_allowed = 0
-
-
-# The number of codes we will be dealing with will four
-NUMBER_CODE = 4
-
-
-# The code maker
-code_maker = []
-counter = 0
-
-while counter < NUMBER_CODE:
-    code = random.randint(0, 9)
-
-    if duplicates_allowed:
-        code_maker.append(code)
-        counter += 1
-
-    else:
-        if not code in code_maker:
-            code_maker.append(code)
-            counter += 1
-
-
-# hint
-hints = ['h', 'i', 'n', 't']
-
-
-# code breaker guesses the code by the code maker
-while rounds > 0:
-
-    # enter guess with spaces
-    code_breaker = list(map(int, input("Enter codes space separated: ").split()))
-
-    # compare the code_breaker to the code maker
-    for i in range(NUMBER_CODE):
-        if code_breaker[i] > code_maker[i]:
-            hints[i] = 1
-        elif code_breaker[i] == code_maker[i]:
-            hints[i] = 0
-        else:
-            hints[i] = -1
-
-    # because of the values that we used to hint the user
-    # we have to find some dicey way to break the program
-    # when the user guesses the code (all hints go to 0)
-    if hints.count(0) == 4:
-        break
-
-    print(hints)
-
-    rounds -= 1
-
-
-# declaring the result of the game
-if rounds > 0:
-    print("You won the rounds")
-else:
-    print("You lost bitterly to a computer")
-
-print(code_maker)
-
-
-```
-
-## Let's show off a little
-
-We will create functions and constants where possible. I remember doing something like this once and I later went back to the old code because I could find where I was - I was lost in my code. It happens. Sometimes it is not the best and sometimes it is. I am interested in showing you another possibility.
-
-```py
-# app2.py
-
-# Import the _random_ module
-import random
-import os
-from time import sleep
-
-
-# string constants
-ROUNDS_PROMPT = "Enter number of rounds (Even in [2, 12]) 🤗️: "
-INVALID_ROUNDS_PROMPT = "Round must be an even number from 2 to 12 includes 😩️"
-DUPLICATE_PROMPT = "Duplicates allowed? (1/0) 🤤️: "
-CODE_BREAKER_PROMPT = "Enter codes separated by space: "
-WIN_PROMPT = "You won the rounds 👏️"
-LOSS_PROMPT = "You lost bitterly to a computer 😏️"
-
-# int constants
-ZERO, ONE = 0, 1
-NUMBER_CODE = 4
-TERMINATING_VALUE = 0
-MORE, EQUAL, LESS = 1, 0, -1
-MIN_ROUNDS, MAX_ROUNDS = 2, 12
-RAND_INT_MIN, RAND_INT_MAX = 0, 9
-WAITING_TIME = 3
-
-# The code maker
-code_maker = []
-
-# hint
-hints = ['h', 'i', 'n', 't']
-
-def clear_screen() :
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-# validates the round input
-def isvalid_round(rounds):
-    return MIN_ROUNDS <= rounds <= MAX_ROUNDS and rounds % 2 == ZERO
-
-
-# declaring the result of the game
-def declare_result(rounds):
-    if rounds > TERMINATING_VALUE:
-        print(WIN_PROMPT)
-    else:
-        print(LOSS_PROMPT)
-
-
-# generate code maker
-def generate_code_maker(duplicates_allowed):
-    counter = 0
-
-    while counter < NUMBER_CODE:
-        code = random.randint(RAND_INT_MIN, RAND_INT_MAX)
-
-        if duplicates_allowed:
-            code_maker.append(code)
-            counter += ONE
-
-        else:
-            if not code in code_maker:
-                code_maker.append(code)
-                counter += ONE
-
-
-# compare the code_breaker to the code maker
-def compare_code():
-    # enter guess with spaces
-    code_breaker = list(map(int, input(CODE_BREAKER_PROMPT).split()))
-
-    for pos in range(NUMBER_CODE):
-        if code_breaker[pos] > code_maker[pos]:
-            hints[pos] = MORE
-        elif code_breaker[pos] == code_maker[pos]:
-            hints[pos] = EQUAL
-        else:
-            hints[pos] = LESS
-
-
-# entry point
-def App():
-    # The number of times to play must be even between 2 to 12 rounds
-    while True:
-        try:
-            rounds = int(input(ROUNDS_PROMPT))
-
-            if isvalid_round(rounds):
-                break
-
-        except ValueError:
-            print(INVALID_ROUNDS_PROMPT)
-
-
-    # should there be duplicates
-    try:
-        duplicates_allowed = int(input(DUPLICATE_PROMPT))
-    except ValueError:
-        duplicates_allowed = ZERO
-
-
-
-    generate_code_maker(duplicates_allowed)
-
-
-    # code breaker guesses the code by the code maker
-    while rounds > TERMINATING_VALUE:
-        compare_code()
-
-        # because of the values that we used to hint the user
-        # we have to find some dicey way to break the program
-        # when the user guesses the code (all hints go to 0)
-        if hints.count(EQUAL) == NUMBER_CODE:
-            break
-
-        print(hints)
-
-        rounds -= ONE
-
-
-    declare_result(rounds)
-
-    print(code_maker)
-
-
-# infinitely keep playing
-while True:
-    App()
-
-    sleep(WAITING_TIME)
-    clear_screen()
-
-    # reset the game for replay
-    code_maker = []
-    hints = ['h', 'i', 'n', 't']
-
+- In _app.js_ we can now add the code maker function and a variable for the code make.
+- Now back to the scratch pad. We want to take an input from the user from the terminal. And javascript has a way to do that too. Try this snippet.
+
+  ```js
+  const readline = require("readline");
+
+  const readlineOInstance = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  readlineOInstance.question("Enter code maker: ", (userInput) => {
+    console.clear();
+    console.log(`INPUT: ${userInput}`);
+    readlineOInstance.close();
+  });
+  ```
+
+- There is not issue with this approach of taking user input. It is just that we have to use a callback function and there is no way to pass the entered input to the outer scope of the callback function of `readlineOInstance.question`.
+
+- What are you thinking? try it out in the "scratch pad". If you are thinking about declaring a variable in the outer scope of `readlineOInstance.question` the assign the input entered to it, then it is a good approach but ... Still try it.
+
+- Do you remember the concept about Promises? We can use promise here and resolve the input. However we have to wrap the whole process in function. There are few parts of the `readlineOInstance.question` has a header similar to `question(query: string, callback: (answer: string) => void`. The `query` is the query (or prompt) to the user and `callback` is how we handle the input collection. Since we might reuse the same function somewhere later, we'd pass query as argument.
+
+  ```js
+  const readline = require("readline");
+
+  async function getInput(query) {
+    const readlineOInstance = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    return await new Promise((resolve) => {
+      readlineOInstance.question(query, (userInput) => {
+        resolve(userInput);
+        readlineOInstance.close();
+      });
+    });
+  }
+
+  // This is an iife
+  (async () => {
+    const userInput = await getInput("Enter code maker: ");
+    console.clear();
+    console.log(`INPUT: ${userInput}`);
+  })();
+  ```
+
+- Now we can add the `getInput` function to the _app.js_. Do not forget the import, `const readline = require("readline")`. The content of the _app.js_ should be similar to the snippet below.
+
+  ```js
+  const readline = require("readline");
+
+  console.log("Mastermind");
+
+  let CODE_MAKER = [];
+
+  function generateRandomNumbersBetween(min, max) {
+    return min + Math.floor(Math.random() * (max - min + 1));
+  }
+
+  function generateCodeMaker(isDuplicatesAllowed = false) {
+    let counter = 0;
+    let codeMaker = [];
+
+    while (counter < 4) {
+      let code = generateRandomNumbersBetween(0, 9);
+
+      if (isDuplicatesAllowed || !codeMaker.includes(code)) {
+        codeMaker.push(code);
+        counter += 1;
+      }
+    }
+
+    return codeMaker;
+  }
+
+  async function getInput(query) {
+    const readlineOInstance = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    return await new Promise((resolve) => {
+      readlineOInstance.question(query, (userInput) => {
+        resolve(userInput);
+        readlineOInstance.close();
+      });
+    });
+  }
+
+  function App() {
+    console.log("App");
+  }
+
+  App();
+  ```
+
+- Now we ask the user to enter the number of rounds and also if duplicate is allowed. WWe know that the number of rounds must be even and between 2 to 12. We will implement a function to validate a value (number) to be even and between 2 and 12. It will return a boolean. A number is even when the number modulo 2 is zero. (ie. `number % 2 == 0`).
+
+  ```js
+  function isValidRound(rounds) {
+    return 2 <= rounds && rounds <= 12 && rounds % 2 == 0;
+  }
+  ```
+
+- In the body of the `App` function, we can ask for the inputs and validate them. We will continuously ask for the proper input for the number of rounds but for the duplicate values in the code, when user enters anything other than the expected we'd assume that the user doesn't want duplicates. We will use a while loop and set the condition to be `true` and only `break` when the rounds is valid however using a `try` and a `catch` (for error handling), when the user enters an invalid value we log a message indicating that the value entered is invalid. Try it out.
+
+  ```js
+  let rounds = 0;
+  let isDuplicateAllowed = false;
+
+  // The number of times to play must be even between 2 to 12 rounds
+  while (true) {
+    try {
+      const roundsInput = await getInput(
+        "Enter number of rounds [must be even between 2 to 12]: "
+      );
+
+      // Number(some value) -> converts some value to a number
+      // if possible else returns NaN. we could directly check
+      // that 'rounds' is not NaN but any error will be caught
+      // in the catch
+      rounds = Number(roundsInput);
+
+      if (isValidRound(rounds)) {
+        break;
+      }
+    } catch (error) {
+      console.log(INVALID_ROUNDS_PROMPT);
+    }
+  }
+
+  // should there be duplicates
+  try {
+    const duplicateInput = await getInput("Allow duplicates [1/0]: ");
+    isDuplicateAllowed = Number(duplicateInput) === 1;
+  } catch (error) {
+    isDuplicateAllowed = false;
+  }
+
+  console.log(
+    `Number of rounds: (${rounds}) | Duplicate allowed: (${
+      isDuplicateAllowed === 1 ? "Yes" : "No"
+    })`
+  );
+  ```
+
+  Run the `app.js` and interact with it. This is a similar output during the interaction.
+
+  ```sh
+  Mastermind
+  App
+  Enter number of rounds [must be even between 2 to 12]: 1
+  Enter number of rounds [must be even between 2 to 12]: 5
+  Enter number of rounds [must be even between 2 to 12]: 7
+  Enter number of rounds [must be even between 2 to 12]: 100
+  Enter number of rounds [must be even between 2 to 12]: 0
+  Enter number of rounds [must be even between 2 to 12]: -2
+  Enter number of rounds [must be even between 2 to 12]: 2
+  Allow duplicates [1/0]: 1
+  Number of rounds: (2) | Duplicate allowed: (Yes)
+  ```
+
+- We have taken the number of rounds and the value for duplication. Now we can generate the code maker. To do this we can simply call the `generateCodeMaker` function and pass the duplication option value to it (or leave it since it's by default false).
+
+  ```js
+  console.clear();
+
+  CODE_MAKER = generateCodeMaker();
+
+  console.log(CODE_MAKER);
+  ```
+
+- Now we ca ask the user for the code breaker and compare it to the code maker. The code breaker is also an array of numbers. We will also add a hint for the user to know how far they are from a particular code. So if the code for the code breaker is greater than the code of the code maker, we say more. We say equal when they are equal and else we say less which is when the code from the code breaker is less than the code of the code breaker. Let's head into the scratch pad.
+- We will create a function that will take a numeric array of 4 element then compare users input (code breaker).
+
+  ```js
+  const readline = require("readline");
+
+  // generate by the code maker function
+  let CODE_MAKER = [3, 6, 7, 0];
+
+  async function getInput(query) {
+    const readlineOInstance = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    return await new Promise((resolve) => {
+      readlineOInstance.question(query, (userInput) => {
+        resolve(userInput);
+        readlineOInstance.close();
+      });
+    });
+  }
+
+  // new code
+
+  let HINTS = [0, 0, 0, 0];
+
+  async function compareCode(codeMaker) {
+    // enter guess with spaces
+    const input = await getInput("Enter code breaker with spaces: ");
+
+    // we are converting the code breaker into numbers
+    const codeBreaker = input.split(" ").map((value) => Number(value));
+
+    // compare each code at the same index and provide a hint
+    for (let codeIndex = 0; codeIndex < 4; codeIndex++) {
+      if (codeBreaker[codeIndex] > codeMaker[codeIndex]) {
+        HINTS[codeIndex] = 1;
+      } else if (codeBreaker[codeIndex] === codeMaker[codeIndex]) {
+        HINTS[codeIndex] = 0;
+      } else {
+        HINTS[codeIndex] = -1;
+      }
+    }
+  }
+
+  (async () => {
+    console.log(`INITIAL Hint: ${HINTS}`);
+
+    // await because of the input
+    await compareCode(CODE_MAKER);
+
+    console.log(`INITIAL Hint: ${HINTS}`);
+  })();
+  ```
+
+  - We have a variable to handle the hints and there is a value for each each code related to the code maker and breaker.
+  - We pass the code maker to the function to compare it against the input from the user.
+  - We update the hints according to let the user know how to update the values in the code breaker
+  - Now we can add the `HINTS` and `compareCode` function to the _app.js_. It is a great time to run your _app.js_, above the `App` function.
+
+- Now that we implemented a function to compare the code maker and the code breaker, we can now put this in a loop to account for the rounds (rounds = number of time to play the game). So if the number of rounds is 6, then the game would be played 6 times but we'd have to terminate the game when the user guess all the codes correctly, that is, when the values in the `HINTS` are all `0`s. SO when we count the number of `0`s in `HINTS` and it is 4, then we can terminate the game and say user won or something like that.
+
+  ```js
+  // code breaker guesses the code by the code maker
+  while (rounds > 0) {
+    console.log(`Number of rounds left: ${rounds}`);
+    await compareCode(CODE_MAKER);
+
+    // because of the values that we used to hint the user
+    // we have to find some dicey way to break the program
+    // when the user guesses the code (all hints go to 0)
+    if (HINTS.filter((value) => 0 === value).length === 4) {
+      break;
+    }
+
+    console.log(HINTS);
+
+    rounds -= 1;
+  }
+  ```
+
+- The number of rounds is reduced and we'd know whether the user won or not if the number of rounds is not 0.
+
+  ```js
+  if (rounds > 0) {
+    console.log("You won... Congratulations...");
+  } else {
+    console.log("You lost bitterly to a computer");
+  }
+  ```
+
+- Some outputs when you run the program
+
+  ```sh
+  Mastermind
+  App
+  Enter number of rounds [must be even between 2 to 12]: 6
+  Allow duplicates [1/0]: 0
+  ```
+
+- When I hit enter
+
+  ```sh
+  Number of rounds left: 6
+  Enter code breaker with spaces: 7 7 7 7
+  [ 1, 1, 1, 1 ]
+  Number of rounds left: 5
+  Enter code breaker with spaces: 1 2 3 5
+  [ -1, -1, 1, 1 ]
+  Number of rounds left: 4
+  Enter code breaker with spaces: 4 5 1 3
+  [ -1, -1, 1, 1 ]
+  Number of rounds left: 3
+  Enter code breaker with spaces: 5 6 0 2
+  [ 0, 0, 0, 1 ]
+  Number of rounds left: 2
+  Enter code breaker with spaces: 5 6 0 1
+  You won... Congratulations...
+  ```
+
+- I guess we can enjoy our hard work so far. I have about 130 lines. How many do you have?
+
+- This is the full code
+
+```js
+const readline = require("readline");
+
+console.log("Mastermind");
+
+let CODE_MAKER = [];
+let HINTS = [0, 0, 0, 0];
+
+function generateRandomNumbersBetween(min, max) {
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+function generateCodeMaker(isDuplicatesAllowed = false) {
+  let counter = 0;
+  let codeMaker = [];
+
+  while (counter < 4) {
+    let code = generateRandomNumbersBetween(0, 9);
+
+    if (isDuplicatesAllowed || !codeMaker.includes(code)) {
+      codeMaker.push(code);
+      counter += 1;
+    }
+  }
+
+  return codeMaker;
+}
+
+async function getInput(query) {
+  const readlineOInstance = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  return await new Promise((resolve) => {
+    readlineOInstance.question(query, (userInput) => {
+      resolve(userInput);
+      readlineOInstance.close();
+    });
+  });
+}
+
+function isValidRound(rounds) {
+  return 2 <= rounds && rounds <= 12 && rounds % 2 == 0;
+}
+
+async function compareCode(codeMaker) {
+  // enter guess with spaces
+  const input = await getInput("Enter code breaker with spaces: ");
+
+  // we are converting the code breaker into numbers
+  const codeBreaker = input.split(" ").map((value) => Number(value));
+
+  // compare each code at the same index and provide a hint
+  for (let codeIndex = 0; codeIndex < 4; codeIndex++) {
+    if (codeBreaker[codeIndex] > codeMaker[codeIndex]) {
+      HINTS[codeIndex] = 1;
+    } else if (codeBreaker[codeIndex] === codeMaker[codeIndex]) {
+      HINTS[codeIndex] = 0;
+    } else {
+      HINTS[codeIndex] = -1;
+    }
+  }
+}
+
+async function App() {
+  console.log("App");
+
+  let rounds = 0;
+  let isDuplicateAllowed = 0;
+
+  // The number of times to play must be even between 2 to 12 rounds
+  while (true) {
+    try {
+      const roundsInput = await getInput(
+        "Enter number of rounds [must be even between 2 to 12]: "
+      );
+
+      // Number(some value) -> converts some value to a number
+      // if possible else returns NaN. we could directly check
+      // that 'rounds' is not NaN but any error will be caught
+      // in the catch
+      rounds = Number(roundsInput);
+
+      if (isValidRound(rounds)) {
+        break;
+      }
+    } catch (error) {
+      console.log(INVALID_ROUNDS_PROMPT);
+    }
+  }
+
+  // should there be duplicates
+  try {
+    const duplicateInput = await getInput("Allow duplicates [1/0]: ");
+    isDuplicateAllowed = Number(duplicateInput) === 1;
+  } catch (error) {
+    isDuplicateAllowed = false;
+  }
+
+  console.clear();
+
+  CODE_MAKER = generateCodeMaker(isDuplicateAllowed);
+
+  // code breaker guesses the code by the code maker
+  while (rounds > 0) {
+    console.log(`Number of rounds left: ${rounds}`);
+    await compareCode(CODE_MAKER);
+
+    // because of the values that we used to hint the user
+    // we have to find some dicey way to break the program
+    // when the user guesses the code (all hints go to 0)
+    if (HINTS.filter((value) => 0 === value).length === 4) {
+      break;
+    }
+
+    console.log(HINTS);
+
+    rounds -= 1;
+  }
+
+  if (rounds > 0) {
+    console.log("You won... Congratulations...");
+  } else {
+    console.log("You lost bitterly to a computer");
+  }
+}
+
+App();
 ```
 
 ## Is there room for improvement?
 
 Even though, this is a simple console/terminal/text based app, there is more we can do to it.
 
-- We can put all the constants in its own file, `constants.py`.
-- Put all functions that can standalone into their own file, `functions.py`. We can then refactor standalone functions that depends on a global variable then pass that data as an argument to the function using a parameter.
+- We can replace all constants such as strings and numbers.
+- We could pull out (refactor) the code breaker input and splitting of it, out of the `compare code` and then pass the code breaker and code maker as arguments. We could even let the function return the hints rather that accessing the hints globally. We will create a new hints variable and return it. So `compareCode` will return hints that will be assigned to the hints variable.
+
+  ```js
+  async function compareCode(codeMaker) {
+    // enter guess with spaces
+    const input = await getInput("Enter code breaker with spaces: ");
+
+    // we are converting the code breaker into numbers
+    const codeBreaker = input.split(" ").map((value) => Number(value));
+
+    // compare each code at the same index and provide a hint
+    for (let codeIndex = 0; codeIndex < 4; codeIndex++) {
+      if (codeBreaker[codeIndex] > codeMaker[codeIndex]) {
+        HINTS[codeIndex] = 1;
+      } else if (codeBreaker[codeIndex] === codeMaker[codeIndex]) {
+        HINTS[codeIndex] = 0;
+      } else {
+        HINTS[codeIndex] = -1;
+      }
+    }
+  }
+  ```
+
+- we can also wrap the `console.clear()` into a function.
+- we can let the program slow down before the next game
+- we can pull out `HINTS.filter((value) => 0 === value).length === 4` as a function. The purpose of it is to check if the code breaker has guessed correctly the code maker.
+- we can also do the same for declaring who won the game
+
+  ```js
+  if (rounds > 0) {
+    console.log("You won... Congratulations...");
+  } else {
+    console.log("You lost bitterly to a computer");
+  }
+  ```
+
+- Put all functions that can standalone into their own file, `functions.js` and export them. We can then refactor standalone functions that depends on a global variable then pass that data as an argument to the function using a parameter.
 - We can even have a separate file for
 
-```py
+  ```js
+  (async () => {
+    while (true) {
+      // Run the App function
+      await App();
 
-# infinitely keep playing
-while True:
-    App()
+      // Wait for a specified time before next run
+      await sleep(WAITING_TIME);
 
-    sleep(WAITING_TIME)
-    clear_screen()
+      // Clear the screen
+      clearScreen();
 
-    # reset the game for replay
-    code_maker = []
-    hints = ['h', 'i', 'n', 't']
-```
+      // Reset the game state for replay
+      CODE_MAKER = [0, 0, 0, 0];
+      HINTS = [0, 0, 0, 0];
+    }
+  })();
+  ```
 
-and then add, `if __name__ == "__main__":...`
+## Conclusion
+
+We have used all that we have learnt in this project and there is more. I mentioned that we could group some functions and export them. For this, we will discuss how to `import` and `export` in Javascript. I will provide another project that I think will be useful to you. This is the end of the master mind game and I hope you will also do some refactoring since there are a lot of places that needs to be refactored. Best of lucks...
 
 ## Sources
 
 - [wiki-play-mastermind][wiki-play-mastermind]
 - [wikipedia-mastermind][wikipedia-mastermind]
+- [Master mind in python][Master-mind-in-python]
 
 #
 
 [wiki-play-mastermind]: https://www.wikihow.com/Play-Mastermind
 [wikipedia-mastermind]: https://en.wikipedia.org/wiki/Mastermind_(board_game)
+[Master-mind-in-python]: https://dev.to/otumianempire/mastermind-board-game-implementation-in-python-26le
