@@ -1,12 +1,12 @@
 # JavaScript Essentials: Part 7
 
-This is the 7th part of this JavaScript Series (as a part of the whole) and in this part we are going to look at how to break down our projects into small pieces so that they are manageable. We will group create a sort of separation of concerns, making our project appealing and easy to navigate. In all things there is a beautiful part and of course the ugly part. Don't over do it.
+This is the 7th part of this JavaScript Series (as a part of the whole) and in this part, we will look at how to break down our projects into small pieces so they are manageable. We will create some sort of separation of concerns, making our project appealing and easy to navigate. In all things there is a beautiful part and of course the ugly part. So, don't overdo it.
 
-As mentioned earlier, our focus here is a to break some part of our project into a separate file, export it then import it into our "main app". There are at the moment two ways to do this in JavaScript. Using the commonJs approach and also the ES6's modular approach. They are all great and we will look at both.
+As mentioned earlier, our focus here is to break some part of our project into a separate file, export it then import it into our "main app". There are at the moment two ways to do this in JavaScript. Using the commonjs approach and also the ES6's modular approach. They are all great and we will look at both.
 
 ## CommonJs
 
-The import and export with commonjs is the default when not specified. That is how we were able to do, `const readline = require("readline");`. _readline_ is a builtin package. We can use this approach on third party or modules that we have written in out project.
+The import and export with commonjs is the default when not specified. That is how we could do, `const readline = require("readline");`. _readline_ is a built-in package. We can use this approach on the third party or modules written in our project.
 
 - Import with commonjs is done with `const someVarNameForTheModule = require("modNameOrPath");`.
 - We export by doing, `module.exports = thingToExportOrStructuredObjectToExport`.
@@ -19,255 +19,255 @@ Let's kick off with a project to perform some math. We will create functions to 
 - Initial the node project by doing, `npm init -y`
 - You can choose to add, `"type": "commonjs"` to the _package.json_ file.
 
-  ```json
-  {
-    "name": "cmodule",
-    "version": "1.0.0",
-    "main": "index.js",
-    "type": "commonjs",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "description": ""
-  }
-  ```
+```json
+{
+  "name": "cmodule",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
+```
 
 - Create two files, _lib.js_ and _main.js_, `touch lib.js main.js`
 - Implement the body for the add in the _lib.js_
 
-  ```js
-  function add(x, y) {
-    // return the sum of x and y
-  }
-  ```
+```js
+function add(x, y) {
+  // return the sum of x and y
+}
+```
 
-- Now that we have the functions implemented, we have to export them to be used for the best project in the world in our _main.js_. To export, we user `module.exports = functionName`. In our case, we do `module.exports = add`.
+- Now that we have the functions implemented, we have to export them to be used for the best project in the world in our _main.js_. To export, we use `module.exports = functionName`. In our case, we do `module.exports = add`.
 
-  ```js
-  ...
-  module.exports = add
-  ```
+```js
+ ...
+ module.exports = add
+```
 
 - Here the entirety of _lib.js_ is just the add function. We exported _lib.js_ as the `add` function. So we can import it as, `const someName = require("./lib");`
 - In the _main.js_, we will import the _lib.js_ file and make use of `add` function.
 
-  ```js
-  const lib = require("./lib");
-  // we did, "./lib" because main.js and lib.js are in the same folder.
+```js
+const lib = require("./lib");
+// we did, "./lib" because main.js and lib.js are in the same folder.
 
-  console.log(lib(1, 2));
-  ```
+console.log(lib(1, 2));
+```
 
 - Let's add the subtraction function
 
-  ```js
-  function sub(x, y) {
-    // returns the difference x and y
-  }
-  ```
+```js
+function sub(x, y) {
+  // returns the difference x and y
+}
+```
 
-  > You are supposed to implement these functions yourself 🙂
+> You are supposed to implement these functions yourself 🙂
 
 - The question is, how do we export `sub`? Try it and access it inside _main.js_
 - Know that, when we do, `module.exports = X`, `X` is exported as a whole module so when we import `const moduleName = require("moduleName");`, we directly get access to `X`. So we can not export another value with this same approach.
 - In a case such as this, we can export both `add` and `sub` by exporting them as a group (object).
 
-  ```js
-  ...
-  module.exports = { add, sub}
-  ```
+```js
+ ...
+ module.exports = { add, sub}
+```
 
 - Now when we import in _main.js_ we can do
 
-  ```js
-  const lib = require("./lib");
+```js
+const lib = require("./lib");
 
-  console.log(lib.add(1, 2));
-  console.log(lib.sub(1, 2));
-  ```
+console.log(lib.add(1, 2));
+console.log(lib.sub(1, 2));
+```
 
-  > the _lib_ module eas exported as an object so we can do, `moduleName.add` and `moduleName.sub`.
+> the _lib_ module is exported as an object so we can do, `moduleName.add` and `moduleName.sub`.
 
 - We can also import by doing, `const {add, sub} = require("./lib");`
 
-  ```js
-  const { add, sub } = require("./lib");
+```js
+const { add, sub } = require("./lib");
 
-  console.log(add(1, 2));
-  console.log(sub(1, 2));
-  ```
+console.log(add(1, 2));
+console.log(sub(1, 2));
+```
 
 - There is another way to do multiple exports
 
-  ```js
-  exports.add = function add(x, y) {
-    // return the sum of x and y
-  };
+```js
+exports.add = function add(x, y) {
+  // return the sum of x and y
+};
 
-  exports.sub = function sub(x, y) {
-    // return the difference of x and y
-  };
-  ```
+exports.sub = function sub(x, y) {
+  // return the difference of x and y
+};
+```
 
-  Or
+Or
 
-  ```js
-  exports.add = function (x, y) {
-    // return the sum of x and y
-  };
+```js
+exports.add = function (x, y) {
+  // return the sum of x and y
+};
 
-  exports.sub = function (x, y) {
-    // return the difference of x and y
-  };
-  ```
+exports.sub = function (x, y) {
+  // return the difference of x and y
+};
+```
 
 - `exports.alias = someThing` and `exports.someThing= someThing` or also works like `modules.exports = { someThing }`. I'd usually choose the `exports.alias = someThing` because, the `module.exports = { ... }` could extra lines.
 
 ## ES Module
 
-The import and export with ES module is not the default currently and as such must be specified explicitly by setting the _type_ property to _"module"_ in the _package.json_ file. In this case we would be able to do, `import readline from "readline";` instead of `const readline = require("readline");`. We replaced the `const` with `import`, the `=` and `require` with `from`.
+The import and export with the ES module style is not the default currently and as such must be specified explicitly by setting the _type_ property to _"module"_ in the _package.json_ file. In this case, we would be able to do, `import readline from "readline";` instead of `const readline = require("readline");`. We replaced the `const` with `import`, the `=` and `require` with `from`.
 
 - ES module import is done with `import someVarNameForTheModule from  "modNameOrPath";`.
 - We export by doing, `export default thingToExportOrStructuredObjectToExport` or `export thingToExportOrStructuredObjectToExport`.
 
 ### Project
 
-We will build a similar project using ES module style of import and export. We will create functions to add and subtract just as we did previously. So you can copy and paste this time.
+We will build a similar project using the ES module style of import and export. We will create functions to add and subtract just as we did previously. So you can copy and paste this time.
 
 - Create a project folder, _emodule_: `cd && mkdir emodule && cd emodule`
 - Initial the node project: `npm init -y`
 - Add, `"type": "module"` to the _package.json_ file.
 
-  ```json
-  {
-    "name": "emodule",
-    "version": "1.0.0",
-    "main": "index.js",
-    "type": "module",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "description": ""
-  }
-  ```
+```json
+{
+  "name": "emodule",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
+```
 
 - Create two files, _lib.js_ and _main.js_: `touch lib.js main.js`
 - Implement the body for the add in the _lib.js_
 
-  ```js
-  function add(x, y) {
-    // return the sum of x and y
-  }
-  ```
+```js
+function add(x, y) {
+  // return the sum of x and y
+}
+```
 
 - Now that we have the `add` function implemented, we have to export it to be used for the best project in the world in our _main.js_. To export, we can use `export default functionName`. In our case, we do `export default add`.
 
-  ```js
-  ...
-  export default add
-  ```
+```js
+ ...
+ export default add
+```
 
 - We could have also done
 
-  ```js
-  export default function add(...) { ... }
-  ```
+```js
+ export default function add(...) { ... }
+```
 
 - Here the entirety of _lib.js_ is just the add function. We exported _lib.js_ as the `add` function. So we can import it as, `import someName from "./lib";`
 - In the _main.js_, we will import the _lib.js_ file and make use of `add` function.
 
-  ```js
-  import lib from "./lib";
-  // we did, "./lib" because main.js and lib.js are in the same folder.
+```js
+import lib from "./lib";
+// we did, "./lib" because main.js and lib.js are in the same folder.
 
-  console.log(lib(1, 2));
-  ```
+console.log(lib(1, 2));
+```
 
 - Let's add the subtraction function
 
-  ```js
-  function sub(x, y) {
-    // returns the difference x and y
-  }
-  ```
+```js
+function sub(x, y) {
+  // returns the difference x and y
+}
+```
 
 - The question is, how do we export `sub`?
 - In a case such as this, we can export both `add` and `sub` by exporting them as a group (object).
 
-  ```js
-  ...
-  export default { add, sub }
-  ```
+```js
+ ...
+ export default { add, sub }
+```
 
 - Now when we import in _main.js_ we can do
 
-  ```js
-  import lib from "./lib.js";
+```js
+import lib from "./lib.js";
 
-  console.log(lib.add(1, 2));
-  console.log(lib.sub(1, 2));
-  ```
+console.log(lib.add(1, 2));
+console.log(lib.sub(1, 2));
+```
 
 - We can also import by doing, `import {add, sub} from "./lib";`
 
-  ```js
-  import { add, sub } from "./lib";
+```js
+import { add, sub } from "./lib";
 
-  console.log(add(1, 2));
-  console.log(sub(1, 2));
-  ```
+console.log(add(1, 2));
+console.log(sub(1, 2));
+```
 
 - There is another way to do multiple exports
 
-  ```js
-  export function add(x, y) {
-    // return the sum of x and y
-  }
+```js
+export function add(x, y) {
+  // return the sum of x and y
+}
 
-  export function sub(x, y) {
-    // return the difference of x and y
-  }
-  ```
+export function sub(x, y) {
+  // return the difference of x and y
+}
+```
 
-  Or
+Or
 
-  ```js
-  export const add = function (x, y) {
-    // return the sum of x and y
-  };
+```js
+export const add = function (x, y) {
+  // return the sum of x and y
+};
 
-  export const sub = function (x, y) {
-    // return the difference of x and y
-  };
-  ```
+export const sub = function (x, y) {
+  // return the difference of x and y
+};
+```
 
-- With this sort of approach, it is either we bundle the whole exports as one import or access individual imports one by one
+- With this sort of approach, it is either, we bundle the whole exports as one import or access individual imports one by one
 
-  ```js
-  import * as lib from "./lib.js";
+```js
+import * as lib from "./lib.js";
 
-  console.log(lib.add(1, 2));
-  console.log(lib.sub(1, 2));
-  ```
+console.log(lib.add(1, 2));
+console.log(lib.sub(1, 2));
+```
 
-  OR
+OR
 
-  ```js
-  import { add, sub } from "./lib.js";
+```js
+import { add, sub } from "./lib.js";
 
-  console.log(lib.add(1, 2));
-  console.log(lib.sub(1, 2));
-  ```
+console.log(lib.add(1, 2));
+console.log(lib.sub(1, 2));
+```
 
 ## Summary
 
-To use commonjs or es module import and export style is absolutely relative. commonjs comes with no configurations, so one would as why not use it as is? `module.exports = someObject` is the same as `export default someObject`. We can import with `const someObject = require("pathToModule");` and `import someObject from "pathToModule";`. I like said, whichever you choose is okay.
+To use commonjs or es module import and export style is relative. commonjs comes with no configurations, so one would ask why not use it as is? `module.exports = someObject` is the same as `export default someObject`. We can import with `const someObject = require("pathToModule");` and `import someObject from "pathToModule";`. I like said, whichever you choose is okay.
 
 These are some rules that I try to stick to when I am developing my backend projects:
 
@@ -291,14 +291,14 @@ If it challenges you, rewrite the mastermind program using multiple files. While
  * -> conditionals
  *
  * Description
- * -> Create a login system where users can sign up with a email and password, and then attempt to log in.
+ * -> Create a login system where users can sign up with an email and password, and then attempt to log in.
  * -> Store user data in memory (using an array or object), and compare the entered credentials with the stored ones during login.
  *
  * Challenge
  * -> Implement password validation with the following rules. Password must:
  *  - not be null or empty, hence, required
  *  - be at least six characters
- *  - must have at least on of the special characters: !, @, $, _, -
+ *  - must have at least one of the special characters: !, @, $, _, -
  *  - have at least one uppercase
  *  - have at least one lowercase
  *  - have at least one number
@@ -324,7 +324,7 @@ const crypto = require("node:crypto");
 // another approach is to generate some random string for the key (the key must be unique)
 // so that in the USERS object we can have { keys: {email, password}, ...}
 // another approach is to use an array where we'd have [{email, password}, ...]
-// try both approaches and let's know what is best
+// try both approaches and let us know what is best
 const USERS = {};
 
 // expected actions are either login or signup
@@ -333,7 +333,7 @@ const AUTH_ACTIONS = {
   SIGNUP: "signup",
 };
 
-// We are expecting that a user input will indicate what action to be performed
+// We are expecting that the user input will indicate what action to be performed
 // and the data to be used.
 // Eg: [action] [email] [password]
 async function getUserInput(question) {
@@ -350,7 +350,7 @@ async function getUserInput(question) {
   });
 }
 
-// We expect user to enter-> [action] [email] [password]
+// We expect the user to enter-> [action] [email] [password]
 function isValidInputFormat(input = "") {
   return input.split(" ").length === 3;
 }
@@ -430,14 +430,14 @@ function isValidHash(password, passwordHash) {
 // When signing up, we have to make sure that the email doesn't exist
 // The email and password are valid
 // Then generate a key that hasn't been used and create an object
-// and assign an object of the credentials as value
-// Log that signup successful and log the key and email of the user
+// and assign an object of the credentials as a value
+// Log that signup is successful and log the key and email of the user
 function signUpLogic({ email, password }) {
   const user = findUserByEmail(email);
   if (user) {
     return {
       success: false,
-      message: "User with such email already exist",
+      message: "User with such email already exists",
     };
   }
 
@@ -453,8 +453,8 @@ function signUpLogic({ email, password }) {
 
 // When logging in, we have to make sure that the email exists
 // We have to validate the email and password
-// Opinion here: I learn from one of the devs that there is no need to
-// validate data that you are not going to write to the db
+// Opinion here: I learned from one of the devs that there is no need to
+// validate data that you are not going to write to the DB
 // What do you think
 function loginLogic({ email, password }) {
   const user = findUserByEmail(email);
@@ -537,7 +537,7 @@ async function App() {
 
   const passwordValidation = isValidPassword(password);
   if (!passwordValidation.isValid) {
-    // It is not a good idea to trust what api (message) your are using, especially if the
+    // It is not a good idea to trust what API (message) you are using, especially if the
     // message is from a vendor (a 3rd party and the error messages aren't predefined)
     // Usually, I'd just say invalid credentials or throw some error that the client can catch
     // and knowing the error type, they'd be certain of what to do based on the rules
@@ -547,7 +547,7 @@ async function App() {
     return;
   }
 
-  // had we several actions, we could use switch instead
+  // had we several actions, we could use the switch instead
   if (action === AUTH_ACTIONS.LOGIN) {
     // console.log("We are doing a login");
     const { success, message } = loginLogic({ email, password });
