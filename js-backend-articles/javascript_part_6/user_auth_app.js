@@ -67,7 +67,7 @@ async function getUserInput(question) {
 }
 
 // We expect user to enter-> [action] [email] [password]
-function isValidateInputFormat(input = "") {
+function isValidInputFormat(input = "") {
     return input.split(" ").length === 3;
 }
 
@@ -85,7 +85,6 @@ function destructureInput(input = "") {
 function isValidationAction(action = "") {
     return action && Object.values(AUTH_ACTIONS).includes(action);
 }
-
 
 async function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -176,7 +175,7 @@ function splitEmailIntoLocalDomainAndTld(email, indexOfAt, indexOfDot) {
 
 function isValidEmail(email = "") {
     //  - not be null or empty, hence, required
-    if (!email || email.length === "") {
+    if (!email || email === "") {
         return {
             isValid: false,
             message: "Email is required",
@@ -254,7 +253,7 @@ function isValidEmail(email = "") {
     if ([local, domain, tld].includes("email")) {
         return {
             isValid: false,
-            message: "Email must have an '.'",
+            message: "Email must have 'email' in it",
         };
     }
 
@@ -299,7 +298,7 @@ function isValidEmail(email = "") {
 
 // will return undefine or the user object
 function findUserByEmail(email) {
-    return USERS[email]
+    return USERS[email];
 }
 
 // hashes the password using sha256, we could use something better
@@ -309,7 +308,7 @@ function hashPassword(password) {
 }
 
 function isValidHash(password, passwordHash) {
-    return hashPassword(password) === passwordHash
+    return hashPassword(password) === passwordHash;
 }
 
 // When signing up, we have to make sure that the email doesn't exist
@@ -318,22 +317,22 @@ function isValidHash(password, passwordHash) {
 // and assign an object of the credentials as value
 // Log that signup successful and log the key and email of the user
 function signUpLogic({ email, password }) {
-    const user = findUserByEmail(email)
+    const user = findUserByEmail(email);
     if (user) {
         return {
             success: false,
-            message: "User with such email already exist"
-        }
+            message: "User with such email already exist",
+        };
     }
 
-    const passwordHash = hashPassword(password)
+    const passwordHash = hashPassword(password);
 
-    USERS[email] = { email, password: passwordHash }
+    USERS[email] = { email, password: passwordHash };
 
     return {
         success: true,
-        message: "User created successfully, you can now login"
-    }
+        message: "User created successfully, you can now login",
+    };
 }
 
 // When logging in, we have to make sure that the email exists
@@ -342,26 +341,26 @@ function signUpLogic({ email, password }) {
 // validate data that you are not going to write to the db
 // What do you think
 function loginLogic({ email, password }) {
-    const user = findUserByEmail(email)
+    const user = findUserByEmail(email);
     if (!user) {
         // here the message could just be invalid credentials
         return {
             success: false,
-            message: "User with not found"
-        }
+            message: "User with not found",
+        };
     }
 
     if (!isValidHash(password, user.password)) {
         return {
             success: false,
-            message: "Invalid credentials"
-        }
+            message: "Invalid credentials",
+        };
     }
 
     return {
         success: true,
-        message: `${user.email} has logged in`
-    }
+        message: `${user.email} has logged in`,
+    };
 }
 
 async function App() {
@@ -372,18 +371,26 @@ async function App() {
 
     if (["help", "h", "about"].includes(userInput)) {
         console.log(
-            "About: Simple User Authentication Logic\n- Expected format->[action] [email] [password]\n\t[action] can be 'signup' or 'login'\n\n- Expected format->[action]\n\t[action] can be 'exit', 'quit', 'help', or 'h'"
+            "About: Simple User Authentication Logic" +
+            "\n- Expected format->[action] [email] [password]" +
+            "\n\t[action] can be 'signup' or 'login' followed by email and password" +
+            "\n" +
+            "\n- Expected format->[action]" +
+            "\n\t[action] can be 'exit', 'quit', 'list', 'l, 'about', 'help', or 'h'" +
+            "\n\t\t- [exit|quit]: exits or quits the program" +
+            "\n\t\t- [list|l]: list the user emails available" +
+            "\n\t\t- [about|help|h]: displays the about page"
         );
         return;
     }
 
-    if (["list", 'l'].includes(userInput)) {
-        console.clear()
-        console.log("Users\n-----")
+    if (["list", "l"].includes(userInput)) {
+        console.clear();
+        console.log("Users\n-----");
         for (const user of Object.values(USERS)) {
-            console.log(`${user.email}`)
+            console.log(`${user.email}`);
         }
-        return
+        return;
     }
 
     if (["exit", "quit", "\n"].includes(userInput)) {
@@ -392,7 +399,7 @@ async function App() {
         process.exit();
     }
 
-    if (!isValidateInputFormat(userInput)) {
+    if (!isValidInputFormat(userInput)) {
         console.log(
             "FormatError: Invalid date format. Expected format->[action] [email] [password]"
         );
@@ -426,16 +433,23 @@ async function App() {
 
     // had we several actions, we could use switch instead
     if (action === AUTH_ACTIONS.LOGIN) {
-        console.log("We are doing a login");
-    } else if (action === AUTH_ACTIONS.SIGNUP) {
-        // console.log("We are doing a signup");
-        const { success, message } = signUpLogic({ email, password })
+        // console.log("We are doing a login");
+        const { success, message } = loginLogic({ email, password });
         if (!success) {
-            console.log(message)
-            return
+            console.log(message);
+            return;
         }
 
-        console.log(message)
+        console.log(message);
+    } else if (action === AUTH_ACTIONS.SIGNUP) {
+        // console.log("We are doing a signup");
+        const { success, message } = signUpLogic({ email, password });
+        if (!success) {
+            console.log(message);
+            return;
+        }
+
+        console.log(message);
     } else {
         console.log(
             `FormatError: Action must be one of ${Object.values(AUTH_ACTIONS)}`
