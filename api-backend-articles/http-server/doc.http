@@ -1,0 +1,10 @@
+# doc.http
+
+### Hello
+POST http://localhost:3000
+Content-Type: application/json
+
+{
+    "Name": "Daniel",
+    "FavFood": "Rice and chicken",
+}
