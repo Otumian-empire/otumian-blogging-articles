@@ -2,17 +2,17 @@
 
 ## Content
 
-- Introduction✅
-- Project creation and initialization✅
-- Create a simple server and a GET route✅
-- Routes and Request handlers✅
-- Request and Response✅
-- Watch for changes✅
-- Create POST, GET, UPDATE, DELETE routes✅
-- API Clients✅
-- Request body, params, query, header, ...✅
-- Manipulating memory data
-
+- Introduction
+- Project creation and initialization
+- Create a simple server and a GET route
+- Routes and Request handlers
+- Request and Response
+- Watch for changes
+- Create POST, GET, UPDATE, DELETE routes
+- API Clients
+- Request body, params, query, header, ...
+- Manipulating memory datadata
+- Conclusion
 
 ## Introduction
 
@@ -389,16 +389,14 @@ app.get("/expenditures/:id", (req, res) => {
 
 We can access the `id` directly too. I hope you noticed that the `:id` key or name passed as part of the route matches the key in the logged object. Try renaming the params key in the route and see the output logged.
 
-
-
 ### Request query (query string)
 
 For the query strings, there is a property on the request object, `query`, which expose the query strings passed.
 
-To demonstrate this  will pass a query string to filter the records to return. This endpoint should do enough.
+To demonstrate this will pass a query string to filter the records to return. This endpoint should do enough.
 
 ```http
-### List Expenditures 
+### List Expenditures
 GET http://localhost:3000/expenditures?amountMoreThan=1000&nameStartsWith=Legion
 ```
 
@@ -407,9 +405,560 @@ Now the implementation will something similar to:
 ```js
 // list expenditures
 app.get("/expenditures", (req, res) => {
-  console.log(req.query)
+  console.log(req.query);
   return res.send("list expenditures");
 });
 ```
 
 Now run your api and check your logs. Experiment with this.
+
+## Manipulating memory data
+
+At this point we are not connecting to a database yet so we have to manipulate date from memory. What we intend to do is to create an array, add to the array, update an element in it, and remove an element. It sounds feasible as such that's what we are going to do.
+
+> We will be doing some modifications to some previously written code as such, feel free to alter your too. The final excerpt will be shared at the end.
+
+### Initialize in memory data
+
+Let's create an array of expenditures (dummy data) below `const express = require("express");`
+
+```js
+// dummy data
+let expenditures = [
+  {
+    name: "Legion Tower 7i Gen 8 (Intel) Gaming Desktop",
+    amount: 2099.99,
+    date: "2024-12-31",
+  },
+  {
+    name: "Apple MacBook Pro 16-inch",
+    amount: 2499.99,
+    date: "2024-12-15",
+  },
+  {
+    name: "Samsung Galaxy S24 Ultra",
+    amount: 1199.99,
+    date: "2024-12-10",
+  },
+  {
+    name: "Sony WH-1000XM5 Noise Cancelling Headphones",
+    amount: 349.99,
+    date: "2024-12-20",
+  },
+  {
+    name: "Dell UltraSharp 27 4K USB-C Monitor",
+    amount: 699.99,
+    date: "2024-11-25",
+  },
+  {
+    name: "Logitech MX Keys Wireless Keyboard",
+    amount: 119.99,
+    date: "2024-10-05",
+  },
+  {
+    name: "HP Envy x360 Convertible Laptop",
+    amount: 1349.99,
+    date: "2024-09-30",
+  },
+  {
+    name: "NVIDIA GeForce RTX 4080 Graphics Card",
+    amount: 1199.99,
+    date: "2024-08-15",
+  },
+  {
+    name: "ASUS ROG Zephyrus G14 Gaming Laptop",
+    amount: 1599.99,
+    date: "2024-07-18",
+  },
+  {
+    name: "Canon EOS R6 Mark II Mirrorless Camera",
+    amount: 2499.99,
+    date: "2024-07-12",
+  },
+];
+```
+
+### List expenditures
+
+The current endpoint returns just a message using the `res.send(message)` but what we want to return is `json`. Though thr `.send` can also take in a object or `json`, we will use `res.json(obj)`.
+
+I didn't mention but the default status code returned is `200`. Have you noticed that? Except that another occurs or there is an issue with the resquest, the status code remains the same. There is a section under [status codes](https://dev.to/otumianempire/request-and-response-1031), glance through.
+
+We can alter the status code by passing the desired status code in `res.status(desireStatusCode).json(obj)`. I will maintain the `200` status code through out.
+
+> Make sure the server is still running
+
+We can pass the list of expenditures directly.
+
+```js
+// list expenditures
+app.get("/expenditures", (req, res) => {
+  return res.json(expenditures);
+});
+```
+
+What was the response received? Check the status code as well as the response payload.
+
+From experience and also to avoid abiguity, I prefer to return status code `200` be default, have a either `success` property, `message` or `data` property to return a message or requested resource. By default, when `status` is `false`, `message` will be passed else, `message` or `data` may be passed.
+
+```js
+// list expenditures
+app.get("/expenditures", (req, res) => {
+  return res.json({
+    success: true,
+    data: expenditures,
+  });
+});
+```
+
+We need to display the id (index of each row)
+
+```js
+// list expenditures
+app.get("/expenditures", (req, res) => {
+  return res.json({
+    success: true,
+    data: expenditures.map((row, index) => ({ id: index, ...row })),
+  });
+});
+```
+
+### Apply filtering with
+
+```js
+// list expenditures
+app.get("/expenditures", (req, res) => {
+  // get the query string and check if it not a number or something
+  // that can be a number else set a default filter value of 0
+  let amountMoreThan = Number(req.query.amountMoreThan);
+  if (isNaN(amountMoreThan) || amountMoreThan < 0) {
+    amountMoreThan = 0;
+  }
+
+  return res.json({
+    success: true,
+    data: expenditures
+      .map((row, index) => ({ id: index, ...row }))
+      .filter((row) => row.amount > amountMoreThan),
+  });
+});
+```
+
+Why was the filter done after the mapping?
+
+### Read expenditure
+
+```js
+// read expenditure
+app.get("/expenditures/:id", (req, res) => {
+  // get the id of the request resource from the params
+  const id = Number(req.params.id);
+  if (isNaN(id) || id < 0) {
+    return res.status(200).json({
+      success: false,
+      message: "Resource ID invalid",
+    });
+  }
+
+  // we don't take negative ids, why?
+  const row = expenditures[id];
+  if (!row) {
+    // what status code do this should be passed here? 404 not not found? why??
+    return res.status(200).json({
+      success: false,
+      message: `Resource with ID, '${id}' not found`,
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+    data: row,
+  });
+});
+```
+
+Does this implementation hint you about, _Why was the filter done after the mapping?_ ?
+
+### Create expenditure
+
+```js
+// create expenditure
+app.post("/expenditures", (req, res) => {
+  // const { name, amount, date } = req.body
+  const payload = req.body;
+
+  if (!payload?.name || !payload.amount || !payload.date) {
+    return res.status(200).json({
+      success: false,
+      message: "name, amount and date for expense are required",
+    });
+  }
+
+  // we have to validate the name, maybe, there name must have some number of characters
+  // we have to make sure that amount is actually a number
+  // we have to also make sure that date is of the format, yyyy-MM-dd
+
+  // insert the new record
+  expenditures.push({
+    name: payload.name,
+    amount: payload.amount,
+    date: payload.date,
+  });
+
+  return res.status(201).json({
+    success: true,
+    message: "expenditure created successfully",
+  });
+
+  // there situations that it is best that you pass the new record created
+  /* return res.status(201).json({
+    success: true,
+    message: "expenditure created successfully",
+    data: expenditures[expenditures.length - 1],
+  }); */
+
+  // pass a route to fetch the new record created
+  /* return res.status(201).json({
+    success: true,
+    message: "expenditure created successfully",
+    route: `/expenditures/${expenditures[expenditures.length - 1]}`,
+  }); */
+});
+```
+
+### Update expenditure
+
+```js
+// update expenditure
+app.put("/expenditures/:id", (req, res) => {
+  // get the id of the request resource from the params
+  const id = Number(req.params.id);
+  if (isNaN(id) || id < 0) {
+    return res.status(200).json({
+      success: false,
+      message: "Resource ID invalid",
+    });
+  }
+
+  // we don't take negative ids, why?
+  const row = expenditures[id];
+  if (!row) {
+    // what status code do this should be passed here? 404 not not found? why??
+    return res.status(200).json({
+      success: false,
+      message: `Resource with ID, '${id}' not found`,
+    });
+  }
+
+  // we have to validate the name, maybe, there name must have some number of characters
+  // we have to make sure that amount is actually a number
+  // we have to also make sure that date is of the format, yyyy-MM-dd
+  const { name, amount, date } = req.body;
+
+  expenditures[id].name = name ?? row.name;
+  expenditures[id].amount = amount ?? row.amount;
+  expenditures[id].date = date ?? row.date;
+
+  // there was a time a saw a 204 status - No content
+  // since there was no data to return however we'll return the usual
+  return res.status(200).json({
+    success: true,
+    message: "expenditure updated successfully",
+  });
+});
+```
+
+### Delete expenditure
+
+```js
+// delete expenditure
+app.delete("/expenditures/:id", (req, res) => {
+  // get the id of the request resource from the params
+  const id = Number(req.params.id);
+  if (isNaN(id) || id < 0) {
+    return res.status(200).json({
+      success: false,
+      message: "Resource ID invalid",
+    });
+  }
+
+  // we don't take negative ids, why?
+  const row = expenditures[id];
+  if (!row) {
+    // what status code do this should be passed here? 404 not not found? why??
+    return res.status(200).json({
+      success: false,
+      message: `Resource with ID, '${id}' not found`,
+    });
+  }
+
+  expenditures = expenditures.filter((_, index) => index !== id);
+
+  return res.status(200).json({
+    success: true,
+    message: "expenditure deleted successfully",
+  });
+});
+```
+
+## Conclusion
+
+We have covered basically the root of most apis delepments. This project is as basic as it comes. Relax and glance thtough again. There is more to look into such as
+
+- validation
+- authentication and authorization
+- middleware
+- error handling
+- sql
+- database integration
+
+### Practice project
+
+crud api = create, list, read, update, and delete. It is how you approach this problems.
+
+⁠**To-Do List**
+
+- todo object: { id: int, task: string, status: boolean }
+- crud api
+- add an endpoint to mark all task as completed, success is true or not completed
+
+⁠**Calculator⁠**
+
+- you have to decide, either you'd create an endpoint for all the operations (addition, subtraction, multiplication, division)
+- or you would create a single endpoint with different functions that corresponds to each operation. the user should be able to pass the operator and thw two perands
+
+⁠**Currency Converter⁠**
+You are basically converting from one currency to another. Do for as many currencies as you can (3 is enough)
+
+⁠**Unit Converter⁠**
+⁠**Notes App⁠**
+⁠**Personal Blog⁠**
+⁠**Quiz App⁠**
+
+### Snippets
+
+Know that the execess was removed
+
+```js
+// import the express lib
+const express = require("express");
+
+// dummy data
+let expenditures = [
+  {
+    name: "Legion Tower 7i Gen 8 (Intel) Gaming Desktop",
+    amount: 2099.99,
+    date: "2024-12-31",
+  },
+  {
+    name: "Apple MacBook Pro 16-inch",
+    amount: 2499.99,
+    date: "2024-12-15",
+  },
+  {
+    name: "Samsung Galaxy S24 Ultra",
+    amount: 1199.99,
+    date: "2024-12-10",
+  },
+];
+
+// create an express application
+const app = express();
+
+// parse request body as json
+app.use(express.json());
+
+// list expenditures
+app.get("/expenditures", (req, res) => {
+  // get the query string and check if it not a number or something
+  // that can be a number else set a default filter value of 0
+  let amountMoreThan = Number(req.query.amountMoreThan);
+  if (isNaN(amountMoreThan) || amountMoreThan < 0) {
+    amountMoreThan = 0;
+  }
+
+  return res.json({
+    success: true,
+    data: expenditures
+      .map((row, index) => ({ id: index, ...row }))
+      .filter((row) => row.amount > amountMoreThan),
+  });
+});
+
+// read expenditure
+app.get("/expenditures/:id", (req, res) => {
+  // get the id of the request resource from the params
+  const id = Number(req.params.id);
+  if (isNaN(id) || id < 0) {
+    return res.status(200).json({
+      success: false,
+      message: "Resource ID invalid",
+    });
+  }
+
+  // we don't take negative ids, why?
+  const row = expenditures[id];
+  if (!row) {
+    // what status code do this should be passed here? 404 not not found? why??
+    return res.status(200).json({
+      success: false,
+      message: `Resource with ID, '${id}' not found`,
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+    data: row,
+  });
+});
+
+// create expenditure
+app.post("/expenditures", (req, res) => {
+  // const { name, amount, date } = req.body
+  const payload = req.body;
+
+  if (!payload?.name || !payload.amount || !payload.date) {
+    return res.status(200).json({
+      success: false,
+      message: "name, amount and date for expense are required",
+    });
+  }
+
+  // we have to validate the name, maybe, there name must have some number of characters
+  // we have to make sure that amount is actually a number
+  // we have to also make sure that date is of the format, yyyy-MM-dd
+
+  // insert the new record
+  expenditures.push({
+    name: payload.name,
+    amount: payload.amount,
+    date: payload.date,
+  });
+
+  return res.status(201).json({
+    success: true,
+    message: "expenditure created successfully",
+  });
+
+  // there situations that it is best that you pass the new record created
+  /* return res.status(201).json({
+    success: true,
+    message: "expenditure created successfully",
+    data: expenditures[expenditures.length - 1],
+  }); */
+
+  // pass a route to fetch the new record created
+  /* return res.status(201).json({
+    success: true,
+    message: "expenditure created successfully",
+    route: `/expenditures/${expenditures[expenditures.length - 1]}`,
+  }); */
+});
+
+// update expenditure
+app.put("/expenditures/:id", (req, res) => {
+  // get the id of the request resource from the params
+  const id = Number(req.params.id);
+  if (isNaN(id) || id < 0) {
+    return res.status(200).json({
+      success: false,
+      message: "Resource ID invalid",
+    });
+  }
+
+  // we don't take negative ids, why?
+  const row = expenditures[id];
+  if (!row) {
+    // what status code do this should be passed here? 404 not not found? why??
+    return res.status(200).json({
+      success: false,
+      message: `Resource with ID, '${id}' not found`,
+    });
+  }
+
+  // we have to validate the name, maybe, there name must have some number of characters
+  // we have to make sure that amount is actually a number
+  // we have to also make sure that date is of the format, yyyy-MM-dd
+  const { name, amount, date } = req.body;
+
+  expenditures[id].name = name ?? row.name;
+  expenditures[id].amount = amount ?? row.amount;
+  expenditures[id].date = date ?? row.date;
+
+  // there was a time a saw a 204 status - No content
+  // since there was no data to return however we'll return the usual
+  return res.status(200).json({
+    success: true,
+    message: "expenditure updated successfully",
+  });
+});
+
+// delete expenditure
+app.delete("/expenditures/:id", (req, res) => {
+  // get the id of the request resource from the params
+  const id = Number(req.params.id);
+  if (isNaN(id) || id < 0) {
+    return res.status(200).json({
+      success: false,
+      message: "Resource ID invalid",
+    });
+  }
+
+  // we don't take negative ids, why?
+  const row = expenditures[id];
+  if (!row) {
+    // what status code do this should be passed here? 404 not not found? why??
+    return res.status(200).json({
+      success: false,
+      message: `Resource with ID, '${id}' not found`,
+    });
+  }
+
+  expenditures = expenditures.filter((_, index) => index !== id);
+
+  return res.status(200).json({
+    success: true,
+    message: "expenditure deleted successfully",
+  });
+});
+
+// create a server that listens to requests on port 3000
+app.listen(3000, () =>
+  console.log(`Api running on ${"http://localhost:3000"}`)
+);
+```
+
+API requests
+
+```http
+# Expenditure endpoints
+
+### Create Expenditures
+POST http://localhost:3000/expenditures
+Content-Type: application/json
+
+{
+    "name": "Legion Tower 7i Gen 8 (Intel) Gaming Desktop",
+    "amount": 2099.99,
+    "date": "2024-31-12"
+}
+
+### List Expenditures
+GET http://localhost:3000/expenditures?
+
+### Read Expenditure
+GET http://localhost:3000/expenditures/1
+
+### Update Expenditure
+PUT http://localhost:3000/expenditures/11
+Content-Type: application/json
+
+{
+    "name": "MacBook pro laptop",
+    "amount": 5099.99,
+    "date": "2025-01-01"
+}
+
+### Delete Expenditure
+DELETE http://localhost:3000/expenditures/0
+```
