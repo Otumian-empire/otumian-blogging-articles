@@ -1,0 +1,45 @@
+### test base GET endpoint
+GET http://localhost:3000
+
+### Create a dummy POST request
+POST http://localhost:3000
+Content-Type: application/json
+
+{
+    "property1": "value1",
+    "property2": "value1",
+    ...
+    "propertyN": "valueN",
+}
+
+# Expenditure endpoints
+
+### Create Expenditures 
+POST http://localhost:3000/expenditures
+Content-Type: application/json
+
+{
+    "name": "Legion Tower 7i Gen 8 (Intel) Gaming Desktop",
+    "amount": 2099.99,
+    "date": "2024-31-12"
+}
+
+### List Expenditures 
+GET http://localhost:3000/expenditures?amountMoreThan=1000&nameStartsWith=Legion
+
+### Read Expenditure
+GET http://localhost:3000/expenditures/1
+
+### Update Expenditure
+PUT http://localhost:3000/expenditures/1
+Content-Type: application/json
+
+{
+    "name": "Legion Tower 7i Gen 8 (Intel) Gaming Desktop",
+    "amount": 2099.99,
+    "date": "2024-31-12"
+}
+
+### Delete Expenditure
+DELETE http://localhost:3000/expenditures/1
+

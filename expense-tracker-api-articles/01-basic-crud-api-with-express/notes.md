@@ -8,14 +8,11 @@
 - Routes and Request handlers✅
 - Request and Response✅
 - Watch for changes✅
-- Create POST, GET, UPDATE, DELETE routes
-- Extract controller
-- Request body, params, query, header, ...
-- Validation
-- Authentication and Authorization
-- Middlewares
-- Validation Middleware
-- Criticism
+- Create POST, GET, UPDATE, DELETE routes✅
+- API Clients✅
+- Request body, params, query, header, ...✅
+- Manipulating memory data
+
 
 ## Introduction
 
@@ -186,7 +183,7 @@ Currently this is the content of my `package.json` file:
 We can add a script called `dev` under the script section.
 
 ```json
-"dev" : "node --watch-path=./ index.js" 
+"dev" : "node --watch-path=./ index.js"
 ```
 
 We can stop the running server with `control + c` and now execute `npm run dev`. This will monitor saved changes in our files and reload the server.
@@ -196,17 +193,223 @@ So you who this is not working for you, we have an alternative. We will install 
 We can modify our `dev` script to use nodemon by,
 
 ```json
-"dev" : "nodemon --exec node index.js" 
+"dev" : "nodemon --exec node index.js"
 ```
 
 At this point you can freely modify your `.js` files and on save, the server will restart to reload the load changes applied.
 
-<!--
-⁠To-Do List
-⁠Calculator
-⁠Currency Converter
-⁠Unit Converter
-⁠Notes App
-⁠Personal Blog
-⁠Quiz App
- -->
+## Create POST, GET, UPDATE, DELETE routes
+
+We have already created a `GET` request. In this section, we will look into what each method means briefly since we have discussed them at length in [Request and Response](https://dev.to/otumianempire/request-and-response-1031).
+
+In this application, we are only serving one kind of resource to our clients, and that is, expenditures. Assuming we are serving several resources, then we'd group request under each resources.
+
+So let's say we have user and expenditure, we have GET, POST, PUT, DELETE, etc for both users and expenditures.
+
+For now, we'd use the `/expenditures` route to represent the expenditure resource.
+
+- `GET`: This means we will create a route to list, get all, fetch all, etc the records we have on expenditures. We can have a `GET` request that fetches one of the records. We have created similar `GET`
+
+- `POST`: The post method is often used for creating resources
+
+- `PUT`: The put method is used to update recourses
+
+- `DELETE`: The delete method is used to delete resource
+
+Now we can add the following lines of code to the `index.js` file but above `app.listen(3000,...)`.
+
+```js
+// --- expenditure routes ---
+
+// list expenditures
+app.get("/expenditures", (req, res) => res.send("list expenditures"));
+
+// create expenditure
+app.post("/expenditures", (req, res) => res.send("create expenditure"));
+
+// update expenditure
+app.put("/expenditures", (req, res) => res.send("update expenditure"));
+
+// delete expenditure
+app.delete("/expenditures", (req, res) => res.send("delete expenditure"));
+```
+
+When you save your file, do you notice the logs in the terminal? Test the `GET` route for the expenditure in the browser.
+
+> We can only run the `GET` requests in the browser. We will discuss api clients next.
+
+## API Clients
+
+An API client in this context is tool, a program or an applications that is used to interact (consume, integrate, or test) APIs. Most commonly used are [Postman](https://www.postman.com/downloads/), [Insomnia](https://insomnia.rest/download), [curl](https://curl.se/docs/), etc...
+
+In vscode and alongisde some other IDEs, there are extension that provides extensions to api clients. vscode has some of these extension for that matter. However, we will be considering an api client known as [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client). For our usecase it will be simpler to use Rest Client as such don't fret. We are covered.
+
+> Note: postman or any other api client of your choice is okay to use
+
+### How to use REST Client
+
+- First install, [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
+- We are creating http request as such we can create a file with `.http` or `.rest` extension - `touch expense-tracker-api.http`
+- In `expense-tracker-api.http` we can define our request
+- To create a `GET` request, add the following to the `.http` file
+
+  ```http
+  GET http://localhost:3000
+  ```
+
+- The endpoint is passed as seen above. For a post, put or delete request update the endpoint. Remember the difference between an endpoint and a route?
+- For a request that requires that data be passed to the api, we can pass the data as part of the route as a parameter or a string query, or we can pass it in the body.
+
+  ```http
+  POST http://localhost:3000
+  Content-Type: application/json
+
+  {
+      "property1": "value1",
+      "property2": "value1",
+      ...
+      "propertyN": "valueN",
+  }
+  ```
+
+- `Content-Type: application/json` is a header key-value. This means, thats how you pass headers using rest-client.
+- For the request body, we pass it as a json object - a newline is expected between the headers and the body though
+- Each request can be separated by three pound or ash signs, `###`. A text can be added at the end of `###` to make it look as if it is a title.
+
+  ```http
+  ### test base GET endpoint
+  GET http://localhost:3000
+
+  ### Create a dummy POST request
+  POST http://localhost:3000
+  Content-Type: application/json
+
+  {
+      "property1": "value1",
+      "property2": "value1",
+      ...
+      "propertyN": "valueN",
+  }
+  ```
+
+As exercise, create the request for the expenditure endpoints. Refer to [](https://dev.to/otumianempire/request-and-response-1031) when you are having any difficulties. We have more to do.
+
+## Request body, params, query, header
+
+At this point I don't have to stress that we'd be using [JSON](https://dev.to/otumianempire/what-is-json-5cel) to communicate with our api using the api-client.
+
+As mention earlier, we can pass data to our api using the body, header, or the url of our request. We have seen how to pass data via the request body and the header (We will look into passing some specific data at anothet time). Check the `POST` request created. What we have not looked at is how to pass data as part of the url.
+
+Let's say we want to read an expenditure which has an id of `4`, we can pass the add a parameter (as part of the url) as, `/expenditures/2`. For the request which will be handling this requirement, we do, `/expenditures/:id`, where `:id` refers to the `id` of the expenditure. Assuming it is something else other than an `id`, let's say a name, then we'd do `:name`. Express will process this a provide use with a means to extract this value without sweat.
+
+Now, for a query string, the idea is similar to request parameters however, it comes after a question, followed by a key1=value1&key2=value2...&keyN=valueN, where the key is the identifier of the value you want to pass. A very direct example is the REST-Client url, _<https://marketplace.visualstudio.com/items?itemName=humao.rest-client>_. The question mark marks the beginning of the query string and whatever follows it maps a key to a value. Eg: _?itemName=humao.rest-client_.
+
+> It will be a good time to test all your api endpoints and experience playing with it.
+
+### Request Body
+
+Now we are going to process a request that passes data using the request body - The `POST` endpoint.
+
+```js
+// create expenditure
+app.post("/expenditures", (req, res) => res.send("create expenditure"));
+```
+
+The request object has a property, `body`, and on this property, are the values that we passed in the request body of our request - `req.body`.
+
+This is the request will be running
+
+```http
+### Create Expenditures
+POST http://localhost:3000/expenditures
+Content-Type: application/json
+
+{
+    "name": "Legion Tower 7i Gen 8 (Intel) Gaming Desktop",
+    "amount": 2099.99,
+    "date": "2024-31-12"
+}
+```
+
+and this is our endpoint implementation that will just log the requuest body to the console.
+
+```js
+// create expenditure
+app.post("/expenditures", (req, res) => {
+  console.log(req.body);
+  return res.send("create expenditure");
+});
+```
+
+What happened? We had the usual response but... `undefined` was logged in the console. Well, it basically means everything is alright however, our api server doesn't know that it should parse the incoming as `json`. Remember `json`?
+
+Let's add this one line below the `const app = express();` which should solve parse the incoming data as `json`.
+
+```js
+// parse request body as json
+app.use(express.json());
+```
+
+Now, let's test the `POST` endpoint again. What did you get this time? Did you get something similar to this?
+
+```json
+{
+  "name": "Legion Tower 7i Gen 8 (Intel) Gaming Desktop",
+  "amount": 2099.99,
+  "date": "2024-31-12"
+}
+```
+
+Now you know how to get the data from the body. Now as exercise, desctruct the body and pass an object in the response. So instead of logging it, return it as the response.
+
+### Request parameter
+
+We will create a new `GET` endpoint to read an expenditure by id.
+
+This will be our API request:
+
+```http
+### Read Expenditure
+GET http://localhost:3000/expenditures/1
+```
+
+The request object has a property, `params` and on this property, are the values that we passed in the request param of our request - `req.params`.
+
+Now the implementation will be similar to what we have done so far but a little different, however not align to us.
+
+```js
+// read expenditure
+app.get("/expenditures/:id", (req, res) => {
+  /* const id = req.params.id;
+  console.log(id) */
+  console.log(req.params);
+  return res.send("read expenditure");
+});
+```
+
+We can access the `id` directly too. I hope you noticed that the `:id` key or name passed as part of the route matches the key in the logged object. Try renaming the params key in the route and see the output logged.
+
+
+
+### Request query (query string)
+
+For the query strings, there is a property on the request object, `query`, which expose the query strings passed.
+
+To demonstrate this  will pass a query string to filter the records to return. This endpoint should do enough.
+
+```http
+### List Expenditures 
+GET http://localhost:3000/expenditures?amountMoreThan=1000&nameStartsWith=Legion
+```
+
+Now the implementation will something similar to:
+
+```js
+// list expenditures
+app.get("/expenditures", (req, res) => {
+  console.log(req.query)
+  return res.send("list expenditures");
+});
+```
+
+Now run your api and check your logs. Experiment with this.
