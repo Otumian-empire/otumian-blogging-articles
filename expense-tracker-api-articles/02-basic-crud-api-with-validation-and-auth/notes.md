@@ -693,6 +693,7 @@ Let me know what you think... 🥳
 
 ## Resources
 
+-   [Source code](https://github.com/Otumian-empire/otumian-blogging-articles/tree/main/expense-tracker-api-articles/02-basic-crud-api-with-validation-and-auth/expense-tracker-simple-api)
 -   [Basic CRUD API with express](https://dev.to/otumianempire/basic-crud-api-with-express-2eoc)
 -   [expense-tracker-api-articles/01-basic-crud-api-with-express/expense-tracker-simple-api](https://github.com/Otumian-empire/otumian-blogging-articles/tree/main/expense-tracker-api-articles/01-basic-crud-api-with-express/expense-tracker-simple-api)
 -   [Why Form Validation Is Important](https://dev.to/flippedcoding/why-form-validation-is-important-37mj)
