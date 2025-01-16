@@ -11,7 +11,8 @@ Content-Type: application/json
 }
 
 ### List Expenditures 
-GET http://localhost:3000/expenditures?
+GET http://localhost:3000/expenditures
+Authorization: am9obmRvZUBnbWFpbC5jb206ZGVjZWM2OTQtNmQ5Ny00MTk5LTg1NDQtZjRiYmU3ZWE3NTNi
 
 ### Read Expenditure
 GET http://localhost:3000/expenditures/1
@@ -29,3 +30,24 @@ Content-Type: application/json
 ### Delete Expenditure
 DELETE http://localhost:3000/expenditures/0
 
+
+# User
+
+
+### Sign up
+POST http://localhost:3000/users/signup
+Content-Type: application/json
+
+{
+    "email": "johndoe1@gmail.com",
+    "password": "JohnPwd12_"
+}
+
+### Log in
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+    "email": "johndoe@gmail.com",
+    "password": "JohnPwd12_"
+}
