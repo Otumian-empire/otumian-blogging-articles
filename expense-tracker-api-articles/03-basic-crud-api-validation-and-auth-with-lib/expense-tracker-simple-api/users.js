@@ -1,0 +1,111 @@
+// users.js;
+const app = require("express").Router();
+const crypto = require("crypto");
+let { users } = require("./data");
+const { isValidEmail, isValidPassword } = require("./validations");
+
+// sign up
+app.post("/users/signup", (req, res) => {
+    const { email, password } = req.body;
+
+    if (!isValidEmail(email)) {
+        return res.status(200).json({
+            success: false,
+            message: "Invalid email",
+        });
+    }
+
+    if (!isValidPassword(password)) {
+        return res.status(200).json({
+            success: false,
+            message: "Invalid password",
+        });
+    }
+
+    // making sure that there is no record with the same email as this user's
+    const existingUsers = users.filter((user) => user.email === email);
+
+    if (existingUsers.length > 0) {
+        return res.status(200).json({
+            success: false,
+            message: "Email already taken",
+        });
+    }
+
+    // we are supposed to do password hashing here (recommended practice)
+
+    // generate uuid unique to this user
+    const uuid = crypto.randomUUID();
+
+    // save this record
+    const newUser = {
+        id: uuid,
+        email,
+        password,
+    };
+
+    console.log(newUser);
+
+    users = [...users, newUser];
+
+    const token = Buffer.from(`${email}:${uuid}`).toString("base64");
+
+    return res.status(200).json({
+        success: true,
+        message: "Sign up successful",
+        data: {
+            id: uuid,
+            email,
+            token,
+        },
+    });
+});
+
+// login
+app.post("/users/login", (req, res) => {
+    const { email, password } = req.body;
+
+    if (!isValidEmail(email)) {
+        return res.status(200).json({
+            success: false,
+            message: "Invalid email",
+        });
+    }
+
+    if (!isValidPassword(password)) {
+        return res.status(200).json({
+            success: false,
+            message: "Invalid password",
+        });
+    }
+
+    // find a user with the same email and password: authentication taking place here
+    const authUser = users.filter(
+        (user) => user.email === email && user.password === password
+    );
+
+    // the number of record expected is one, anything else is invalid
+    if (authUser.length !== 1) {
+        return res.status(200).json({
+            success: false,
+            message: "Invalid credentials",
+        });
+    }
+
+    // we are supposed to compare the password with the hash normally
+    const user = authUser[0];
+
+    const token = Buffer.from(`${user.email}:${user.id}`).toString("base64");
+
+    return res.status(200).json({
+        success: true,
+        message: "Log in successful",
+        data: {
+            id: user.id,
+            email: user.email,
+            token,
+        },
+    });
+});
+
+module.exports = app;
