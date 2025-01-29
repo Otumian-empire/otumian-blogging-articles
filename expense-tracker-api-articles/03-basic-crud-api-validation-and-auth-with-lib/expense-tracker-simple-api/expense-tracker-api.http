@@ -13,7 +13,7 @@ Authorization: am9obmRvZTFAZ21haWwuY29tOmI1OGJjZWViLTQwNDEtNGE1MC1iMjA0LTg1Y2FhM
 {
     "name": "Legion Tower 7i Gen 8 (Intel) Gaming Desktop",
     "amount": 2099.99,
-    "date": "2024-31-12"
+    "date": "2024-12-31"
 }
 
 ### List Expenditures 
@@ -26,14 +26,14 @@ GET http://localhost:3000/expenditures/f1d6aed5-ef77-4cb4-8b34-43af5fd0a007
 Authorization: am9obmRvZTFAZ21haWwuY29tOmI1OGJjZWViLTQwNDEtNGE1MC1iMjA0LTg1Y2FhMmFkNmMyMA==
 
 ### Update Expenditure
-PUT http://localhost:3000/expenditures/f1d6aed5-ef77-4cb4-8b34-43af5fd0a007
+PUT http://localhost:3000/expenditures/8e752d99-aeff-401b-90dd-e07665a1aa4f
 Content-Type: application/json
 Authorization: am9obmRvZTFAZ21haWwuY29tOmI1OGJjZWViLTQwNDEtNGE1MC1iMjA0LTg1Y2FhMmFkNmMyMA==
 
 {
-    "name": "MacBook pro laptop updated",
-    "amount": 5099.99,
-    "date": "2025-01-01"
+    "name": "Legion Tower 7i Gen 8 (Intel) Gaming Desktop",
+    "amount": 2099.99,
+    "date": "2024-12-31"
 }
 
 ### Delete Expenditure
@@ -50,8 +50,8 @@ POST http://localhost:3000/users/signup
 Content-Type: application/json
 
 {
-    "email": "johndoe1@gmail.com",
-    "password": "JohnPwd12_"
+    "email": "johndoe2@gmail.com",
+    "password": "JohnPwd12"
 }
 
 ### Log in

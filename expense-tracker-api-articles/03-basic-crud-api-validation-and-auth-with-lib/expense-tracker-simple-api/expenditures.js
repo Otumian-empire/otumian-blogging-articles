@@ -1,7 +1,11 @@
 // expenditures.js;
 const app = require("express").Router();
 const { authorize } = require("./auth");
-let { users, expenditures } = require("./data");
+let { expenditures } = require("./data");
+const {
+    createExpenseSchema,
+    updateExpenseSchema,
+} = require("./joi_validations");
 const { isValidName, isValidAmount, isValidDate } = require("./validations");
 
 app.get("/expendituresx", (req, res) => {
@@ -92,34 +96,11 @@ app.post("/expenditures", (req, res) => {
     // const { name, amount, date } = req.body
     const payload = req.body;
 
-    if (!payload?.name || !payload.amount || !payload.date) {
-        return res.status(200).json({
+    const validationResponse = createExpenseSchema.validate(payload);
+    if (validationResponse.error) {
+        return res.status(201).json({
             success: false,
-            message: "name, amount and date for expense are required",
-        });
-    }
-
-    // we have to validate the name, maybe, there name must have some number of characters
-    if (!isValidName(payload.name)) {
-        return res.status(200).json({
-            success: false,
-            message: "Name is invalid",
-        });
-    }
-
-    // we have to make sure that amount is actually a number
-    if (!isValidAmount(payload.amount)) {
-        return res.status(200).json({
-            success: false,
-            message: "Amount is invalid",
-        });
-    }
-
-    // we have to also make sure that date is of the format, yyyy-MM-dd
-    if (!isValidDate(payload.date)) {
-        return res.status(200).json({
-            success: false,
-            message: "Expense date is invalid",
+            message: validationResponse.error.message,
         });
     }
 
@@ -178,34 +159,22 @@ app.put("/expenditures/:id", (req, res) => {
     // we have to also make sure that date is of the format, yyyy-MM-dd
     const { name, amount, date } = req.body;
 
-    if (!name || !amount || !date) {
+    if (!name && !amount && !date) {
         return res.status(200).json({
             success: false,
             message: "name, amount and date for expense are required",
         });
     }
 
-    // validate name if it is passed
-    if (name && !isValidName(name)) {
+    const validationResponse = updateExpenseSchema.validate({
+        name,
+        amount,
+        date,
+    });
+    if (validationResponse.error) {
         return res.status(200).json({
             success: false,
-            message: "Name is invalid",
-        });
-    }
-
-    // validate amount if it is passed
-    if (amount && !isValidAmount(amount)) {
-        return res.status(200).json({
-            success: false,
-            message: "Amount is invalid",
-        });
-    }
-
-    // validate date if it is passed
-    if (date && !isValidDate(date)) {
-        return res.status(200).json({
-            success: false,
-            message: "Expense date is invalid",
+            message: validationResponse.error.message,
         });
     }
 

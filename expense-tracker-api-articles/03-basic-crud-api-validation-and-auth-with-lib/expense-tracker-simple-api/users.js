@@ -2,23 +2,21 @@
 const app = require("express").Router();
 const crypto = require("crypto");
 let { users } = require("./data");
-const { isValidEmail, isValidPassword } = require("./validations");
+const { authValidationSchema } = require("./joi_validations");
 
 // sign up
 app.post("/users/signup", (req, res) => {
     const { email, password } = req.body;
 
-    if (!isValidEmail(email)) {
+    const validationResponse = authValidationSchema.validate({
+        email,
+        password,
+    });
+    if (validationResponse.error) {
         return res.status(200).json({
             success: false,
-            message: "Invalid email",
-        });
-    }
-
-    if (!isValidPassword(password)) {
-        return res.status(200).json({
-            success: false,
-            message: "Invalid password",
+            message: validationResponse.error.message,
+            // message: validationResponse.error.details[0].message,
         });
     }
 
@@ -65,17 +63,15 @@ app.post("/users/signup", (req, res) => {
 app.post("/users/login", (req, res) => {
     const { email, password } = req.body;
 
-    if (!isValidEmail(email)) {
+    const validationResponse = authValidationSchema.validate({
+        email,
+        password,
+    });
+    if (validationResponse.error) {
         return res.status(200).json({
             success: false,
-            message: "Invalid email",
-        });
-    }
-
-    if (!isValidPassword(password)) {
-        return res.status(200).json({
-            success: false,
-            message: "Invalid password",
+            message: validationResponse.error.message,
+            // message: validationResponse.error.details[0].message,
         });
     }
 

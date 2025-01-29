@@ -115,21 +115,15 @@ const hasOneOf = (arg, key) => {
 // password validation
 function isValidPassword(password) {
     if (!password || !isString(password) || password.length < 6) {
-        console.log("11");
-
         return false;
     }
 
     const UPPER_CASE = LETTERS.map((char) => char.toUpperCase());
     if (!hasAnyOf(password, UPPER_CASE)) {
-        console.log("21");
-
         return false;
     }
 
     if (!hasAnyOf(password, NUMBERS)) {
-        console.log("31");
-
         return false;
     }
 
@@ -171,4 +165,8 @@ module.exports = {
     isValidDate,
     isValidPassword,
     isValidEmail,
+    NUMBERS,
+    SPECIAL_SYMBOLS,
+    LETTERS,
+    hasAnyOf,
 };

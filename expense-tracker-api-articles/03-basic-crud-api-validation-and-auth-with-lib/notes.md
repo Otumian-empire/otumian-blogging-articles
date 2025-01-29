@@ -5,9 +5,8 @@ In the previous excerpt with discussed validation, authentication and authorizat
 ## Content
 
 -   Separation of concerns
--   Criticism
--   Verification
--   Extract controller
+-   Validation with Joi
+-   Auth with JSON Web Tokens
 
 ## Separation of concerns
 
@@ -28,6 +27,8 @@ In the `index.js`, which serves as the entry point into out application, there a
 Consider, `app.SOME_METHOD(route, request handlers)` `SOME_METHOD` is the http method, is the definition of how routes are passed with some middlewares and the request handlers are passed or handled. We have `app.get("/expenditures", (req, res) => {...})` where `"/expenditures"` is the routes and `(req, res) => {...}` is a request handler. We can separate the request handler as a standalone function. We already know how to create functions (and even async functions). When we create a function outof `(req, res) => {...}`, we can pass it as, ``app.get("/expenditures", functionName)`. That is it. We can choose to keep the routes and the request handlers (controllers) in the same file or separate them.
 
 We can have a file, just because our project is small else we would use folders, for the list above.
+
+### Taking actions
 
 These are some of the changes we can do (follow along):
 
@@ -383,3 +384,389 @@ expenditures.push({
     -   find the `rowIndex`, if it is `-1` then there is no row found
     -   pass the `rowIndex` inplace of `id` in `expenditures = expenditures.filter((_, index) => index !== id);`
     -   Give it a try
+
+At this point, we have :
+
+-   rewritten mmost parts of this api
+-   separated the endpoints into their various files
+-   fixed file paths and imports and exports
+-   fixed the resource ID validations
+-   fixed or patched the auth mechanism
+-   fixed managing resources, accounting for `userId`
+
+> Make sure you have a working api by testing (hitting) each endpoint and that you get the appropriate response. Use console logs if you have to, read the error logs displayed in the console.
+
+## Validation
+
+I want to point out that even though we wrote most of our validations, we can use a library for that. As we have discussed some time ago, a library is a piece of code that does something specific and can be reused, bundled as one (as in whatever functionalities the library provides). Usually libraries are well versioned, maintained and tested. Using a library removes some sort of responsibility in maintaining some functionality. This would save time and reduce the chunks of code "we" write. There also downsides to this. Some libraries maybe outdated and be vulnerable to some attacks as a result of it not been maintained and upto date with the current (nodejs) runtime. As such be careful with using third party libraries.
+
+For validation libraries, there are several and the one we will use today is [Joi](https://www.npmjs.com/package/joi). At the time of writing this excerpt, the current version was [17.13.3](https://joi.dev/api/?v=17.13.3). Spend sometime on this [this](https://joi.dev/api/?v=17.13.3#general-usage) page just to see how to use [Joi](https://www.npmjs.com/package/joi).
+
+> By the way, run, `npm i joi`, to install Joi
+
+### Replicating validations.js
+
+> This is something we'd be doing on the side then integrate later.
+
+From the generaal usage [page](https://joi.dev/api/?v=17.13.3#general-usage), validation with Joi is done in two simple steps.
+
+-   Create a schema
+-   Use the schema to validate your data
+-   Handle the response, error and value. Error is the data failed the validation criteria. Value is the validated data (passed as argument).
+
+> We can validate the literal types: number, string, bool, and an array and an object as well.
+
+### Validate Sign up and Login Credentials
+
+There is no difference between the _sigu up_ validation and _log in_ validation, both has _email_ and _password_.
+
+> Just to be clear, create a new file for the validation with _Joi_. (`joi_validations.js`)
+> We will be referencing the old validations rewritten
+
+We want to create a _schema_ that has an _email_ and _password_ properties.
+
+```js
+const authValidationSchema = Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(6).required(),
+});
+```
+
+Assuming we have, this below, as credentials
+
+```js
+const credentials = {
+    email: "johndoe1@gmail.com",
+    password: "JohnPwd12_",
+};
+```
+
+Then we can validate the credentials as follows:
+
+```js
+const { error, value } = authValidationSchema.validate(credentials);
+
+console.log({ error, value });
+
+/* console log
+{
+  error: undefined,
+  value: { email: 'johndoe1@gmail.com', password: 'JohnPwd12_' }
+}
+*/
+```
+
+Let's say we passed, intentionally for demo purposes, invalid credentials:
+
+```js
+const inValidCredentials = {
+    email: "johndoe1gmail.com",
+    password: "John",
+};
+```
+
+The `schema.validate` method, takes a argument of objects, `options`. The second argument is nullable or rather has some default values and among these, there are:
+
+-   `abortEarly`: By default is `true`. When `true`, stops validation on the first error, otherwise returns all the errors found. So if the email was invalid, it will stop the validation, ignoring the password validation, and return the validation response.
+-   `allowUnknown`: By default is `false`. When `true`, allows object to contain unknown keys which are ignored. Let's say we are expecting _email_ and _password_ but user is passing _ide_ as part of the request, we can ignore this noise by setting `allowUnknown` to `true`.
+-   `convert`: by default is `true`. When `true`, attempts to cast values to the required types (e.g. a string to a number).
+
+> You really have to think about these because of these options can have an effect on the user interface and the user experience
+
+> Aborting early means, I will have one error field and UI will have just one error component (div or something) else UI would either have to join the list of error messages together and display as one or have differnt alerts for each error. Depending on what decision is made, this will affect the User experience.
+
+```js
+const invalidResult = authValidationSchema.validate(inValidCredentials, {
+    abortEarly: false,
+});
+
+console.log(invalidResult.value);
+// console log
+// { email: 'johndoe1gmail.com', password: 'John' }
+
+console.log(invalidResult.error);
+
+/* console log
+[Error [ValidationError]: "email" must be a valid email. "password" length must be at least 6 characters long] {
+  _original: { email: 'johndoe1gmail.com', password: 'John' },
+  details: [
+    {
+      message: '"email" must be a valid email',
+      path: [Array],
+      type: 'string.email',
+      context: [Object]
+    },
+    {
+      message: '"password" length must be at least 6 characters long',
+      path: [Array],
+      type: 'string.min',
+      context: [Object]
+    }
+  ]
+}
+*/
+```
+
+We can write a custom validation method.
+
+This is what we have for the previous password validation.
+
+```js
+function isValidPassword(password) {
+    if (!password || !isString(password) || password.length < 6) {
+        return false;
+    }
+
+    const UPPER_CASE = LETTERS.map((char) => char.toUpperCase());
+    if (!hasAnyOf(password, UPPER_CASE)) {
+        return false;
+    }
+
+    if (!hasAnyOf(password, NUMBERS)) {
+        return false;
+    }
+
+    return hasAnyOf(password, SPECIAL_SYMBOLS);
+}
+```
+
+We can make this function a method to be used in the current validation schema by passing it a method to the `custom` method.
+
+> the reference to constants are infered (we already have them, 🙈 copy them over or export them from `validations.js`) and here we either return the value or throw an error when it is not valid.
+
+We define a function that takes in the password (or the value to validate) and a second params, called, `helper`. (We will not use it but just pass it) - Read on helpers [here](https://joi.dev/api/?v=17.13.3#validation-helpers).
+
+> So that there would be no naming comflits, the validation method will be named, `customPasswordValidation`
+
+```js
+const customPasswordValidation = (value, helpers) => {
+    if (!value || typeof value !== "string") {
+        throw new Error("Password invalid");
+    }
+
+    if (value.length < 6) {
+        throw new Error("Password must be at least 6 characters");
+    }
+
+    const UPPER_CASE = LETTERS.map((char) => char.toUpperCase());
+    if (!hasAnyOf(value, UPPER_CASE)) {
+        throw new Error(
+            "Password must inlcude at least one uppercase character"
+        );
+    }
+
+    if (!hasAnyOf(value, NUMBERS)) {
+        throw new Error("Password must inlcude at least one numeric character");
+    }
+
+    if (!hasAnyOf(value, SPECIAL_SYMBOLS)) {
+        throw new Error(
+            `Password must inlcude at least one of these special characters: [${SPECIAL_SYMBOLS.join(
+                ","
+            )}]`
+        );
+    }
+
+    return value;
+};
+```
+
+Let's try out this password validation.
+
+```js
+const passwords = ["", "John", "john123", "John123", "John123_"];
+
+const customPasswordSchema = Joi.string().custom(
+    customPasswordValidation,
+    "custom password validation"
+);
+
+const errorList = passwords.reduce((errors, password) => {
+    const { error } = customPasswordSchema.validate(password);
+
+    errors.push({
+        [password]:
+            error?.details?.map((log) => log.message).join("and") ?? "No error",
+    });
+
+    return errors;
+}, []);
+
+console.log(errorList);
+/* console log
+[
+    { "": '"value" is not allowed to be empty' },
+    {
+        John: '"value" failed custom validation because Password must be at least 6 characters',
+    },
+    {
+        john123:
+            '"value" failed custom validation because Password must inlcude at least one uppercase character',
+    },
+    {
+        John123:
+            '"value" failed custom validation because Password must inlcude at least one of these special characters: [$,_,-]',
+    },
+    { John123_: "No error" },
+]; 
+*/
+```
+
+At this point we can write some custom validation with Joi. Now we want to make use of this validation scheme where needed .i.e in the _sign up_ and _log in_. We can comment out or remove (you decide) the unwanted code from the `joi_validations.js` and export the `authValidationSchema` accounting for the `customPasswordValidation`.
+
+```js
+// joi_validations.js;
+const Joi = require("joi");
+const {
+    hasAnyOf,
+    LETTERS,
+    NUMBERS,
+    SPECIAL_SYMBOLS,
+} = require("./validations");
+
+const customPasswordValidation = (value, helpers) => {
+    if (!value || typeof value !== "string") {
+        throw new Error("Password invalid");
+    }
+
+    if (value.length < 6) {
+        throw new Error("Password must be at least 6 characters");
+    }
+
+    const UPPER_CASE = LETTERS.map((char) => char.toUpperCase());
+    if (!hasAnyOf(value, UPPER_CASE)) {
+        throw new Error(
+            "Password must inlcude at least one uppercase character"
+        );
+    }
+
+    if (!hasAnyOf(value, NUMBERS)) {
+        throw new Error("Password must inlcude at least one numeric character");
+    }
+
+    if (!hasAnyOf(value, SPECIAL_SYMBOLS)) {
+        throw new Error(
+            `Password must inlcude at least one of these special characters: [${SPECIAL_SYMBOLS.join(
+                ","
+            )}]`
+        );
+    }
+
+    return value;
+};
+
+const authValidationSchema = Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string()
+        .custom(customPasswordValidation, "custom password validation")
+        .required(),
+});
+
+module.exports = { authValidationSchema };
+```
+
+In `user.js`, we will import `authValidationSchema` from `joi_validations.js` and replace:
+
+```js
+if (!isValidEmail(email)) {
+    return res.status(200).json({
+        success: false,
+        message: "Invalid email",
+    });
+}
+
+if (!isValidPassword(password)) {
+    return res.status(200).json({
+        success: false,
+        message: "Invalid password",
+    });
+}
+```
+
+with
+
+```js
+const validationResponse = authValidationSchema.validate({
+    email,
+    password,
+});
+if (validationResponse.error) {
+    return res.status(200).json({
+        success: false,
+        message: validationResponse.error.message,
+        // message: validationResponse.error.details[0].message,
+    });
+}
+```
+
+We will do same for login and clean up unused imports.
+
+### Validate expense
+
+From the _http_ requests that we have we are to validate the expense on creation and update. During creations all the fields are required but optional during update.
+
+```js
+const createExpenseSchema = Joi.object().keys({
+    name: Joi.string().min(10).max(255).required(),
+    amount: Joi.number().positive().required(),
+    date: Joi.date().iso().required(),
+    // date: Joi.string().isoDate().required(),
+});
+
+const updateExpenseSchema = Joi.object().keys({
+    name: Joi.string().min(10).max(255).optional(),
+    amount: Joi.number().positive().optional(),
+    date: Joi.date().iso().optional(),
+    // date: Joi.string().isoDate().optional(),
+});
+
+module.exports = {
+    authValidationSchema,
+    createExpenseSchema,
+    updateExpenseSchema,
+};
+```
+
+In _create expenditures_, we will replace the individual validates with:
+
+```js
+...
+// const { name, amount, date } = req.body
+const payload = req.body;
+
+const validationResponse = createExpenseSchema.validate(payload);
+if (validationResponse.error) {
+    return res.status(201).json({
+        success: false,
+        message: validationResponse.error.message,
+    });
+}
+```
+
+In update,
+
+```js
+...
+ const { name, amount, date } = req.body;
+
+    if (!name && !amount && !date) {
+        return res.status(200).json({
+            success: false,
+            message: "name, amount or date for expense are required",
+        });
+    }
+
+    const validationResponse = updateExpenseSchema.validate({
+        name,
+        amount,
+        date,
+    });
+    if (validationResponse.error) {
+        return res.status(200).json({
+            success: false,
+            message: validationResponse.error.message,
+        });
+    }
+```
+
+## Auth with JSON Web Tokens
