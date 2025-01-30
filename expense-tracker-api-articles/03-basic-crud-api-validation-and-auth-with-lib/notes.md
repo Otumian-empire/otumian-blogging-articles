@@ -12,7 +12,7 @@ In the previous excerpt with discussed validation, authentication and authorizat
 
 We started to section or move some of our code into different files. We have the data we are manipulating, in the `data.js` file, we have the validations in `validations.js` and so on. This process can get complicated and out of hand easily. So don't push it. It is a simple application we are building.
 
-As usual, we are building on top of the previous codebase which can be found [on github](https://github.com/Otumian-empire/otumian-blogging-articles/tree/main/expense-tracker-api-articles/02-basic-crud-api-with-validation-and-auth/expense-tracker-simple-api) and read more on it on [Validation, Authentication and Authorization](https://dev.to/otumianempire/validation-authentication-and-authorization-5cag).
+As usual, we are building on top of the previous codebase which can be found [on github][previous-code-on-github] and read more on it on [Validation, Authentication and Authorization][previous-article].
 
 The api we are building is that titled expense tracker. We have users and their expenses. So we are dealing with two entities. As the project grows and the content of the `index.js` grows, we have to pull certain codes out or group them to be precise. This is not a must, we can write all our code in one files and it will work fine. There are advantages and disadvantages to it, however, it is better to know when to group your functionalities.
 
@@ -400,7 +400,7 @@ At this point, we have :
 
 I want to point out that even though we wrote most of our validations, we can use a library for that. As we have discussed some time ago, a library is a piece of code that does something specific and can be reused, bundled as one (as in whatever functionalities the library provides). Usually libraries are well versioned, maintained and tested. Using a library removes some sort of responsibility in maintaining some functionality. This would save time and reduce the chunks of code "we" write. There also downsides to this. Some libraries maybe outdated and be vulnerable to some attacks as a result of it not been maintained and upto date with the current (nodejs) runtime. As such be careful with using third party libraries.
 
-For validation libraries, there are several and the one we will use today is [Joi](https://www.npmjs.com/package/joi). At the time of writing this excerpt, the current version was [17.13.3](https://joi.dev/api/?v=17.13.3). Spend sometime on this [this](https://joi.dev/api/?v=17.13.3#general-usage) page just to see how to use [Joi](https://www.npmjs.com/package/joi).
+For validation libraries, there are several and the one we will use today is [Joi][joi]. At the time of writing this excerpt, the current version was [17.13.3](https://joi.dev/api/?v=17.13.3). Spend sometime on this [this](https://joi.dev/api/?v=17.13.3#general-usage) page just to see how to use [Joi][joi].
 
 > By the way, run, `npm i joi`, to install Joi
 
@@ -770,3 +770,295 @@ In update,
 ```
 
 ## Auth with JSON Web Tokens
+
+For our auth token we combined the user's email and ID (uuid) then encode it. It is not safe, it is not secure and THAT IS CRIMINAL. Check out this platform, [BASE64 Decode and Encode][base64-encode-decoder]. This is platform that allows you to decode and encode some stringified payloads. Copy and paste any of your auth tokens and you'd realize that an attacker wouldn't need nodejs or some programming runtime to know how to generate an auth token. All they have to do, to get a new auth token, is to get a user ID (uuid) and the rest comes and goes into the past, history. For this case, we will use JSON WebTokens. Our initial auth token doesn't expire but JWTs could.
+
+JSON Web Tokens, is a ... No! No definitions. Well A JOSN Web Token, is a digitally signed token of an encoded payload in a JSON format, that is shared between used for communication between two parties. JWT is encrypted and its data can be decode. Header over to [jwt.io][jwt], a platform that allows you to decode, verify and generate jwts.
+
+A JWT has three parts, the header, payload, and signature.
+
+So this is the jwt I modified on [jwt.io][jwt], it is of the format, `HEADER.PAYLOAD.SIGNATURE`.
+
+```sh
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJkb2IiOiIyMDA0LTEyLTAyIn0.NjrWV_CeOphs6WR676B-oyVk5S4mafNZW88SAVrzY0I
+```
+
+-   The header, `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9`, indicates which hash algorithm was used and what type of token we are creating, in our case, jwt.
+    ```json
+    {
+        "alg": "HS256",
+        "typ": "JWT"
+    }
+    ```
+-   Visit [BASE64 Decode and Encode][base64-encode-decoder] or toggle the decode part, and decode the header and payload.
+-   The payload, indicates or contains what is in the encoded data or the data we want to associate with the user: a way to identify the user.
+    ```json
+    {
+        "sub": "1234567890",
+        "name": "John Doe",
+        "iat": 1516239022,
+        "dob": "2004-12-02"
+    }
+    ```
+-   The signature is crytohraphic hash of the of the headers and payloads. From the header, we use `HS256` to hash the header and payload.
+-   On [jwt.io][jwt], what happens when you add another key value to the payload? Does the signature change? If it changed then it means when an attacker gets an auth token from our platform, they can not replicate it. They have to sign it. And their secret for hashing will not be the same as ours as such our system will not accept it as a valid auth token. For a jwt with a longer TTL, (Time To Live, expiration time), an attacker can use that compromised token to reck havoc until the token expires. So usually one is adviced to use short TTLs. We whitelist valid tokens or blacklist invalidated tokens (user logs out but the token is still invalid). We have to be creative.
+
+### Using JWT
+
+> install jsonwebtoken, `npm install jsonwebtoken`
+
+Read about the jwt lib from [here][jsonwebtoken] and a more techincal version from, [rfc7519](https://datatracker.ietf.org/doc/html/rfc7519).
+
+As usual, just like the Joi library, usuage of the library speeds up our work. This is another reason to use the code another developer has written.
+
+There are three methods to:
+
+-   sign (create a new) token: pass the payload, the secret and some options like the expiresIn property which defines the TTL for the token
+-   decode jwt: decodes the payload of the jwt, however, does not verify the jwt
+-   verify jwt: verifies the jwt. Has it expired? Is it malformed and all that.
+
+This was how we generated the auth token:
+
+```js
+const token = Buffer.from(`${email}:${uuid}`).toString("base64");
+```
+
+But now we are doing it differntly, we are going to use the `sign(payload, secret, options)` method from the jwt lib. We will use the email and uuid as payload. Generally the sign format is of the form:
+
+```js
+const jwt = require("jsonwebtoken");
+
+const authToken = jwt.sign(
+    {
+        id: "c96b08b8-f92f-4e27-8f04-c4f3604907d6",
+        email: "john@gmail.com",
+    },
+    "SOME SERECT",
+    {
+        expiresIn: "1h",
+    }
+);
+
+console.log(authToken);
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM5NmIwOGI4LWY5MmYtNGUyNy04ZjA0LWM0ZjM2MDQ5MDdkNiIsImVtYWlsIjoiam9obkBnbWFpbC5jb20iLCJpYXQiOjE3MzgyMTM0NTAsImV4cCI6MTczODIxNzA1MH0.3edLKTeSlgo8vThEAmDJ1uC5GU58AxeLzNpSgVAOYvc
+```
+
+The sign method takes in the payload, which is part of the [claims](https://datatracker.ietf.org/doc/html/rfc7519#section-4). Refer to the documentation for more [details](https://www.npmjs.com/package/jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback).
+
+For demo purposes, I am passing the secret as `"SOME SERECT"`. In a production application, we'd hide these from the code itself. We will put it into an environmental variable path or file.
+
+> DO NOT ADD YOUR SECRET TO YOUR APPLICATION. YOU WILL BE IN A LOT OF TROUBLE, I think 😒.
+
+> We will look into how to handle environmental variables later.
+
+In the options object parameter, we have an option to pass an algorith but the default is `HS256`. Check the docs for the other options. What we can do is assign the `algorithm` property to `HS384` to set it to `HS384`.
+
+Now on the `expiresIn: "1h"`, it indicates that the token becomes invalid or expires in one hour. This is directly from the docs:
+
+```md
+Eg: 1000, "2 days", "10h", "7d". A numeric value is interpreted as a seconds count. If you use a string be sure you provide the time units (days, hours, etc), otherwise milliseconds unit is used by default ("120" is equal to "120ms").
+```
+
+-   When you set the ttl to a number, `3600`, it understood that you want the ttl to be in seconds. `3600` one hour.
+-   When you set the ttl to a number string, `"3600"`, it is assumed that you want te ttl to be in millisecs. S0 `"3600"` in parsed as `3.`6 seconds.
+-   There are other formats as well, specified by the docs on, [vercel/ms](https://github.com/vercel/ms) and I will share a snippet describing some time span:
+
+    ```js
+    ms("2 days"); // 172800000
+    ms("1d"); // 86400000
+    ms("10h"); // 36000000
+    ms("2.5 hrs"); // 9000000
+    ms("2h"); // 7200000
+    ms("1m"); // 60000
+    ms("5s"); // 5000
+    ms("1y"); // 31557600000
+    ms("100"); // 100
+    ms("-3 days"); // -259200000
+    ms("-1h"); // -3600000
+    ms("-200"); // -200
+    ```
+
+-   What we are interested in here is `"2 days"` for two days, `"1d"` for one day, etc. We used `"1h"` for one hour. I think it is clear how to use the ms time span description define the time span of the ttl.
+
+So the `sign.(PAYLOAD, SECRET, { expiresIn: X })`, generates a jwt with payload, `PAYLOAD` signed with the secret, `SECRET`, which will become invalid in `X` specified time span.
+
+The `decode(authToken)` method decodes the payload without verifying it.
+
+```js
+console.log(
+    jwt.decode(
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM5NmIwOGI4LWY5MmYtNGUyNy04ZjA0LWM0ZjM2MDQ5MDdkNiIsImVtYWlsIjoiam9obkBnbWFpbC5jb20iLCJpYXQiOjE3MzgyMTM0NTAsImV4cCI6MTczODIxNzA1MH0.3edLKTeSlgo8vThEAmDJ1uC5GU58AxeLzNpSgVAOYvc"
+    )
+);
+/* 
+{
+  id: 'c96b08b8-f92f-4e27-8f04-c4f3604907d6',
+  email: 'john@gmail.com',
+  iat: 1738213450,// seconds
+  exp: 1738217050 // seconds
+}
+*/
+```
+
+Try removing or adding some characters to the auth token, and then decode. What value do you get?
+
+The `verify(authToken, secret)`, verifies then decodes the auth token on success, else throws and error.
+
+```js
+console.log(
+    jwt.verify(
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM5NmIwOGI4LWY5MmYtNGUyNy04ZjA0LWM0ZjM2MDQ5MDdkNiIsImVtYWlsIjoiam9obkBnbWFpbC5jb20iLCJpYXQiOjE3MzgyMTM0NTAsImV4cCI6MTczODIxNzA1MH0.3edLKTeSlgo8vThEAmDJ1uC5GU58AxeLzNpSgVAOYvc",
+        "SOME SERECT"
+    )
+);
+/* 
+{
+  id: 'c96b08b8-f92f-4e27-8f04-c4f3604907d6',
+  email: 'john@gmail.com',
+  iat: 1738213450,// seconds
+  exp: 1738217050 // seconds
+}
+*/
+```
+
+Now when the auth token is faulty or has expired, there is likely that you may encounter on of these errors:
+
+-   TokenExpiredError: when the token has expired
+
+    ```sh
+    TokenExpiredError: Thrown error if the token is expired.
+        if (err) throw err;
+                ^
+    TokenExpiredError: jwt expired
+        at /Users/user/expense-tracker-simple-api/node_modules/jsonwebtoken/verify.js:190:21
+        at getSecret (/Users/user/expense-tracker-simple-api/node_modules/jsonwebtoken/verify.js:97:14)
+        at module.exports [as verify] (/Users/user/expense-tracker-simple-api/node_modules/jsonwebtoken/verify.js:101:10)
+        at Object.<anonymous> (/Users/user/expense-tracker-simple-api/auth.js:82:9)
+        at Module._compile (node:internal/modules/cjs/loader:1565:14)
+        at Object..js (node:internal/modules/cjs/loader:1708:10)
+        at Module.load (node:internal/modules/cjs/loader:1318:32)
+        at Function._load (node:internal/modules/cjs/loader:1128:12)
+        at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+        at wrapModuleLoad (node:internal/modules/cjs/loader:219:24) {
+    expiredAt: 2025-01-30T06:04:10.000Z
+    }
+    ```
+
+-   JsonWebTokenError: when there is an issue with the token or the secret
+
+    ```sh
+    JsonWebTokenError
+        if (err) throw err;
+                ^
+    JsonWebTokenError: invalid signature
+        at /Users/user/Projects/me/human/otumian-blogging-articles/expense-tracker-api-articles/03-basic-crud-api-validation-and-auth-with-lib/expense-tracker-simple-api/node_modules/jsonwebtoken/verify.js:171:19
+        at getSecret (/Users/user/Projects/me/human/otumian-blogging-articles/expense-tracker-api-articles/03-basic-crud-api-validation-and-auth-with-lib/expense-tracker-simple-api/node_modules/jsonwebtoken/verify.js:97:14)
+        at module.exports [as verify] (/Users/user/Projects/me/human/otumian-blogging-articles/expense-tracker-api-articles/03-basic-crud-api-validation-and-auth-with-lib/expense-tracker-simple-api/node_modules/jsonwebtoken/verify.js:101:10)
+        at Object.<anonymous> (/Users/user/Projects/me/human/otumian-blogging-articles/expense-tracker-api-articles/03-basic-crud-api-validation-and-auth-with-lib/expense-tracker-simple-api/auth.js:82:9)
+        at Module._compile (node:internal/modules/cjs/loader:1565:14)
+        at Object..js (node:internal/modules/cjs/loader:1708:10)
+        at Module.load (node:internal/modules/cjs/loader:1318:32)
+        at Function._load (node:internal/modules/cjs/loader:1128:12)
+        at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+        at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    ```
+
+-   NotBeforeError: Thrown if current time is before the nbf claim.
+
+> We will be looking into how to handle these errors later on
+
+### Integrating JWT
+
+To integrate the use of jwt in our application, we need to modify a few parts of api such the the _sign up_ and _login_ in `users.js` and `authorize(authToken)` function in `auth.js`.
+
+In `users.js`, let's import the jwt library as, `const jwt = require("jsonwebtoken");`. Then replace all instances of:
+
+```js
+const token = Buffer.from(`${email}:${uuid}`).toString("base64");
+```
+
+with the snippet blow for sign up
+
+```js
+const token = jwt.sign(
+    {
+        userId: uuid,
+        email,
+    },
+    "SOME SERECT",
+    {
+        expiresIn: "1h",
+    }
+);
+```
+
+and for login
+
+```js
+const token = jwt.sign(
+    {
+        userId: user.id,
+        email: user.email,
+    },
+    "SOME SERECT",
+    {
+        expiresIn: "1h",
+    }
+);
+```
+
+Since this looks similar, we can wrap in a function and call the function passing in the payload. The secret and ttl, are always the same.
+
+> As exercise, create a function the `auth.js` file, called `generateJwt({ userId, email})` and return the token generated.
+
+When we try the login, we should get a response similar to
+
+```json
+{
+    "success": true,
+    "message": "Log in successful",
+    "data": {
+        "id": "b58bceeb-4041-4a50-b204-85caa2ad6c20",
+        "email": "johndoe1@gmail.com",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTczODIzMTE5MiwiZXhwIjoxNzM4MjM0NzkyfQ.GYXR3qhJ_NdXwbjjrHbel-i7cKSBOX2izMBoO6hOhK4"
+    }
+}
+```
+
+You can copy and past the the auth token into [jwt.io][jwt] to inspect the token.
+
+> Do same for sign up.
+> Replace the auhorization tokens with the new one from the login or sign up response
+
+In `auth.js`, we will replace
+
+```js
+// decode auth token
+const decodeToken = Buffer.from(authToken, "base64").toString();
+
+// parse the decode token into the email and userId
+const [email, userId] = decodeToken.split(":");
+```
+
+with
+
+```js
+const { userId, email } = jwt.verify(authToken, "SOME SERECT");
+```
+
+> Remember to import jwt.
+
+## Conclusion
+
+We have come a long way here and gradually we will plow through, surging forward. I could argue that this excerpt is about the importance of using libraries. We can reduce the number of code by using libraries. The number of code we "reduce" by not writing is written by the library authors. Maybe same code but less writing on our part.
+
+[Joi][joi] and [jsonwebtoken][jsonwebtoken] are one of the few implementations of these concepts. For our use case this is enough and we meet shortly.
+
+#
+
+[joi]: https://www.npmjs.com/package/joi
+[jsonwebtoken]: https://www.npmjs.com/package/jsonwebtoken
+[jwt]: https://jwt.io
+[base64-encode-decoder]: https://www.base64encode.org/
+[previous-code-on-github]: https://github.com/Otumian-empire/otumian-blogging-articles/tree/main/expense-tracker-api-articles/02-basic-crud-api-with-validation-and-auth/expense-tracker-simple-api
+[previous-article]: https://dev.to/otumianempire/validation-authentication-and-authorization-5cag

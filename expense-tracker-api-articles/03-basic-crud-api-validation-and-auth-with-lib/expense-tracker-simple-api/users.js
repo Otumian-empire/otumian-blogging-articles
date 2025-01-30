@@ -1,5 +1,6 @@
 // users.js;
 const app = require("express").Router();
+const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 let { users } = require("./data");
 const { authValidationSchema } = require("./joi_validations");
@@ -46,7 +47,16 @@ app.post("/users/signup", (req, res) => {
 
     users = [...users, newUser];
 
-    const token = Buffer.from(`${email}:${uuid}`).toString("base64");
+    const token = jwt.sign(
+        {
+            userId: uuid,
+            email,
+        },
+        "SOME SERECT",
+        {
+            expiresIn: "1h",
+        }
+    );
 
     return res.status(200).json({
         success: true,
@@ -91,7 +101,16 @@ app.post("/users/login", (req, res) => {
     // we are supposed to compare the password with the hash normally
     const user = authUser[0];
 
-    const token = Buffer.from(`${user.email}:${user.id}`).toString("base64");
+    const token = jwt.sign(
+        {
+            userId: user.id,
+            email: user.email,
+        },
+        "SOME SERECT",
+        {
+            expiresIn: "1h",
+        }
+    );
 
     return res.status(200).json({
         success: true,
