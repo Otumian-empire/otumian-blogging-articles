@@ -1,0 +1,64 @@
+# Expenditure endpoints
+
+
+
+### List Expenditures 
+GET http://localhost:3000/expendituresx
+
+### Create Expenditures 
+POST http://localhost:3000/expenditures
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTczODIzMjI2MCwiZXhwIjoxNzM4MjM1ODYwfQ.VkP3AW1TNpWQMVmNNlIpL0lWWyicSZROxO1hrJZe5wY
+
+{
+    "name": "Legion Tower 7i Gen 8 (Intel) Gaming Desktop",
+    "amount": 2099.99,
+    "date": "2024-12-31"
+}
+
+### List Expenditures 
+GET http://localhost:3000/expenditures
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTc0MDA3Nzc0NywiZXhwIjoxNzQwMDgxMzQ3fQ.0ZCCspK-PqNc8Mz8h4fPmi3fBZeKhm4Jiq8FdiJBlAs
+
+### Read Expenditure
+GET http://localhost:3000/expenditures/f1d6aed5-ef77-4cb4-8b34-43af5fd0a007
+# GET http://localhost:3000/expenditures/1
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTczODIzMjI2MCwiZXhwIjoxNzM4MjM1ODYwfQ.VkP3AW1TNpWQMVmNNlIpL0lWWyicSZROxO1hrJZe5wY
+
+### Update Expenditure
+PUT http://localhost:3000/expenditures/8e752d99-aeff-401b-90dd-e07665a1aa4f
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTczODIzMjI2MCwiZXhwIjoxNzM4MjM1ODYwfQ.VkP3AW1TNpWQMVmNNlIpL0lWWyicSZROxO1hrJZe5wY
+
+{
+    "name": "Legion Tower 7i Gen 8 (Intel) Gaming Desktop",
+    "amount": 2099.99,
+    "date": "2024-12-31"
+}
+
+### Delete Expenditure
+DELETE http://localhost:3000/expenditures/552f1cdd-9d41-42a7-8bd8-3c9f8fde86a9
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTczODIzMjI2MCwiZXhwIjoxNzM4MjM1ODYwfQ.VkP3AW1TNpWQMVmNNlIpL0lWWyicSZROxO1hrJZe5wY
+
+
+
+# User
+
+
+### Sign up
+POST http://localhost:3000/users/signup
+Content-Type: application/json
+
+{
+    "email": "johndoe2@gmail.com",
+    "password": "JohnPwd_12"
+}
+
+### Log in
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+    "email": "johndoe1@gmail.com",
+    "password": "JohnPwd12_"
+}
