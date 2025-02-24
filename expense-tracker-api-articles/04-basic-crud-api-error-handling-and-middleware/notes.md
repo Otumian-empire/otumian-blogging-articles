@@ -104,6 +104,59 @@ With information, it is upto you now to create a `.env` file and pass any config
 
 > just to be safe, check if the value `undefined` and responsed appropriately - read about the [difference between null and ndefined][null-vs-undefined]
 
+> Since we don't have to make our `.env` open, we create a `sample.env` file and pass the keys, only, so that developers can know what the `.env` file expects.
+
+## Middlewares
+
+We have discussed what a controller is. As a reminder, and perhaps if we haven't discussed it. A controller is function (method) that handles requests, It is of the forms:
+
+```js
+[async] function FunctionName(requestObject, responseObject) {
+    // do something on the request
+    // return a response
+}
+```
+
+The point I want us to understand is that, controllers are request handlers.
+
+Request handlers are usually is two forms:
+
+-   Controllers
+-   Middlewares
+
+Briefly, a middleware is a request handler that seats between a route and a controller.
+
+```js
+router.method("/some route", middlewares, controller);
+```
+
+A middleware looks like:
+
+```js
+[async] function FunctionName(requestObject, responseObject, nextMiddleware) {
+    // do something on the request
+    // return a response if there is an error
+    // else go the the next middleware
+}
+```
+
+The only difference here is that it has a third parameter which is dubbed, `next`, most often. `next` here is a there next middleware in the pipeline (controller is a like a middleware).
+
+A middleware has access to the request and response object and as such can intercept a request to alter (remove, add or update) the payload. In our `index.js` file, we have the following:
+
+```js
+// parse request body as json
+app.use(express.json());
+
+// register routers
+app.use(userEndpoints);
+app.use(expendituresEndpoints);
+```
+
+-   `app.use(express.json());` is a middleware that parses the request body into json
+-   `app.use(userEndpoints);` that exposes the user endpoints to the main app
+-   `app.use(expendituresEndpoints);` that exposes the expenditure endpoints to the main app
+
 ## Resources
 
 <!--  -->
