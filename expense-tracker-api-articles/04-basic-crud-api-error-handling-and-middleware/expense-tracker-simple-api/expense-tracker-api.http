@@ -8,7 +8,7 @@ GET http://localhost:3000/expendituresx
 ### Create Expenditures 
 POST http://localhost:3000/expenditures
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTczODIzMjI2MCwiZXhwIjoxNzM4MjM1ODYwfQ.VkP3AW1TNpWQMVmNNlIpL0lWWyicSZROxO1hrJZe5wY
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTc0MDk1MzI1OCwiZXhwIjoxNzQwOTU2ODU4fQ.oz7tkfwdWONKH1KoavTK6XlosxA0NG-T31W7VyjV0Ns
 
 {
     "name": "Legion Tower 7i Gen 8 (Intel) Gaming Desktop",
@@ -18,17 +18,17 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00
 
 ### List Expenditures 
 GET http://localhost:3000/expenditures
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTc0MDA3Nzc0NywiZXhwIjoxNzQwMDgxMzQ3fQ.0ZCCspK-PqNc8Mz8h4fPmi3fBZeKhm4Jiq8FdiJBlAs
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTc0MDk1MzI1OCwiZXhwIjoxNzQwOTU2ODU4fQ.oz7tkfwdWONKH1KoavTK6XlosxA0NG-T31W7VyjV0Ns
 
 ### Read Expenditure
-GET http://localhost:3000/expenditures/f1d6aed5-ef77-4cb4-8b34-43af5fd0a007
+GET http://localhost:3000/expenditures/1c93e5ea-d72a-4b29-a89a-d8fd75283c16
 # GET http://localhost:3000/expenditures/1
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTczODIzMjI2MCwiZXhwIjoxNzM4MjM1ODYwfQ.VkP3AW1TNpWQMVmNNlIpL0lWWyicSZROxO1hrJZe5wY
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTc0MDk1MzI1OCwiZXhwIjoxNzQwOTU2ODU4fQ.oz7tkfwdWONKH1KoavTK6XlosxA0NG-T31W7VyjV0Ns
 
 ### Update Expenditure
-PUT http://localhost:3000/expenditures/8e752d99-aeff-401b-90dd-e07665a1aa4f
+PUT http://localhost:3000/expenditures/1c93e5ea-d72a-4b29-a89a-d8fd75283c16
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTczODIzMjI2MCwiZXhwIjoxNzM4MjM1ODYwfQ.VkP3AW1TNpWQMVmNNlIpL0lWWyicSZROxO1hrJZe5wY
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTc0MDk1MzI1OCwiZXhwIjoxNzQwOTU2ODU4fQ.oz7tkfwdWONKH1KoavTK6XlosxA0NG-T31W7VyjV0Ns
 
 {
     "name": "Legion Tower 7i Gen 8 (Intel) Gaming Desktop",
@@ -37,8 +37,8 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00
 }
 
 ### Delete Expenditure
-DELETE http://localhost:3000/expenditures/552f1cdd-9d41-42a7-8bd8-3c9f8fde86a9
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTczODIzMjI2MCwiZXhwIjoxNzM4MjM1ODYwfQ.VkP3AW1TNpWQMVmNNlIpL0lWWyicSZROxO1hrJZe5wY
+DELETE http://localhost:3000/expenditures/1c93e5ea-d72a-4b29-a89a-d8fd75283c16
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTc0MDk1MzI1OCwiZXhwIjoxNzQwOTU2ODU4fQ.oz7tkfwdWONKH1KoavTK6XlosxA0NG-T31W7VyjV0Ns
 
 
 
@@ -62,3 +62,7 @@ Content-Type: application/json
     "email": "johndoe1@gmail.com",
     "password": "JohnPwd12_"
 }
+
+
+###
+GET http://localhost:3000/

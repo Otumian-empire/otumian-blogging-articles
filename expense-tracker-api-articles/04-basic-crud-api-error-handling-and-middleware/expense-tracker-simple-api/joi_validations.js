@@ -59,8 +59,18 @@ const updateExpenseSchema = Joi.object().keys({
     // date: Joi.string().isoDate().optional(),
 });
 
+const expenditureQuerySchema = Joi.object().keys({
+    amountMoreThan: Joi.number().positive().optional(),
+});
+
+const IdValidationSchema = Joi.object().keys({
+    id: Joi.string().uuid().required(),
+});
+
 module.exports = {
     authValidationSchema,
     createExpenseSchema,
     updateExpenseSchema,
+    expenditureQuerySchema,
+    IdValidationSchema,
 };

@@ -5,6 +5,7 @@ const express = require("express");
 // import the routers exported from users and expenditures
 const userEndpoints = require("./users");
 const expendituresEndpoints = require("./expenditures");
+const { logRequest, hasJwt, isAuthorized } = require("./middlewares");
 
 // create an express application
 const app = express();
@@ -12,9 +13,12 @@ const app = express();
 // parse request body as json
 app.use(express.json());
 
+// add console logging middleware
+app.use(logRequest);
+
 // register routers
-app.use(userEndpoints);
-app.use(expendituresEndpoints);
+app.use("/users", userEndpoints);
+app.use("/expenditures", hasJwt, isAuthorized, expendituresEndpoints);
 
 // create a server that listens to requests on port 3000
 app.listen(3000, () =>

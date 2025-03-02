@@ -157,12 +157,431 @@ app.use(expendituresEndpoints);
 -   `app.use(userEndpoints);` that exposes the user endpoints to the main app
 -   `app.use(expendituresEndpoints);` that exposes the expenditure endpoints to the main app
 
+Let's create a middleware that logs the following about a request:
+
+-   time
+-   http method
+-   and route the client visited
+
+> Most of this information can be found on the request object. `req.method` and `req.originalUrl`.
+
+```js
+// add console logging middleware
+app.use((req, res, next) => {
+    const log = `${req.method} :: ${
+        req.originalUrl
+    } - ${new Date().toISOString()}`;
+
+    console.log(log);
+
+    return next();
+});
+```
+
+Put this middleware after (or below) `app.use(express.json());`.
+
+> One thing to know is that, middlewares are executed in the order they have been set.
+> `app.use(express.json());` comes before any endpoint is hit, so data is parsed before it gets to that route.
+
+With this in mind, we can now put the middleware above the registered routers (or routes), but below `app.use(express.json());`.
+
+On protected routes, _routes that required jwt auth_, we can have a middleware that checks if the incoming request has a jwt token or not.
+
+> If your are wondering what would happen or what to do when there is no jwt, then, you should return an appropriate message or error response. The response object, _res_, is at your exposure.
+
+Apparently, none of the user routes requires jwt auth however, the expenditures does. Let's create another middleware that checks if a request jwt.
+
+> check the `authorize` function on how to access the jwt
+
+Have you seen this code snippet and how many have you seen? About five?
+
+```js
+const authReponse = authorize(req.headers.authorization);
+if (!authReponse.isAuthorized) {
+    return res.status(200).json({
+        success: false,
+        message: "Unathorized, please login",
+    });
+}
+```
+
+There could be more when we are more routes that will require jwt auth.
+
+This time we are going to create a function for this middleware. Try your hands on it.
+
+```js
+/* checks the header of the incoming request if there is a jwt */
+function hasJwt(req, res, next) {
+    // implementation before calling next function
+}
+```
+
+And create another middleware to actually do the authentication.
+
+```js
+/* authenticates and authorize user */
+function isAuthorized(req, res, next) {
+    // implement user authentication here
+}
+```
+
+> Create a file called `middlewares.js` and name the first middleware for logging the request (details) as `logRequest`.
+
+> `(req, res, next)` can have any names as far as the order (positions) of the parameters are respected.
+
+Here is what I have or what your should look like:
+
+```js
+// middlewares.js;
+const jwt = require("jsonwebtoken");
+
+/* Logs the request method, route and the time the request was made */
+function logRequest(req, res, next) {
+    const log = `${req.method} :: ${
+        req.originalUrl
+    } - ${new Date().toISOString()}`;
+
+    console.log(log);
+
+    return next();
+}
+
+/* checks the header of the incoming request if there is a jwt */
+function hasJwt(req, res, next) {
+    const authorization = req.headers.authorization;
+    if (!authorization) {
+        return res.status(200).json({
+            success: false,
+            message: "Unathorized, No auth token found",
+        });
+    }
+
+    return next();
+}
+
+function isAuthorized(req, res, next) {
+    const authorization = req.headers.authorization;
+
+    const JWT_SECRET = process.env.SECRET;
+    if (!JWT_SECRET) {
+        return res.status(200).json({
+            success: false,
+            message: "Something went wrong",
+        });
+    }
+
+    const { userId, email } = jwt.verify(authorization, JWT_SECRET);
+
+    // now we can fetch user with email and userId
+    const isAuthenticUser = users.find(
+        (user) => user.email === email && user.id === userId
+    );
+
+    if (!isAuthenticUser) {
+        return res.status(200).json({
+            success: false,
+            message: "Unathorized, No user matched",
+        });
+    }
+
+    req.user = { userId, email };
+
+    return next();
+}
+
+module.exports = { logRequest, hasJwt, isAuthorized };
+```
+
+> `req.someProperty = someValue`, where `someProperty` doesn't overwrite some existing keys value.
+> we send a message to the next request handler and access it in the same manner. In the life cycle of the request, the request object is shared through out.
+
+Now we can update the `list expenditures` route to add the `hasJwt` and `isAuthorized`.
+
+```js
+// list expenditures
+app.get("/expenditures", (req, res) => {
+    // extra auth token from headers
+    const authReponse = authorize(req.headers.authorization);
+    if (!authReponse.isAuthorized) {
+        return res.status(200).json({
+            success: false,
+            message: "Unathorized, please login",
+        });
+    }
+
+    // parse the auth user id
+    const { userId } = authReponse;
+
+    // ====================
+    // get the query string and check if it not a number or something
+    // that can be a number else set a default filter value of 0
+    let amountMoreThan = Number(req.query.amountMoreThan);
+    if (isNaN(amountMoreThan) || amountMoreThan < 0) {
+        amountMoreThan = 0;
+    }
+
+    return res.json({
+        success: true,
+        data: expenditures.filter(
+            (row) => row.userId === userId && row.amount > amountMoreThan
+        ),
+    });
+});
+```
+
+becomes
+
+```js
+// list expenditures
+app.get("/expenditures", hasJwt, isAuthorized, (req, res) => {
+    // parse the userId and email from the req.user
+    const { userId /*,  email */ } = req.user;
+
+    // ====================
+    // get the query string and check if it not a number or something
+    // that can be a number else set a default filter value of 0
+    let amountMoreThan = Number(req.query.amountMoreThan);
+    if (isNaN(amountMoreThan) || amountMoreThan < 0) {
+        amountMoreThan = 0;
+    }
+
+    return res.json({
+        success: true,
+        data: expenditures.filter(
+            (row) => row.userId === userId && row.amount > amountMoreThan
+        ),
+    });
+});
+```
+
+THe point here is that we can add a middleware(s) between the route and request handler (controller).
+
+Another exercise here is to do the same for the rest.
+
+-   add ` hasJwt, isAuthorized,`
+-   then remove
+
+    ```js
+    // extra auth token from headers
+    const authReponse = authorize(req.headers.authorization);
+    if (!authReponse.isAuthorized) {
+        return res.status(200).json({
+            success: false,
+            message: "Unathorized, please login",
+        });
+    }
+    ```
+
+-   update
+
+    ```js
+    // parse the auth user id
+    const { userId } = authReponse;
+    ```
+
+-   to
+
+    ```js
+    // parse the auth user id
+    const { userId } = req.user;
+    ```
+
+> if you are wondering where `req.user` is from, then it is from (or was set in) `isAuthorized` middleware.
+
+Try logging in, and you would see a log, `POST :: /users/login - 2025-03-02T14:23:59.310Z`. The date may differ but you should have a similar output.
+
+Using the jwt obtained on the expenditures endpoints, logs the following:
+
+-   `POST :: /expenditures - 2025-03-02T14:28:17.173Z`
+-   `GET :: /expenditures - 2025-03-02T14:28:41.074Z`
+
+At this point your expenditure routes should look more or less like
+
+```js
+router.get("/route", hasJwt, isAuthorized, (req, res) => {
+    /*  */
+});
+```
+
+> One thing you'd notice is that `hasJwt, isAuthorized,` is appearing on all the routes and we might as well put it at the root of our expenditures endpoint.
+> For starters this is alright however since it is the same for all its the routes we can go ahead on put it on the root endpoint.
+> Were there to be unique situations where the middleware will be an issue then we can decide to put or remove them on the affected route.
+
+So we can either have it as,
+
+```js
+app.use(hasJwt, isAuthorized, expendituresEndpoints);
+```
+
+or
+
+```js
+router.get("/route", hasJwt, isAuthorized, (req, res) => {
+    /* some expenditure request handling */
+});
+```
+
+The former is more welcoming but any of them works.
+
+We can update our index file to update our index file from
+
+```js
+// register routers
+app.use(userEndpoints);
+app.use(hasJwt, isAuthorized, expendituresEndpoints);
+```
+
+to
+
+```js
+// register routers
+app.use("/users", userEndpoints);
+app.use("/expenditures", hasJwt, isAuthorized, expendituresEndpoints);
+```
+
+and we will go into `userEndpoints` and `expendituresEndpoints` then remove the base endpoints (routes). `app.delete("/expenditures/:id",...)` becomes, `app.delete("/:id",...)`.
+
+## Validation Middleware
+
+We are already familiar with the concept of validation, be it, writing it ourselves or using a library such as [Joi][joi]. We also know that we can pass data to our api via the headers, query strings, request parameters and body. So here, we can tell where to expect the valisation to be to done (as in, take its data from).
+
+Let's use signup for a case study.
+
+```js
+const { email, password } = req.body;
+
+const validationResponse = authValidationSchema.validate({
+    email,
+    password,
+});
+if (validationResponse.error) {
+    return res.status(200).json({
+        success: false,
+        message: validationResponse.error.message,
+        // message: validationResponse.error.details[0].message,
+    });
+}
+```
+
+-   the data for the validation came from the body: `const { email, password } = req.body;`.
+-   we call the `validate` method of a joi schema, `const validationResponse = authValidationSchema.validate({ ...})`
+-   taking on some data
+
+A normal middleware looks like:
+
+```js
+[async] function FunctionName(requestObject, responseObject, next) {
+    // do something on the request
+    // return a response
+}
+```
+
+Which we should all know at this point. The point here is that we can pass data down to the middleware. We will create a function that returns request handler.
+
+```js
+function FunctionName(parameters) {
+    return function (req, res, next) {
+        /* do something */
+
+        return next();
+    };
+}
+```
+
+In our case, the function parameters will be the validation schema of interest, followed by where we want to extract the data from (for the validation). Here request property can be: _body_, _params_, _query_ or _headers_.
+
+> we can call this function any name you want, `validation, validationMiddleware, etc`
+
+```js
+/* validation middleware: takes schema and a request property*/
+function validation(schema, requestProperty) {
+    return function (req, res, next) {
+        const validationResponse = schema.validate(req[requestProperty]);
+
+        if (validationResponse.error) {
+            return res.status(200).json({
+                success: false,
+                message: validationResponse.error.message,
+                // message: validationResponse.error.details[0].message,
+            });
+        }
+
+        return next();
+    };
+}
+```
+
+This should look familiar.
+
+-   We take the validation `schema` and pass it as an argument and also provide where the data will be extracted from via `requestProperty`.
+-   `req[requestProperty]`, if `requestProperty` was body will result to `req["body"]` which is `req.body`.
+
+The _sign up_ route looks like `app.post("/signup", (req, res) => {...})`. With the new information we have now we will add the validation middleware pass the schema and update the controller to remove the validation (done in the controller so that the controller will just be used for the logic needed).
+
+The `sign up` route should look like:
+
+```js
+app.post("/signup", validation(authValidationSchema, "body"), (req, res) => {
+    /*  */
+});
+```
+
+We can apply the same refactor to the _login_.
+
+```js
+app.post("/login", validation(authValidationSchema, "body"), (req, res) => {
+    /*  */
+});
+```
+
+As an exercise, refactor the expenditure routes to make use of the general validation middleware and passing the appropriate schema to it. We can even go the extra mile by also validating the the request parameters and string queries.
+
+This how is how our endpoint are supposed to be looking like:
+
+```js
+/* /users */
+app.post("/signup", validation(authValidationSchema, "body"), (req, res) => {
+    /*  */
+});
+
+app.post("/login", validation(authValidationSchema, "body"), (req, res) => {
+    /*  */
+});
+
+/* /expenditures*/
+app.get("/", validation(expenditureQuerySchema, "query"), (req, res) => {
+    /*  */
+});
+
+app.get("/:id", validation(IdValidationSchema, "params"), (req, res) => {
+    /*  */
+});
+
+app.post("/", validation(createExpenseSchema, "body"), (req, res) => {
+    /*  */
+});
+
+app.put(
+    "/:id",
+    validation(IdValidationSchema, "params"),
+    validation(updateExpenseSchema, "body"),
+    (req, res) => {
+        /*  */
+    }
+);
+
+app.delete("/:id", validation(IdValidationSchema, "params"), (req, res) => {
+    /*  */
+});
+```
+
 ## Resources
 
 <!--  -->
 
 #
 
+[joi]: https://www.npmjs.com/package/joi
 [prev-article]: https://dev.to/otumianempire/validation-authentication-and-authorization-with-libraries-ip3
 [nodejs-how-to-read-environment-variables-from-nodejs]: https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs
 [dotenv]: https://www.npmjs.com/package/dotenv

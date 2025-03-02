@@ -4,25 +4,14 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 let { users } = require("./data");
 const { authValidationSchema } = require("./joi_validations");
+const { validation } = require("./middlewares");
 const JWT_SECRET = process.env.SECRET;
 
 console.log({ JWT_SECRET });
 
 // sign up
-app.post("/users/signup", (req, res) => {
+app.post("/signup", validation(authValidationSchema, "body"), (req, res) => {
     const { email, password } = req.body;
-
-    const validationResponse = authValidationSchema.validate({
-        email,
-        password,
-    });
-    if (validationResponse.error) {
-        return res.status(200).json({
-            success: false,
-            message: validationResponse.error.message,
-            // message: validationResponse.error.details[0].message,
-        });
-    }
 
     // making sure that there is no record with the same email as this user's
     const existingUsers = users.filter((user) => user.email === email);
@@ -73,20 +62,8 @@ app.post("/users/signup", (req, res) => {
 });
 
 // login
-app.post("/users/login", (req, res) => {
+app.post("/login", validation(authValidationSchema, "body"), (req, res) => {
     const { email, password } = req.body;
-
-    const validationResponse = authValidationSchema.validate({
-        email,
-        password,
-    });
-    if (validationResponse.error) {
-        return res.status(200).json({
-            success: false,
-            message: validationResponse.error.message,
-            // message: validationResponse.error.details[0].message,
-        });
-    }
 
     // find a user with the same email and password: authentication taking place here
     const authUser = users.filter(

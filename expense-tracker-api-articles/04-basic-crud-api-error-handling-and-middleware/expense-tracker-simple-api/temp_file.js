@@ -13,9 +13,9 @@
 const app = require("express")();
 
 app.use((req, res, next) => {
-    console.log("We are in the middleware");
+    const log = `${req.method} ${req.url} - ${Date.now()}`;
 
-    res.send("Hi...");
+    console.log(log);
 
     return next();
 });

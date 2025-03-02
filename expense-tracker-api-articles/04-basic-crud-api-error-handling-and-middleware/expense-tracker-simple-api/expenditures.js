@@ -1,12 +1,13 @@
 // expenditures.js;
 const app = require("express").Router();
-const { authorize } = require("./auth");
 let { expenditures } = require("./data");
 const {
     createExpenseSchema,
     updateExpenseSchema,
+    expenditureQuerySchema,
+    IdValidationSchema,
 } = require("./joi_validations");
-const { isValidName, isValidAmount, isValidDate } = require("./validations");
+const { validation } = require("./middlewares");
 
 app.get("/expendituresx", (req, res) => {
     return res.json({
@@ -16,24 +17,15 @@ app.get("/expendituresx", (req, res) => {
 });
 
 // list expenditures
-app.get("/expenditures", (req, res) => {
-    // extra auth token from headers
-    const authReponse = authorize(req.headers.authorization);
-    if (!authReponse.isAuthorized) {
-        return res.status(200).json({
-            success: false,
-            message: "Unathorized, please login",
-        });
-    }
-
-    // parse the auth user id
-    const { userId } = authReponse;
+app.get("/", validation(expenditureQuerySchema, "query"), (req, res) => {
+    // parse the userId and email from the req.user
+    const { userId /*,  email */ } = req.user;
 
     // ====================
     // get the query string and check if it not a number or something
     // that can be a number else set a default filter value of 0
     let amountMoreThan = Number(req.query.amountMoreThan);
-    if (isNaN(amountMoreThan) || amountMoreThan < 0) {
+    if (isNaN(amountMoreThan)) {
         amountMoreThan = 0;
     }
 
@@ -46,18 +38,9 @@ app.get("/expenditures", (req, res) => {
 });
 
 // read expenditure
-app.get("/expenditures/:id", (req, res) => {
-    // extra auth token from headers
-    const authReponse = authorize(req.headers.authorization);
-    if (!authReponse.isAuthorized) {
-        return res.status(200).json({
-            success: false,
-            message: "Unathorized, please login",
-        });
-    }
-
+app.get("/:id", validation(IdValidationSchema, "params"), (req, res) => {
     // parse the auth user id
-    const { userId } = authReponse;
+    const { userId } = req.user;
 
     // get the id of the request resource from the params
     const id = req.params.id;
@@ -80,29 +63,11 @@ app.get("/expenditures/:id", (req, res) => {
 });
 
 // create expenditure
-app.post("/expenditures", (req, res) => {
-    // extra auth token from headers
-    const authReponse = authorize(req.headers.authorization);
-    if (!authReponse.isAuthorized) {
-        return res.status(200).json({
-            success: false,
-            message: "Unathorized, please login",
-        });
-    }
-
+app.post("/", validation(createExpenseSchema, "body"), (req, res) => {
     // parse the auth user id
-    const { userId } = authReponse;
+    const { userId } = req.user;
 
-    // const { name, amount, date } = req.body
-    const payload = req.body;
-
-    const validationResponse = createExpenseSchema.validate(payload);
-    if (validationResponse.error) {
-        return res.status(201).json({
-            success: false,
-            message: validationResponse.error.message,
-        });
-    }
+    const { name, amount, date } = req.body;
 
     // generate uuid unique to this expense
     const uuid = crypto.randomUUID();
@@ -111,9 +76,9 @@ app.post("/expenditures", (req, res) => {
     expenditures.push({
         id: uuid,
         userId,
-        name: payload.name,
-        amount: payload.amount,
-        date: payload.date,
+        name,
+        amount,
+        date,
     });
 
     return res.status(201).json({
@@ -123,86 +88,54 @@ app.post("/expenditures", (req, res) => {
 });
 
 // update expenditure
-app.put("/expenditures/:id", (req, res) => {
-    // extra auth token from headers
-    const authReponse = authorize(req.headers.authorization);
-    if (!authReponse.isAuthorized) {
+app.put(
+    "/:id",
+    validation(IdValidationSchema, "params"),
+    validation(updateExpenseSchema, "body"),
+    (req, res) => {
+        // parse the auth user id
+        const { userId } = req.user;
+
+        // get the id of the request resource from the params
+        const id = req.params.id;
+
+        // if the record is not found, rowIndex becomes -1
+        const rowIndex = expenditures.findIndex(
+            (row) => row.userId === userId && row,
+            id === id
+        );
+        if (rowIndex === -1) {
+            // what status code do this should be passed here? 404 not not found? why??
+            return res.status(200).json({
+                success: false,
+                message: `Resource with ID, '${id}' not found`,
+            });
+        }
+
+        const row = expenditures[rowIndex];
+
+        // we have to validate the name, maybe, there name must have some number of characters
+        // we have to make sure that amount is actually a number
+        // we have to also make sure that date is of the format, yyyy-MM-dd
+        const { name, amount, date } = req.body;
+
+        expenditures[rowIndex].name = name ?? row.name;
+        expenditures[rowIndex].amount = amount ?? row.amount;
+        expenditures[rowIndex].date = date ?? row.date;
+
+        // there was a time a saw a 204 status - No content
+        // since there was no data to return however we'll return the usual
         return res.status(200).json({
-            success: false,
-            message: "Unathorized, please login",
+            success: true,
+            message: "expenditure updated successfully",
         });
     }
-
-    // parse the auth user id
-    const { userId } = authReponse;
-
-    // get the id of the request resource from the params
-    const id = Number(req.params.id);
-
-    // if the record is not found, rowIndex becomes -1
-    const rowIndex = expenditures.findIndex(
-        (row) => row.userId === userId && row,
-        id === id
-    );
-    if (rowIndex === -1) {
-        // what status code do this should be passed here? 404 not not found? why??
-        return res.status(200).json({
-            success: false,
-            message: `Resource with ID, '${id}' not found`,
-        });
-    }
-
-    const row = expenditures[rowIndex];
-
-    // we have to validate the name, maybe, there name must have some number of characters
-    // we have to make sure that amount is actually a number
-    // we have to also make sure that date is of the format, yyyy-MM-dd
-    const { name, amount, date } = req.body;
-
-    if (!name && !amount && !date) {
-        return res.status(200).json({
-            success: false,
-            message: "name, amount and date for expense are required",
-        });
-    }
-
-    const validationResponse = updateExpenseSchema.validate({
-        name,
-        amount,
-        date,
-    });
-    if (validationResponse.error) {
-        return res.status(200).json({
-            success: false,
-            message: validationResponse.error.message,
-        });
-    }
-
-    expenditures[rowIndex].name = name ?? row.name;
-    expenditures[rowIndex].amount = amount ?? row.amount;
-    expenditures[rowIndex].date = date ?? row.date;
-
-    // there was a time a saw a 204 status - No content
-    // since there was no data to return however we'll return the usual
-    return res.status(200).json({
-        success: true,
-        message: "expenditure updated successfully",
-    });
-});
+);
 
 // delete expenditure
-app.delete("/expenditures/:id", (req, res) => {
-    // extra auth token from headers
-    const authReponse = authorize(req.headers.authorization);
-    if (!authReponse.isAuthorized) {
-        return res.status(200).json({
-            success: false,
-            message: "Unathorized, please login",
-        });
-    }
-
+app.delete("/:id", validation(IdValidationSchema, "params"), (req, res) => {
     // parse the auth user id
-    const { userId } = authReponse;
+    const { userId } = req.user;
 
     // get the id of the request resource from the params
     const id = req.params.id;
