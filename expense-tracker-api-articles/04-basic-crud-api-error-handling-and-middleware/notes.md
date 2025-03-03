@@ -754,6 +754,15 @@ Connection: close
 
 ## Resources
 
+-   [joi]
+-   [Validation, Authentication and Authorization with Libraries][prev-article]
+-   [How to read environment variables from Node.js][nodejs-how-to-read-environment-variables-from-nodejs]
+-   [git]
+-   [null-vs-undefined]
+-   [JavaScript Essentials: Part 5][js-part-5]
+-   [express]
+-   [instanceof]
+
 #
 
 [joi]: https://www.npmjs.com/package/joi
