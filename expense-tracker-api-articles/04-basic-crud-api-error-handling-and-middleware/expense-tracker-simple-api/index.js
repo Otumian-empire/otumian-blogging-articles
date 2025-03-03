@@ -5,7 +5,13 @@ const express = require("express");
 // import the routers exported from users and expenditures
 const userEndpoints = require("./users");
 const expendituresEndpoints = require("./expenditures");
-const { logRequest, hasJwt, isAuthorized } = require("./middlewares");
+const {
+    logRequest,
+    hasJwt,
+    isAuthorized,
+    errorHandler,
+    notFoundHandler,
+} = require("./middlewares");
 
 // create an express application
 const app = express();
@@ -19,6 +25,12 @@ app.use(logRequest);
 // register routers
 app.use("/users", userEndpoints);
 app.use("/expenditures", hasJwt, isAuthorized, expendituresEndpoints);
+
+/* global error handling */
+app.use(errorHandler);
+
+/* handle cannot [METHOD] some endpoint */
+app.use(notFoundHandler);
 
 // create a server that listens to requests on port 3000
 app.listen(3000, () =>

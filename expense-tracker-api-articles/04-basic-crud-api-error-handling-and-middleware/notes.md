@@ -3,7 +3,7 @@
 -   Environmental variables
 -   Middlewares
 -   Validation Middleware
--   error handling: we are using jsonwebtokens too
+-   Error Handling middleware
 
 In the previous excerpt, [Validation, Authentication and Authorization with Libraries][prev-article], we used Joi for request validation and JsonWebtoken to generate the auth tokens.
 
@@ -575,9 +575,184 @@ app.delete("/:id", validation(IdValidationSchema, "params"), (req, res) => {
 });
 ```
 
-## Resources
+## Error Handling middleware
 
-<!--  -->
+I hope maybe, you have noticed, that we have been getting this kind of errors:
+
+-   `TokenExpiredError: jwt expired`
+-   `JsonWebTokenError: invalid token`
+
+It is bound to occur at some point. Anyways, we have to generally handle errors that may occur in our api consumption (integration). One way to handle errors is to use `try-and-catch`. We discussed about `try-and-catch` in [JavaScript Essentials: Part 5][js-part-5].
+
+We wrap the code we know might generate an error in a `try-and-catch` block and then return some default message when there is an error. Example:
+
+```js
+function someRequestHandler(req, res, next) {
+    try {
+        /* Do something */
+    } catch (error) {
+        return res.status(200).json({
+            success: false,
+            message: "Something went wrong please, try again later.",
+        });
+    }
+}
+```
+
+We have about six routes and for starts we can handle the errors simply just as shown above. There are case the above is okay. However, in the case of a commercial application, when an error occurs, we would want to know and resolve it right? The downside with the above implementation us that we may loss the error trace/stack, informing us what and where the error occurred. The point is, we won't know what caused the error. [Express][express] has what we call the _Error-handling middleware_, just like any middleware or request handler, has the `(req, res, next)=> {}`. WHat make this special is it actully has a four parameters instead of three: `(error, req, res, next)=> {}`. It is just like any order middleware but to get to it (in the pipeline or sequence of middlewares) we have to pass the error that we caught in the `catch (error) { /* */ }` to the `next` function. Example:
+
+```js
+function someRequestHandler(req, res, next) {
+    try {
+        /* Do something */
+    } catch (error) {
+        return next(error);
+    }
+}
+```
+
+So now, instead of returning a general message that, `"Something went wrong please, try again later.",` without even know what went wrong, now we have a devoted mechanism in place to parse and return appropriate error response.
+
+The signature of our error-handling middleware will look like this:
+
+```js
+/* error-handling middleware */
+function errorHandler(error, req, res, next) {
+    /*  */
+}
+```
+
+We will make use of the `instanceof` operator. The [instanceof][instanceof] operator check is an object is an instance of some class. So far we are aware of `TokenExpiredError` and `JsonWebTokenError`, which is as a result of using the jwt library.
+
+Now we can return an appropriate response based on the error instance and a global message when we are not sure what this error is. We might was to write the error into a log file or some remote server, etc.
+
+```js
+// require TokenExpiredError and JsonWebTokenError from jwt
+const { TokenExpiredError, JsonWebTokenError } = require("jsonwebtoken");
+...
+
+
+/* error-handling middleware */
+function errorHandler(error, req, res, next) {
+    if (error instanceof TokenExpiredError) {
+        return res.status(401).json({
+            success: false,
+            message: "Unauthorized: please login",
+        });
+    }
+
+    if (error instanceof JsonWebTokenError) {
+        return res.status(401).json({
+            success: false,
+            message: "Unauthorized: please format your auth token",
+        });
+    }
+
+    // anything else
+    return res.status(500).json({
+        success: false,
+        message: "Internal server error, something went wrong please try again",
+        // as if the same error would not occur again when the user tries again 😂
+    });
+}
+```
+
+I am a not a fan of relying on status codes. I believe my apis are a "third party" and as such sending back these status codes that uniquely identifies these specific errors are too much. What do you want the client consuming your api to do when there is a `400` error response or a `500` error response? Some `http` clients throw errors when the status code returned is not `200` or `201`. So looking at my self as "third party", I would an error code, status code or another key, and immediately that key is present, then something went wrong. I have consumed a _3rd_ party api where there is an success and error section.
+
+```json
+{
+    "success": true,
+    "statusCode": "000001",
+    "error": {},
+    "data": {}
+}
+```
+
+Anyways, as we know, we can put this error habdling middleware anywhere but it is best bellow our registered endpoints. As an exercise, wrap your controllers, in fact, all your request handler must be wrapped in a `try` and `catch` and pass the error to the next function. Don't do this to the error handling middleware. Frankly do it for those that need it, those that you expext that something could go wrong. There are some funtions that I don't `try-and-catch`. Why? The controller has a `try` and `catch`.
+
+So what ever we are going to update will look like:
+
+```js
+function SomeFunction(req, res, next) {
+    try {
+        /*  */
+    } catch (error) {
+        return next(error);
+    }
+}
+```
+
+When all is done, there is a likehood that we'd get an error respose such as:
+
+```json
+{
+    "success": false,
+    "message": "Unauthorized: please format your auth token"
+}
+```
+
+Another case of an error is when the user hits an endpoint that doesn't exist. How do we handle that one and would our error handling middleware account for it? No, the error handling middleware won't account for it.
+
+Well, the idea is this, we hit an endpoint say, `GET http://localhost:3000/audit`. We never defined and endpoint/route for audit. So in the chain of middlewares and requests handlers, in the pipeline, nothing will touch this request so express will handle it say:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Error</title>
+    </head>
+    <body>
+        <pre>Cannot GET /auditing</pre>
+    </body>
+</html>
+```
+
+Express handled it but we want to return a `JSON` not `html`. So we add one final middleware, which will just return something like endpoint not found.
+
+Again, will put this at the after our error handling middleware.
+
+```js
+/* not found error-handling middleware */
+function notFoundHandler(req, res, next) {
+    // anything else
+    return res.status(404).json({
+        success: false,
+        message: "Endpoint not found, kindly read our documentation",
+    });
+}
+```
+
+The function is used after the error-handling middleware
+
+```js
+...
+/* global error handling */
+app.use(errorHandler);
+
+/* handle cannot [METHOD] some endpoint */
+app.use(notFoundHandler);
+...
+```
+
+And we get a json message
+
+```sh
+HTTP/1.1 404 Not Found
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 79
+ETag: W/"4f-ZeAuDFW/On8o/z3qFxGFjcV9e4E"
+Date: Mon, 03 Mar 2025 09:01:58 GMT
+Connection: close
+
+{
+  "success": false,
+  "message": "Endpoint not found, kindly read our documentation"
+}
+```
+
+## Resources
 
 #
 
@@ -587,3 +762,6 @@ app.delete("/:id", validation(IdValidationSchema, "params"), (req, res) => {
 [dotenv]: https://www.npmjs.com/package/dotenv
 [git]: https://git-scm.com/
 [null-vs-undefined]: https://stackoverflow.com/questions/5076944/what-is-the-difference-between-null-and-undefined-in-javascript
+[js-part-5]: https://dev.to/otumianempire/javascript-essentials-part-5-3c9m
+[express]: https://www.npmjs.com/package/express
+[instanceof]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof

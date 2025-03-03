@@ -3,7 +3,7 @@
 
 
 ### List Expenditures 
-GET http://localhost:3000/expendituresx
+GET http://localhost:3000/auditing
 
 ### Create Expenditures 
 POST http://localhost:3000/expenditures
@@ -18,7 +18,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00
 
 ### List Expenditures 
 GET http://localhost:3000/expenditures
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTc0MDk1MzI1OCwiZXhwIjoxNzQwOTU2ODU4fQ.oz7tkfwdWONKH1KoavTK6XlosxA0NG-T31W7VyjV0Ns
+Authorization: GciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNThiY2VlYi00MDQxLTRhNTAtYjIwNC04NWNhYTJhZDZjMjAiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlhdCI6MTc0MDk1MzI1OCwiZXhwIjoxNzQwOTU2ODU4fQ.oz7tkfwdWONKH1KoavTK6XlosxA0NG-T31W7VyjV0Ns
 
 ### Read Expenditure
 GET http://localhost:3000/expenditures/1c93e5ea-d72a-4b29-a89a-d8fd75283c16
