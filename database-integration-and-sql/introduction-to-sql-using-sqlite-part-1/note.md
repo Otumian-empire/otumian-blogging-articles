@@ -1,4 +1,4 @@
-# Introduction to SQL using SQLite
+# Introduction to SQL using SQLite: Create Table
 
 ## Objectives
 
@@ -155,7 +155,61 @@ CREATE TABLE "human" (
 
 Why won't null be a necessarily a "good" value?
 
-##
+```sql
+CREATE TABLE "human" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+	"firstName" TEXT NOT NULL,
+	"lastName" TEXT NOT NULL,
+	"socialSecurityNumber" TEXT NOT NULL,
+	"email" TEXT NOT NULL,
+	"dateOfBirth" TEXT,
+	"hasPet" INTEGER DEFAULT 0,
+	"numberOfCars" INTEGER DEFAULT 0,
+);
+```
+
+`socialSecurityNumber` and `email` are unique supposed to be unique values. We can programmatically handle this as well via code before the data reaches the database.
+
+```sql
+CREATE TABLE "human" (
+    ...
+	"socialSecurityNumber" TEXT NOT NULL UNIQUE,
+	"email" TEXT NOT NULL UNIQUE,
+	...
+);
+```
+
+You can ride the updated script via [Beekeeper studio][beekeeper-studio] or [SQLite][sqlite-browser]. We can also run this via the terminal.
+
+```sh
+$ sqlite3 app.sqlite
+SQLite version 3.43.2 2023-10-10 13:08:14
+Enter ".help" for usage hints.
+sqlite>
+```
+
+> Even when not create, `sqlite3 <DATABASE NAME.sqlite>` will create a new SQLite database with name `<DATABASE NAME.sqlite>`
+> Create a file with a `.sqlite` extension. I will create one called, `app.sqlite`.
+
+```sql
+sqlite> CREATE TABLE "human" (
+(x1...> "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+(x1...> "firstName" TEXT NOT NULL,
+(x1...> "lastName" TEXT NOT NULL,
+(x1...> "socialSecurityNumber" TEXT NOT NULL UNIQUE,
+(x1...> "email" TEXT NOT NULL UNIQUE,
+(x1...> "dateOfBirth" TEXT,
+(x1...> "hasPet" INTEGER DEFAULT 0,
+(x1...> "numberOfCars" INTEGER DEFAULT 0
+(x1...> );
+sqlite> .tables
+human
+sqlite>
+```
+
+> `CREATE`, `TABLE`, `INTEGER`, `DEFAULT`, etc can all be in lower case
+
+Analyze and create a table for the profile object below.
 
 ```js
 const profile = {
@@ -168,11 +222,19 @@ const profile = {
 };
 ```
 
+> Share what you experience
+
 ## Resources
 
 -   [sqlite-browser][sqlite-browser]
 -   [beekeeper-studio][beekeeper-studio]
 -   [nodejs-sqlite][nodejs-sqlite]
+-   [nodejs-sqlite][nodejs-sqlite]
+-   [introduction-to-databases][introduction-to-databases]
+-   [sqlite-constraints][sqlite-constraints]
+-   [w3s-sqlite-constraints][w3s-sqlite-constraints]
+-   [sqlite-quirks][sqlite-quirks]
+-   [javascript-part-1][javascript-part-1]
 
 #
 
@@ -185,6 +247,6 @@ const profile = {
 [article-on-data-types]: https://dev.to/otumianempire/javascript-essentials-part-1-39c1
 [introduction-to-databases]: https://dev.to/otumianempire/introduction-to-databases-2o5g
 [sqlite-constraints]: https://sqlite.org/syntax/column-constraint.html
-[w3s-sqlite-contraints]: https://www.w3schools.com/SQL/sql_constraints.asp
+[w3s-sqlite-constraints]: https://www.w3schools.com/SQL/sql_constraints.asp
 [sqlite-quirks]: https://www.sqlite.org/quirks.html
 [javascript-part-1]: https://dev.to/otumianempire/javascript-essentials-part-1-39c1
