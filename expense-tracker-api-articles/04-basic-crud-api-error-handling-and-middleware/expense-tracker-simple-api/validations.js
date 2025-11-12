@@ -10,7 +10,7 @@ const isString = (arg) => typeof arg === "string";
 // if we use this approach then, "2.99" fails as a number even though it is a numeric string
 // as such we are going with this and later casting the values to numbers
 const isNumber = (arg) => !isNaN(Number(arg));
-// when a arg is non-numberic or a numeric string, Number(arg) returns NaN
+// when a arg is non-numeric or a numeric string, Number(arg) returns NaN
 // isNaN checks if a value is NaN and returns true if so else false
 // which is why we negate the results from isNaN(...)
 
