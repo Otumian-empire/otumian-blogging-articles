@@ -214,10 +214,10 @@ sqlite> SELECT * from "human";
 ┌────┬───────────┬──────────┬──────────────────────┬────────────────────────┬─────────────┬────────┬──────────────┐
 │ id │ firstName │ lastName │ socialSecurityNumber │         email          │ dateOfBirth │ hasPet │ numberOfCars │
 ├────┼───────────┼──────────┼──────────────────────┼────────────────────────┼─────────────┼────────┼──────────────┤
-│ 1 │ John      │ Doe      │ 123-45-6789 │ johndoe1990@gmail.com  │ 1990-03-14 │ 0 │ 0 │
-│ 2 │ Anne      │ Ali      │ 123-45-6790 │ alianne@gmail.com      │ 1995-12-21 │ 0 │ 1 │
-│ 3 │ Gifty     │ Doe      │ 123-45-6791 │ giftydoe@gmail.com     │ 1995-01-11 │ 1 │ 0 │
-│ 4 │ Idris     │ Johnson  │ 123-45-6792 │ johnidrisson@gmail.com │ 1992-06-30 │ 0 │ 2 │
+│ 1  │ John      │ Doe      │ 123-45-6789          │ johndoe1990@gmail.com  │ 1990-03-14  │ 0      │ 0            │
+│ 2  │ Anne      │ Ali      │ 123-45-6790          │ alianne@gmail.com      │ 1995-12-21  │ 0      │ 1            │
+│ 3  │ Gifty     │ Doe      │ 123-45-6791          │ giftydoe@gmail.com     │ 1995-01-11  │ 1      │ 0            │
+│ 4  │ Idris     │ Johnson  │ 123-45-6792          │ johnidrisson@gmail.com │ 1992-06-30  │ 0      │ 2            │
 └────┴───────────┴──────────┴──────────────────────┴────────────────────────┴─────────────┴────────┴──────────────┘
 ```
 

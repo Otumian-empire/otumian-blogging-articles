@@ -4,7 +4,9 @@
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
-        "AUTOINCREMENT"
+        "AUTOINCREMENT",
+        "Gifty",
+        "Idris"
     ],
     "ignoreWords": [],
     "import": []
