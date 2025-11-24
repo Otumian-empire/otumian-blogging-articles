@@ -1,0 +1,48 @@
+Topics
+
+- Introduces database and types and examples
+    - TALK about sqlite
+- LEARN SQL WITH SQLite
+- SWITCH TO POSTGRESQL
+- USE ORM TYPEORM
+    - use with sqlite
+    - use with prohres
+- Repeat some few things about nosql (mongo db) and use mongo
+    - can we use typeorm with mongo
+- Pagination
+- Caching
+    - POSTGRESQL
+    - mongo
+    - redis
+
+- PRACTICAL SQL
+    - Create database
+    - Crate table
+    - INSERT, SELECT, UPDATE and DELETE record from table
+    - RENAME table
+    - ADD field to table
+    - REMOVE field from table
+    - RENAME table
+    - Delete table
+    - rename database
+    - delete database
+
+
+    Pagination with limit and offset
+
+https://dev.to/bobbyiliev/7-best-sql-books-for-beginners-54gi
+
+
+
+<!--
+Look into table commands
+
+rename table
+rename a field
+update the type of a field
+remove some constraints on a field
+remove a field 
+pagination, limit and offset
+using AS
+FK and joins
+-->
