@@ -1,9 +1,9 @@
 # Error handling and Middlewares
 
--   Environmental variables
--   Middlewares
--   Validation Middleware
--   Error Handling middleware
+- Environmental variables
+- Middlewares
+- Validation Middleware
+- Error Handling middleware
 
 In the previous excerpt, [Validation, Authentication and Authorization with Libraries][prev-article], we used Joi for request validation and JsonWebtoken to generate the auth tokens.
 
@@ -121,8 +121,8 @@ The point I want us to understand is that controllers are request handlers.
 
 Request handlers are usually in two forms:
 
--   Controllers
--   Middlewares
+- Controllers
+- Middlewares
 
 Briefly, a middleware is a request handler that seats between a route and a controller.
 
@@ -153,15 +153,15 @@ app.use(userEndpoints);
 app.use(expendituresEndpoints);
 ```
 
--   `app.use(express.json());` is a middleware that parses the request body into json
--   `app.use(userEndpoints);` that exposes the user endpoints to the main app
--   `app.use(expendituresEndpoints);` that exposes the expenditure endpoints to the main app
+- `app.use(express.json());` is a middleware that parses the request body into json
+- `app.use(userEndpoints);` that exposes the user endpoints to the main app
+- `app.use(expendituresEndpoints);` that exposes the expenditure endpoints to the main app
 
 Let's create a middleware that logs the following about a request:
 
--   time
--   http method
--   and route the client visited
+- time
+- http method
+- and route the client visited
 
 > Most of this information can be found on the request object. `req.method` and `req.originalUrl`.
 
@@ -196,8 +196,8 @@ Apparently, none of the user routes requires jwt auth however, the expenditures 
 Have you seen this code snippet and how many have you seen? About five?
 
 ```js
-const authReponse = authorize(req.headers.authorization);
-if (!authReponse.isAuthorized) {
+const authResponse = authorize(req.headers.authorization);
+if (!authResponse.isAuthorized) {
     return res.status(200).json({
         success: false,
         message: "Unauthorized, please log in",
@@ -274,7 +274,7 @@ function isAuthorized(req, res, next) {
 
     // now we can fetch the user with email and userId
     const isAuthenticUser = users.find(
-        (user) => user.email === email && user.id === userId
+        (user) => user.email === email && user.id === userId,
     );
 
     if (!isAuthenticUser) {
@@ -301,8 +301,8 @@ Now we can update the `list expenditures` route to add the `hasJwt` and `isAutho
 // list expenditures
 app.get("/expenditures", (req, res) => {
     // extra auth token from headers
-    const authReponse = authorize(req.headers.authorization);
-    if (!authReponse.isAuthorized) {
+    const authResponse = authorize(req.headers.authorization);
+    if (!authResponse.isAuthorized) {
         return res.status(200).json({
             success: false,
             message: "Unauthorized, please log in",
@@ -310,7 +310,7 @@ app.get("/expenditures", (req, res) => {
     }
 
     // parse the auth user id
-    const { userId } = authReponse;
+    const { userId } = authResponse;
 
     // ====================
     // get the query string and check if it is not a number or something
@@ -323,7 +323,7 @@ app.get("/expenditures", (req, res) => {
     return res.json({
         success: true,
         data: expenditures.filter(
-            (row) => row.userId === userId && row.amount > amountMoreThan
+            (row) => row.userId === userId && row.amount > amountMoreThan,
         ),
     });
 });
@@ -348,7 +348,7 @@ app.get("/expenditures", hasJwt, isAuthorized, (req, res) => {
     return res.json({
         success: true,
         data: expenditures.filter(
-            (row) => row.userId === userId && row.amount > amountMoreThan
+            (row) => row.userId === userId && row.amount > amountMoreThan,
         ),
     });
 });
@@ -358,13 +358,13 @@ The point here is that we can add a middleware(s) between the route and the requ
 
 Another exercise here is to do the same for the rest.
 
--   add ` hasJwt, isAuthorized,`
--   then remove
+- add ` hasJwt, isAuthorized,`
+- then remove
 
 ```js
 // extra auth token from headers
-const authReponse = authorize(req.headers.authorization);
-if (!authReponse.isAuthorized) {
+const authResponse = authorize(req.headers.authorization);
+if (!authResponse.isAuthorized) {
     return res.status(200).json({
         success: false,
         message: "Unauthorized, please log in",
@@ -372,14 +372,14 @@ if (!authReponse.isAuthorized) {
 }
 ```
 
--   update
+- update
 
 ```js
 // parse the auth user id
-const { userId } = authReponse;
+const { userId } = authResponse;
 ```
 
--   to
+- to
 
 ```js
 // parse the auth user id
@@ -392,8 +392,8 @@ Try logging in, and you will see a log, `POST :: /users/login - 2025-03-02T14:23
 
 Using the jwt obtained on the expenditures endpoints logs the following:
 
--   `POST :: /expenditures - 2025-03-02T14:28:17.173Z`
--   `GET :: /expenditures - 2025-03-02T14:28:41.074Z`
+- `POST :: /expenditures - 2025-03-02T14:28:17.173Z`
+- `GET :: /expenditures - 2025-03-02T14:28:41.074Z`
 
 At this point, your expenditure routes should look more or less like
 
@@ -463,9 +463,9 @@ if (validationResponse.error) {
 }
 ```
 
--   the data for the validation came from the body: `const { email, password } = req.body;`.
--   we call the `validate` method of a joi schema, `const validationResponse = authValidationSchema.validate({ ...})`
--   taking on some data
+- the data for the validation came from the body: `const { email, password } = req.body;`.
+- we call the `validate` method of a joi schema, `const validationResponse = authValidationSchema.validate({ ...})`
+- taking on some data
 
 A normal middleware looks like this:
 
@@ -513,8 +513,8 @@ function validation(schema, requestProperty) {
 
 This should look familiar.
 
--   We take the validation `schema` and pass it as an argument and also provide where the data will be extracted from via `requestProperty`.
--   `req[requestProperty]`, if `requestProperty` was body will result in `req["body"]` which is `req.body`.
+- We take the validation `schema` and pass it as an argument and also provide where the data will be extracted from via `requestProperty`.
+- `req[requestProperty]`, if `requestProperty` was body will result in `req["body"]` which is `req.body`.
 
 The _sign up_ route looks like `app.post("/signup", (req, res) => {...})`. With the new information we have now we will add the validation middleware pass the schema and update the controller to remove the validation (done in the controller so that the controller will just be used for the logic needed).
 
@@ -567,7 +567,7 @@ app.put(
     validation(updateExpenseSchema, "body"),
     (req, res) => {
         /*  */
-    }
+    },
 );
 
 app.delete("/:id", validation(IdValidationSchema, "params"), (req, res) => {
@@ -579,8 +579,8 @@ app.delete("/:id", validation(IdValidationSchema, "params"), (req, res) => {
 
 I hope maybe, you noticed, that we have been getting this kind of error:
 
--   `TokenExpiredError: jwt expired`
--   `JsonWebTokenError: invalid token`
+- `TokenExpiredError: jwt expired`
+- `JsonWebTokenError: invalid token`
 
 It is bound to occur at some point. Anyways, we have to generally handle errors that may occur in our api consumption (integration). One way to handle errors is to use `try-and-catch`. We discussed about `try-and-catch` in [JavaScript Essentials: Part 5][js-part-5].
 
@@ -754,14 +754,14 @@ Connection: close
 
 ## Resources
 
--   [joi]
--   [Validation, Authentication and Authorization with Libraries][prev-article]
--   [How to read environment variables from Node.js][nodejs-how-to-read-environment-variables-from-nodejs]
--   [git]
--   [null-vs-undefined]
--   [JavaScript Essentials: Part 5][js-part-5]
--   [express]
--   [instanceof]
+- [joi]
+- [Validation, Authentication and Authorization with Libraries][prev-article]
+- [How to read environment variables from Node.js][nodejs-how-to-read-environment-variables-from-nodejs]
+- [git]
+- [null-vs-undefined]
+- [JavaScript Essentials: Part 5][js-part-5]
+- [express]
+- [instanceof]
 
 #
 
